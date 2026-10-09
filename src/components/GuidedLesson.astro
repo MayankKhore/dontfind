@@ -1,0 +1,109 @@
+---
+/**
+ * GuidedLesson.astro — Duolingo-style locked lesson flow.
+ *
+ * Renders the step-by-step guide card for labs that declare a `guided`
+ * config in their content JSON (see content.config.ts). The companion
+ * script guided-lesson.js drives it:
+ *
+ *   - `command` steps advance when the learner runs the expected command
+ *     (any other command is vetoed in the terminal with the step hint);
+ *   - `action` steps advance through a page control (the topology Add
+ *     button rendered by labs/[slug].astro);
+ *   - a live running-config vs startup-config status strip shows exactly
+ *     which lines exist only in RAM until `write memory` saves them.
+ *
+ * Markup contract (read by guided-lesson.js):
+ *   [data-guide]                root; carries lesson id + steps JSON
+ *   [data-guide-step="i"]       one per step; data-state = done|current|locked
+ *   [data-guide-mark]           circle glyph inside each step
+ *   [data-guide-count]          "Step N" counter text
+ *   [data-guide-progress]       progressbar (aria-valuenow updated live)
+ *   [data-guide-fill]           progress fill width updated live
+ *   [data-guide-run-state]      running-config badge text + data-state
+ *   [data-guide-start-state]    startup-config badge text + data-state
+ *   [data-guide-diff]/[data-guide-diff-list]   unsaved-lines panel
+ *   [data-guide-done]           completion banner (hidden until done)
+ *   [data-guide-reset]          "Start over" button (reloads the page)
+ */
+import Icon from './Icon.astro';
+
+const { steps = [], lessonId = '' } = Astro.props;
+const total = steps.length || 1;
+---
+
+<section
+  class="guide"
+  data-guide
+  data-guide-lesson={lessonId}
+  data-guide-steps={JSON.stringify(steps)}
+  aria-label="Guided lesson"
+>
+  <header class="guide__head">
+    <p class="guide__title">
+      <Icon name="sparkles" size={15} />
+      <span>Guided lesson</span>
+    </p>
+    <p class="guide__count">
+      <span data-guide-count>Step 1</span> of {total}
+    </p>
+    <button type="button" class="guide__reset" data-guide-reset>Start over</button>
+  </header>
+
+  <div
+    class="guide__track"
+    role="progressbar"
+    aria-label="Lesson progress"
+    aria-valuemin="1"
+    aria-valuemax={total}
+    aria-valuenow="1"
+    data-guide-progress
+  >
+    <span class="guide__fill" data-guide-fill style={`width:${(100 / total).toFixed(1)}%`}></span>
+  </div>
+
+  <ol class="guide__steps">
+    {steps.map((step, i) => (
+      <li class="guide__step" data-guide-step={i} data-state={i === 0 ? 'current' : 'locked'}>
+        <span class="guide__mark" data-guide-mark aria-hidden="true">{i + 1}</span>
+        <div class="guide__body">
+          <p class="guide__step-title">{step.title}</p>
+          <p class="guide__step-text">{step.instruction}</p>
+          {step.cmd ? (
+            <code class="guide__cmd">{step.cmd}</code>
+          ) : step.buttonLabel ? (
+            <code class="guide__cmd guide__cmd--action">{step.buttonLabel}</code>
+          ) : null}
+        </div>
+      </li>
+    ))}
+  </ol>
+
+  <div class="guide__status">
+    <div class="guide__cfg">
+      <p class="guide__cfg-name">running-config <span>RAM</span></p>
+      <p class="guide__cfg-state" data-guide-run-state data-state="sync">In sync</p>
+    </div>
+    <div class="guide__cfg">
+      <p class="guide__cfg-name">startup-config <span>NVRAM</span></p>
+      <p class="guide__cfg-state" data-guide-start-state data-state="sync">In sync</p>
+    </div>
+  </div>
+
+  <div class="guide__diff" data-guide-diff hidden>
+    <p class="guide__diff-title">Not saved yet — only in running-config:</p>
+    <ul class="guide__diff-list" data-guide-diff-list></ul>
+  </div>
+
+  <div class="guide__done" data-guide-done hidden>
+    <Icon name="check-circle" size={16} />
+    <p>
+      <strong>Lesson complete!</strong> running-config and startup-config now match — your change
+      survives a reboot.
+    </p>
+  </div>
+</section>
+
+<script>
+  import '../scripts/guided-lesson.js';
+</script>

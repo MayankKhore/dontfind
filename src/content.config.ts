@@ -103,6 +103,41 @@ const labs = defineCollection({
           .default([]),
       })
       .optional(),
+    /**
+     * Optional Duolingo-style guided flow: an ordered list of locked steps
+     * rendered by GuidedLesson.astro and enforced by guided-lesson.js.
+     * `type: 'command'` steps advance when the learner successfully runs
+     * `cmd` in the terminal; `type: 'action'` steps advance through a page
+     * control (e.g. the topology Add button). Every other command is vetoed
+     * with the step's `hint` until the current step completes.
+     */
+    guided: z
+      .object({
+        steps: z
+          .array(
+            z.object({
+              type: z.enum(['command', 'action']),
+              /** Expected terminal command for `command` steps. */
+              cmd: z.string().optional(),
+              /** Extra accepted spellings/abbreviations for `cmd`. */
+              accepts: z.array(z.string()).default([]),
+              /** Identifier for `action` steps (e.g. 'topology-add'). */
+              action: z.string().optional(),
+              /** Label for the action step's button. */
+              buttonLabel: z.string().optional(),
+              /** Scripted commands an action step runs on the device. */
+              commands: z.array(z.string()).default([]),
+              /** Tab to activate when the step becomes current. */
+              tab: z.string().optional(),
+              title: z.string(),
+              instruction: z.string(),
+              /** Message shown when a non-matching command is vetoed. */
+              hint: z.string().optional(),
+            }),
+          )
+          .min(2),
+      })
+      .optional(),
   }),
 });
 

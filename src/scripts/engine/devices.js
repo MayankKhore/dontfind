@@ -189,25 +189,35 @@ class Switch extends NetworkDevice {
     }
 
     generateRunningConfig() {
-        let c = `Building configuration...\n\nCurrent configuration : ${2048 + Math.floor(Math.random() * 2048)} bytes\n!\nversion 12.2\n`;
-        c += `no service timestamps log datetime msec\nno service password-encryption\n!\n`;
-        c += `hostname ${this.hostname}\n!\n`;
+        // Build the body first so the byte count is derived from the actual
+        // configuration instead of a random value: two consecutive
+        // `show running-config` calls must be byte-identical (and equal to
+        // the startup-config snapshot) for a running-vs-startup diff to be
+        // meaningful.
+        const lines = [
+            '!',
+            'version 12.2',
+            'no service timestamps log datetime msec',
+            'no service password-encryption',
+            '!',
+            `hostname ${this.hostname}`,
+            '!',
+        ];
         this.vlans.forEach(v => {
             if (v.id === 1) return;
-            c += `vlan ${v.id}\n name ${v.name}\n!\n`;
+            lines.push(`vlan ${v.id}`, ` name ${v.name}`, '!');
         });
         this.interfaces.forEach(iface => {
-            c += `interface ${iface.name}\n switchport mode ${iface.mode}\n`;
-            if (iface.mode === 'trunk') {
-                c += ` switchport trunk native vlan 1\n`;
-            } else {
-                c += ` switchport access vlan ${iface.vlan}\n`;
-            }
-            if (iface.description) c += ` description ${iface.description}\n`;
-            c += `!\n`;
+            lines.push(`interface ${iface.name}`, ` switchport mode ${iface.mode}`);
+            if (iface.mode === 'trunk') lines.push(' switchport trunk native vlan 1');
+            else lines.push(` switchport access vlan ${iface.vlan}`);
+            if (iface.description) lines.push(` description ${iface.description}`);
+            lines.push('!');
         });
-        c += `\nline con 0\n line vty 0 4\n login\n!\nend\n`;
-        return c;
+        lines.push('', 'line con 0', ' line vty 0 4', ' login', '!', 'end');
+        const body = lines.join('\n');
+        const bytes = 848 + body.length;
+        return `Building configuration...\n\nCurrent configuration : ${bytes} bytes\n${body}`;
     }
 }
 export { NetworkDevice, PC, Switch };

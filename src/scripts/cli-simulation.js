@@ -50,6 +50,11 @@ class Terminal {
     this.booted = new Set();
     this.bind();
     this.select(this.activeId);
+
+    // Public handle + ready event so companion islands (e.g. the guided
+    // lesson flow) can find this terminal and hook into its lifecycle.
+    this.root.__cliTerminal = this;
+    this.root.dispatchEvent(new CustomEvent('cli:ready', { bubbles: true, detail: { terminal: this } }));
   }
 
   /**
@@ -153,6 +158,24 @@ class Terminal {
   submit() {
     const input = this.input.value.trim();
     if (!input) return;
+
+    // Guided lessons veto commands that don't match the current step
+    // (locked progression). A listener calls preventDefault() and sets
+    // `detail.hint` to explain what the learner should do instead.
+    const before = new CustomEvent('cli:before', {
+      bubbles: true,
+      cancelable: true,
+      detail: { command: input, terminal: this, hint: '' },
+    });
+    if (!this.root.dispatchEvent(before)) {
+      this.cmdLine(this.device().getPrompt(), input);
+      this.line(before.detail.hint || 'Not yet — check the lesson steps.', 'error');
+      this.line('');
+      this.input.value = '';
+      this.scroll();
+      return;
+    }
+
     this.input.value = '';
     this.history.push(input);
     this.historyIndex = -1;
@@ -183,6 +206,9 @@ class Terminal {
     this.updatePrompt();
     this.scroll();
     this.checkObjectives(input);
+    this.root.dispatchEvent(
+      new CustomEvent('cli:executed', { bubbles: true, detail: { command: input, result, terminal: this } }),
+    );
   }
 
   checkObjectives(input) {

@@ -12,6 +12,7 @@ import ProgressIndicator from '../../components/ProgressIndicator.astro';
 import RelatedResources from '../../components/RelatedResources.astro';
 import CTABand from '../../components/CTABand.astro';
 import DataTable from '../../components/DataTable.astro';
+import GuidedLesson from '../../components/GuidedLesson.astro';
 import { getCollection } from 'astro:content';
 import { published } from '../../lib/content.js';
 import { resolveLabUi, filterTopology, deviceLabel } from '../../lib/lab-ui.js';
@@ -54,6 +55,14 @@ const tableHead =
   labUi.renderPortMap && topology?.table?.length
     ? Object.keys(topology.table[0]).map((k) => k.replace(/^\w/, (c) => c.toUpperCase()))
     : [];
+
+/**
+ * Optional Duolingo-style guided flow. When a lab declares `guided`, the
+ * lesson runs as locked steps (see GuidedLesson.astro + guided-lesson.js):
+ * the terminal only accepts the current step's command, and `action` steps
+ * complete through the button rendered below instead of free typing.
+ */
+const guided = lab.guided && Array.isArray(lab.guided.steps) ? lab.guided.steps : null;
 
 /** Panels shown as tabs — only the ones that have real content. */
 const tabs = [
@@ -108,6 +117,28 @@ const tabs = [
              content stack and use the full width — no tab bar, no
              topology/port panels, no layout gaps left behind. */
           <div class="lab-stack">
+            {guided && <GuidedLesson steps={guided} lessonId={lessonId} />}
+
+            {guided && (
+              /* The control that completes `action` steps. The scripted
+                 commands live in the content JSON, so the learner just
+                 clicks — they can never type a command that breaks the
+                 simulated device. Disabled until its step is current. */
+              <div class="lab-stack__block guide-action">
+                <Button
+                  variant="outline"
+                  data-guide-action={guided.find((s) => s.type === 'action')?.action}
+                  disabled
+                >
+                  <Icon name="plus" size={15} />
+                  <span>{guided.find((s) => s.type === 'action')?.buttonLabel ?? 'Apply change'}</span>
+                </Button>
+                <p class="guide-action__hint" data-guide-action-hint>
+                  Locked — finish the current step first.
+                </p>
+              </div>
+            )}
+
             {labUi.renderTerminal && (
               <section class="lab-stack__block" aria-label="Lab terminal">
                 <CliSimulator
