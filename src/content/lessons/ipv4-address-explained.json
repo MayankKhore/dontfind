@@ -1,0 +1,47 @@
+{
+  "title": "IPv4 Address Explained",
+  "description": "32 bits, 4 numbers, one identity",
+  "tagline": "32 bits, 4 numbers, one identity",
+  "duration": "9 min",
+  "stage": 5,
+  "stageName": "IPv4 Addressing",
+  "category": "IPv4 Addressing",
+  "difficulty": "intermediate",
+  "status": "published",
+  "icon": "🔢",
+  "order": 115,
+  "sections": [
+    {
+      "icon": "🔢",
+      "title": "The Basics",
+      "body": "An IPv4 address is a 32-bit number written as four blocks (octets) from 0 to 255, separated by dots. Every device that wants to use IP needs one. Example: 192.168.1.50.",
+      "code": "192   .   168   .    1   .   50\n11000000 10101000 00000001 00110010\n(each octet = 8 bits = value 0..255)"
+    },
+    {
+      "icon": "✂️",
+      "title": "Two Parts: Network + Host",
+      "body": "Every IP splits into two parts. The NETWORK part says which street you live on; the HOST part says which house on that street. The subnet mask decides where the split happens.",
+      "code": "192.168.1.50 /24\n[ 192.168.1 | .50 ]\n  network     host\n  (street)    (house)"
+    },
+    {
+      "icon": "🧮",
+      "title": "How Many Hosts Fit?",
+      "body": "Count host bits and use 2^bits minus 2. Why minus 2? One address is reserved as the network name and one as broadcast.",
+      "code": "/24 -> 8 host bits -> 2^8 - 2 = 254 usable hosts\n/30 -> 2 host bits -> 2^2 - 2 = 2 usable hosts"
+    },
+    {
+      "icon": "⭐",
+      "title": "Rules to Remember",
+      "points": [
+        "Each octet ranges from 0 to 255 only.",
+        "Hosts on the SAME network need DIFFERENT IPs.",
+        "Two devices can share an IP only on DIFFERENT networks.",
+        "Learn powers of 2: 128, 192, 224, 240, 248, 252, 254, 255."
+      ],
+      "tip": "💡 Exam tip: practice ONE binary-to-decimal conversion and the whole topic unlocks."
+    }
+  ],
+  "tags": [],
+  "related": [],
+  "resources": []
+}

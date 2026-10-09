@@ -1,0 +1,34 @@
+---
+/**
+ * CTABand.astro — the standard end-of-page call to action.
+ *
+ * Every content template ends with the same band so a reader who
+ * finishes a lesson always has an obvious next step.
+ *
+ * Props: title, text, icon, headingLevel
+ * Slots: actions (buttons)
+ */
+import Icon from './Icon.astro';
+
+const {
+  title = 'Keep going',
+  text,
+  icon = 'route',
+  class: className = '',
+} = Astro.props;
+---
+
+<aside class={['cta', className].filter(Boolean).join(' ')}>
+  <div class="cta__inner">
+    <div class="cta__copy">
+      <h2 class="cta__title">
+        <Icon name={icon} size={20} />
+        <span>{title}</span>
+      </h2>
+      {text && <p class="cta__text">{text}</p>}
+    </div>
+    <div class="cta__actions">
+      <slot name="actions" />
+    </div>
+  </div>
+</aside>

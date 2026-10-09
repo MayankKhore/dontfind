@@ -1,0 +1,45 @@
+{
+  "title": "Subnetting",
+  "description": "Slicing one network into many smaller ones",
+  "tagline": "Slicing one network into many smaller ones",
+  "duration": "14 min",
+  "stage": 6,
+  "stageName": "Subnetting",
+  "category": "Subnetting",
+  "difficulty": "intermediate",
+  "status": "published",
+  "icon": "🍰",
+  "order": 118,
+  "sections": [
+    {
+      "icon": "🍰",
+      "title": "Why Subnet?",
+      "body": "Subnetting = cutting one big network into smaller pieces (subnets) by borrowing host bits and turning them into network bits. Why? Smaller broadcast domains, better security between departments, no wasted addresses."
+    },
+    {
+      "icon": "🪄",
+      "title": "The Magic Formula",
+      "code": "Subnets created  = 2^borrowed bits\nHosts per subnet = 2^remaining host bits - 2\n\n192.168.1.0/24 -> borrow 2 bits -> /26\n  subnets = 2^2 = 4\n  hosts   = 2^6 - 2 = 62 per subnet"
+    },
+    {
+      "icon": "🗺️",
+      "title": "Worked Example Step by Step",
+      "body": "Split 192.168.1.0/24 into 4 subnets using /26:",
+      "code": "/26 mask = 255.255.255.192\nBlock size = 256 - 192 = 64\n\nSubnet 1: .0   - .63   (.0 net, .63 broadcast)\nSubnet 2: .64  - .127  (hosts .65 - .126)\nSubnet 3: .128 - .191\nSubnet 4: .192 - .255"
+    },
+    {
+      "icon": "🧭",
+      "title": "The Block Size Trick",
+      "points": [
+        "Block size = 256 − last interesting mask octet.",
+        "Subnets start at 0 and jump by block size: 0, 64, 128, 192...",
+        "Last address of a subnet = its broadcast.",
+        "First usable = network + 1; last usable = broadcast − 1."
+      ],
+      "tip": "💡 Practice daily — subnetting speed decides whether you finish the CCNA exam on time!"
+    }
+  ],
+  "tags": [],
+  "related": [],
+  "resources": []
+}

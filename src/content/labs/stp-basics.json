@@ -1,0 +1,104 @@
+{
+  "title": "STP Basics",
+  "description": "Understand how STP prevents loops and identify the root bridge.",
+  "scenario": "Understand how STP prevents loops and identify the root bridge.",
+  "duration": "10 min",
+  "stage": 4,
+  "stageName": "Spanning Tree",
+  "category": "Spanning Tree",
+  "difficulty": "beginner",
+  "status": "published",
+  "icon": "🧪",
+  "order": 13,
+  "allowedCommands": [
+    "enable",
+    "show spanning-tree",
+    "show spanning-tree root",
+    "show interfaces status",
+    "exit",
+    "end",
+    "help",
+    "?"
+  ],
+  "objectives": [
+    {
+      "text": "View spanning-tree status",
+      "cmd": "show spanning-tree"
+    },
+    {
+      "text": "View the root bridge",
+      "cmd": "show spanning-tree root"
+    }
+  ],
+  "concepts": [
+    {
+      "title": "Why STP?",
+      "body": "Without STP, redundant links create broadcast storms and MAC table instability. STP blocks redundant paths to create a loop-free topology.",
+      "code": "Redundant links → loops\nSTP → blocks one path → no loops"
+    },
+    {
+      "title": "Root Bridge Election",
+      "body": "The switch with the lowest bridge priority + MAC address becomes the root bridge. All other switches calculate the best path to root.",
+      "code": "Priority: 32768 (default)\nLowest priority + MAC = root"
+    },
+    {
+      "title": "Port Roles",
+      "body": "Root ports (best path to root), designated ports (forward), and blocked ports (prevent loops).",
+      "code": "Root Port: best path to root\nDesignated: forwards traffic\nBlocked:   prevents loops"
+    }
+  ],
+  "topology": {
+    "devices": [
+      {
+        "id": "pc-a",
+        "label": "PC-A",
+        "type": "pc",
+        "x": 60,
+        "y": 75
+      },
+      {
+        "id": "sw1",
+        "label": "SW1",
+        "type": "switch",
+        "x": 210,
+        "y": 75
+      },
+      {
+        "id": "pc-b",
+        "label": "PC-B",
+        "type": "pc",
+        "x": 360,
+        "y": 75
+      }
+    ],
+    "links": [
+      {
+        "from": "pc-a",
+        "to": "sw1",
+        "label": "Fa0/1"
+      },
+      {
+        "from": "pc-b",
+        "to": "sw1",
+        "label": "Fa0/2"
+      }
+    ],
+    "table": [
+      {
+        "port": "Fa0/1",
+        "mode": "access",
+        "vlan": "1",
+        "peer": "PC-A"
+      },
+      {
+        "port": "Fa0/2",
+        "mode": "access",
+        "vlan": "1",
+        "peer": "PC-B"
+      }
+    ]
+  },
+  "tags": [],
+  "related": [],
+  "resources": []
+}

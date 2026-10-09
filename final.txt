@@ -1,0 +1,9 @@
+﻿lab: mark-complete hook False
+lab: cli sim script True
+lab: progressbar True
+lab: canonical https://animated-manatee-4c3b08.netlify.app/labs/configure-access-vlans
+lab: JSON-LD blocks 3
+tools index: search-root=True input=True empty=True script=True
+incidents index: search-root=True input=True empty=True script=True
+interview-questions index: search-root=True input=True empty=True script=True
+articles index: search-root=True input=True empty=True script=True

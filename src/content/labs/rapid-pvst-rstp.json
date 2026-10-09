@@ -1,0 +1,104 @@
+{
+  "title": "Rapid PVST+ (RSTP)",
+  "description": "Understand Rapid Spanning Tree and how it converges faster than classic STP.",
+  "scenario": "Understand Rapid Spanning Tree and how it converges faster than classic STP.",
+  "duration": "7 min",
+  "stage": 4,
+  "stageName": "Spanning Tree",
+  "category": "Spanning Tree",
+  "difficulty": "beginner",
+  "status": "published",
+  "icon": "🧪",
+  "order": 15,
+  "allowedCommands": [
+    "enable",
+    "configure terminal",
+    "spanning-tree mode rapid-pvst",
+    "show spanning-tree",
+    "exit",
+    "end",
+    "help",
+    "?"
+  ],
+  "objectives": [
+    {
+      "text": "Enable Rapid PVST+",
+      "cmd": "spanning-tree mode rapid-pvst"
+    },
+    {
+      "text": "Verify STP mode",
+      "cmd": "show spanning-tree"
+    }
+  ],
+  "concepts": [
+    {
+      "title": "RSTP vs STP",
+      "body": "RSTP (802.1w) converges in seconds instead of 30-50 seconds. It uses port roles: root, designated, alternate, backup.",
+      "code": "STP:  ~30-50s convergence\nRSTP: ~1-3s convergence"
+    },
+    {
+      "title": "RSTP Port Roles",
+      "body": "Alternate ports provide a backup path to root. Backup ports back up designated ports. Both are discarding until needed.",
+      "code": "Root → forwards\nDesignated → forwards\nAlternate → backup to root\nBackup → backup to designated"
+    },
+    {
+      "title": "Enabling RSTP",
+      "body": "Cisco switches use Rapid PVST+ (per-VLAN RSTP). Enable it globally with \"spanning-tree mode rapid-pvst\".",
+      "code": "SW1(config)# spanning-tree mode rapid-pvst"
+    }
+  ],
+  "topology": {
+    "devices": [
+      {
+        "id": "pc-a",
+        "label": "PC-A",
+        "type": "pc",
+        "x": 60,
+        "y": 75
+      },
+      {
+        "id": "sw1",
+        "label": "SW1",
+        "type": "switch",
+        "x": 210,
+        "y": 75
+      },
+      {
+        "id": "pc-b",
+        "label": "PC-B",
+        "type": "pc",
+        "x": 360,
+        "y": 75
+      }
+    ],
+    "links": [
+      {
+        "from": "pc-a",
+        "to": "sw1",
+        "label": "Fa0/1"
+      },
+      {
+        "from": "pc-b",
+        "to": "sw1",
+        "label": "Fa0/2"
+      }
+    ],
+    "table": [
+      {
+        "port": "Fa0/1",
+        "mode": "access",
+        "vlan": "1",
+        "peer": "PC-A"
+      },
+      {
+        "port": "Fa0/2",
+        "mode": "access",
+        "vlan": "1",
+        "peer": "PC-B"
+      }
+    ]
+  },
+  "tags": [],
+  "related": [],
+  "resources": []
+}

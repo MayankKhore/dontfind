@@ -1,0 +1,282 @@
+
+> ccna-path@1.0.0 dev
+> astro dev
+
+[2m19:53:08[22m [34m[types][39m Generated [2m1ms[22m
+[2m19:53:10[22m [34m[content][39m Syncing content
+[2m19:53:11[22m [34m[content][39m Synced content
+[2m19:53:11[22m [34m[vite][39m Re-optimizing dependencies because vite config has changed
+
+[42m[1m astro [22m[49m [32mv5.18.2[39m [2mready in[22m 3378 [2mms[22m
+
+[2m┃[22m Local    [36mhttp://localhost:4321/[39m
+[2m┃[22m Network  [2muse --host to expose[22m
+
+[2m19:53:11[22m [32mwatching for file changes...[39m
+[2m19:53:25[22m [34m[200][39m / [2m238ms[22m
+[2m19:53:34[22m [34m[200][39m / [2m51ms[22m
+[2m19:53:35[22m [34m[200][39m /labs/ [2m52ms[22m
+[2m19:53:35[22m [34m[200][39m /lessons/subnetting/ [2m14ms[22m
+[2m19:53:36[22m [34m[200][39m /glossary/vlan/ [2m15ms[22m
+[2m19:53:36[22m [34m[200][39m /quizzes/ipv4-addressing-basics/ [2m12ms[22m
+[2m19:53:36[22m [34m[200][39m /tools/subnet-calculator/ [2m14ms[22m
+[2m19:53:37[22m [34m[200][39m /dashboard/ [2m35ms[22m
+[2m19:53:37[22m [34m[200][39m /robots.txt [2m3ms[22m
+[2m19:55:55[22m [34m[200][39m / [2m63ms[22m
+[2m19:56:32[22m [34m[200][39m /dashboard/ [2m45ms[22m
+[2m19:56:48[22m [34m[200][39m /dashboard/ [2m44ms[22m
+[2m19:56:59[22m [34m[200][39m / [2m53ms[22m
+[2m19:57:08[22m [34m[200][39m /dashboard/ [2m31ms[22m
+[2m19:57:11[22m [34m[200][39m / [2m30ms[22m
+[2m19:57:24[22m [34m[200][39m /premium/ [2m14ms[22m
+[2m19:58:33[22m [34m[200][39m /path/ [2m52ms[22m
+[2m19:59:12[22m [34m[200][39m /about/ [2m15ms[22m
+[2m19:59:27[22m [34m[200][39m /dashboard/ [2m44ms[22m
+[2m19:59:34[22m [34m[200][39m /path/ [2m81ms[22m
+[2m19:59:37[22m [34m[200][39m / [2m28ms[22m
+[2m19:59:42[22m [33m[404][39m /sitemap-index.xml [2m8ms[22m
+[2m19:59:56[22m [33m[404][39m /legacy/ [2m9ms[22m
+[2m19:59:59[22m [34m[200][39m /about/ [2m12ms[22m
+[2m20:00:02[22m [34m[200][39m /premium/ [2m8ms[22m
+[2m20:00:22[22m [34m[200][39m / [2m45ms[22m
+[2m20:00:38[22m [34m[200][39m /incidents/ [2m14ms[22m
+[2m20:00:53[22m [34m[200][39m / [2m52ms[22m
+[2m20:02:56[22m [34m[200][39m / [2m33ms[22m
+[2m20:03:15[22m [34m[200][39m /labs/ [2m51ms[22m
+[2m20:03:22[22m [34m[200][39m /labs/your-first-switch-config/ [2m21ms[22m
+[2m20:03:35[22m [34m[200][39m / [2m37ms[22m
+[2m20:24:31[22m [34m[200][39m /quizzes/ [2m31ms[22m
+[2m20:24:37[22m [34m[200][39m /path/ [2m114ms[22m
+[2m20:24:57[22m [34m[200][39m /labs/port-mirroring-span/ [2m26ms[22m
+[2m20:26:55[22m [34m[200][39m /lessons/ [2m38ms[22m
+[2m20:28:28[22m [34m[200][39m /lessons/what-is-a-network/ [2m20ms[22m
+[2m20:29:21[22m [34m[200][39m /labs/ [2m68ms[22m
+[2m20:30:17[22m [34m[200][39m /labs/ [2m85ms[22m
+[2m20:30:22[22m [34m[200][39m /path/ [2m99ms[22m
+[2m20:30:40[22m [34m[200][39m /labs/vlan-troubleshooting/ [2m18ms[22m
+[2m20:32:20[22m [34m[200][39m /labs/ [2m110ms[22m
+[2m20:32:25[22m [34m[200][39m /quizzes/ [2m18ms[22m
+[2m20:32:30[22m [34m[200][39m /tools/ [2m26ms[22m
+[2m20:32:34[22m [34m[200][39m /tools/ [2m23ms[22m
+[2m20:32:39[22m [34m[200][39m /tools/subnet-calculator/ [2m37ms[22m
+[2m20:33:13[22m [34m[200][39m /tools/subnet-calculator/ [2m34ms[22m
+[2m20:33:18[22m [34m[200][39m /tools/ [2m26ms[22m
+[2m20:33:20[22m [34m[200][39m /tools/subnet-mask-converter/ [2m18ms[22m
+[2m20:33:32[22m [34m[200][39m /interview-questions/ [2m22ms[22m
+[2m20:33:41[22m [34m[200][39m /interview-questions/how-does-a-switch-learn-mac-addresses/ [2m16ms[22m
+[2m20:33:58[22m [34m[200][39m /interview-questions/ [2m25ms[22m
+[2m20:34:02[22m [34m[200][39m /lessons/ [2m39ms[22m
+[2m20:34:09[22m [34m[200][39m /interview-questions/ [2m27ms[22m
+[2m20:34:20[22m [34m[200][39m /incidents/ [2m32ms[22m
+[2m20:34:24[22m [34m[200][39m /interview-questions/ [2m23ms[22m
+[2m20:34:31[22m [34m[200][39m /interview-questions/ [2m27ms[22m
+[2m20:34:39[22m [34m[200][39m /glossary/ [2m18ms[22m
+[2m20:34:46[22m [34m[200][39m /articles/ [2m14ms[22m
+[2m20:34:51[22m [34m[200][39m /articles/how-to-study-for-the-ccna/ [2m21ms[22m
+[2m20:35:16[22m [34m[200][39m /dashboard/ [2m84ms[22m
+[2m20:35:21[22m [34m[200][39m /dashboard/ [2m46ms[22m
+[2m20:35:45[22m [34m[200][39m /profile/ [2m78ms[22m
+[2m20:36:39[22m [34m[200][39m /dashboard/ [2m73ms[22m
+[2m20:37:00[22m [34m[200][39m /tools/subnet-calculator/ [2m45ms[22m
+[2m20:37:05[22m [34m[200][39m /path/ [2m85ms[22m
+[2m21:14:14[22m [34m[200][39m / [2m119ms[22m
+[2m21:14:27[22m [34m[200][39m /path/ [2m122ms[22m
+[2m21:14:42[22m [34m[200][39m /interview-questions/ [2m35ms[22m
+[2m21:14:49[22m [34m[200][39m /premium/ [2m30ms[22m
+[2m21:15:05[22m [34m[200][39m /dashboard/ [2m91ms[22m
+[2m21:26:58[22m [34m[200][39m / [2m94ms[22m
+[2m21:28:20[22m [34m[200][39m /premium/ [2m30ms[22m
+[2m21:28:30[22m [34m[200][39m / [2m95ms[22m
+[2m21:29:23[22m [34m[200][39m /tools/ [2m25ms[22m
+[2m21:29:28[22m [34m[200][39m /tools/subnet-calculator/ [2m55ms[22m
+[2m21:29:37[22m [34m[200][39m /dashboard/ [2m77ms[22m
+[2m21:29:57[22m [34m[200][39m /path/ [2m145ms[22m
+[2m21:45:54[22m Configuration file updated. Restarting...
+[2m21:45:55[22m [34m[vite][39m Re-optimizing dependencies because vite config has changed
+[2m21:45:56[22m [34m[content][39m Syncing content
+[2m21:45:57[22m [34m[content][39m Synced content
+[2m21:45:57[22m [34m[types][39m Generated [2m1.93s[22m
+[2m21:45:57[22m [34m[vite][39m Re-optimizing dependencies because vite config has changed
+[2m21:46:16[22m [34m[watch][39m dist/404.html
+[2m21:46:16[22m [34m[watch][39m dist/about/index.html
+[2m21:46:16[22m [34m[watch][39m dist/articles/index.html
+[2m21:46:16[22m [34m[watch][39m dist/articles/understanding-the-osi-model/index.html
+[2m21:46:16[22m [34m[watch][39m dist/articles/how-to-study-for-the-ccna/index.html
+[2m21:46:16[22m [34m[watch][39m dist/dashboard/index.html
+[2m21:46:16[22m [34m[watch][39m dist/glossary/address-resolution-protocol/index.html
+[2m21:46:16[22m [34m[watch][39m dist/glossary/index.html
+[2m21:46:16[22m [34m[watch][39m dist/glossary/mac-address/index.html
+[2m21:46:16[22m [34m[watch][39m dist/glossary/spanning-tree-protocol/index.html
+[2m21:46:16[22m [34m[watch][39m dist/glossary/subnet-mask/index.html
+[2m21:46:16[22m [34m[watch][39m dist/glossary/vlan/index.html
+[2m21:46:16[22m [34m[watch][39m dist/incidents/index.html
+[2m21:46:16[22m [34m[watch][39m dist/incidents/interface-administratively-down/index.html
+[2m21:46:16[22m [34m[watch][39m dist/incidents/vlan-mismatch-between-switches/index.html
+[2m21:46:16[22m [34m[watch][39m dist/index.html
+[2m21:46:16[22m [34m[watch][39m dist/interview-questions/index.html
+[2m21:46:16[22m [34m[watch][39m dist/interview-questions/difference-between-tcp-and-udp/index.html
+[2m21:46:16[22m [34m[watch][39m dist/interview-questions/how-does-a-switch-learn-mac-addresses/index.html
+[2m21:46:16[22m [34m[watch][39m dist/interview-questions/what-is-a-subnet-mask/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/aaa-basics/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/arp-address-resolution-protocol/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/auto-negotiation/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/basic-ios-error-messages/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/bpdu-guard-and-root-guard/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/cdp-and-lldp/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/cdp-configuration/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/cli-modes-and-navigation/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/collision-domain-vs-broadcast-domain/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/configuration-modes/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/configure-access-vlans/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/default-gateway/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/default-gateway-concept/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/dhcp-snooping/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/dtp-dynamic-trunking-protocol/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/duplex-and-speed/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/etherchannel/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/etherchannel-basics/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/ethernet-frame/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/help-and-tab-completion/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/inter-vlan-routing-router-on-a-stick/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/interface-naming-and-range/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/interface-basics/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/ipv4-addressing/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/lacp-passive-and-active/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/layer-3-switching-svis/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/lacp-configuration/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/lldp-configuration/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/mac-address-table-management/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/mac-addresses/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/mac-flooding-attack/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/mac-tables-and-arp/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/mac-learning-and-flooding/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/mstp-multiple-spanning-tree/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/native-vlan-and-trunk-configuration/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/network-foundations/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/pagp-port-aggregation-protocol/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/poe-power-over-ethernet/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/password-encryption/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/port-mirroring-span/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/port-security-basics/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/port-security-violation-modes/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/portfast-and-bpdu-guard/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/private-vlan-basics/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/pvst-configuration/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/rapid-pvst-rstp/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/rstp-configuration/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/saving-your-work/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/running-config-vs-startup-config/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/show-commands-basics/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/ssh-configuration/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/ssh-security/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/sticky-mac-and-port-security/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/storm-control/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/stp-basics/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/stp-configuration/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/stp-port-states-and-roles/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/stp-troubleshooting/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/subnet-mask/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/switch-backup-and-restore/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/switch-ios-upgrade/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/switch-management-ip/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/switch-password-and-security/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/switch-stacking/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/telnet-configuration/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/trunk-ports-and-vlan-verification/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/unicast-broadcast-and-multicast/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/vlan-database-vlan-creation-and-deletion/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/vlan-hopping-attack/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/vlan-pruning-concept/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/vlan-tagging/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/vlan-trunking-protocol-vtp/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/vlan-troubleshooting/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/voice-vlan/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/vtp-configuration/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/vtp-modes-and-versions/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/vtp-pruning/index.html
+[2m21:46:16[22m [34m[watch][39m dist/labs/your-first-switch-config/index.html
+[2m21:46:17[22m [34m[watch][39m dist/legacy/index.html
+[2m21:46:17[22m [34m[watch][39m dist/lessons/index.html
+[2m21:46:17[22m [34m[watch][39m dist/lessons/cidr/index.html
+[2m21:46:17[22m [34m[watch][39m dist/lessons/classes-of-ip-addresses/index.html
+[2m21:46:17[22m [34m[watch][39m dist/lessons/ethernet-and-the-ethernet-frame/index.html
+[2m21:46:17[22m [34m[watch][39m dist/lessons/hub/index.html
+[2m21:46:17[22m [34m[watch][39m dist/lessons/ip-header/index.html
+[2m21:46:17[22m [34m[watch][39m dist/lessons/ipv4-address-explained/index.html
+[2m21:46:17[22m [34m[watch][39m dist/lessons/lan-local-area-network/index.html
+[2m21:46:17[22m [34m[watch][39m dist/lessons/mac-address-vs-ip-address/index.html
+[2m21:46:17[22m [34m[watch][39m dist/lessons/network-cables/index.html
+[2m21:46:17[22m [34m[watch][39m dist/lessons/ports/index.html
+[2m21:46:17[22m [34m[watch][39m dist/lessons/osi-model-and-tcp-ip-suite/index.html
+[2m21:46:17[22m [34m[watch][39m dist/lessons/poe-and-ieee-standards/index.html
+[2m21:46:17[22m [34m[watch][39m dist/lessons/private-ip-addresses/index.html
+[2m21:46:17[22m [34m[watch][39m dist/lessons/router/index.html
+[2m21:46:17[22m [34m[watch][39m dist/lessons/subnet-mask/index.html
+[2m21:46:17[22m [34m[watch][39m dist/lessons/subnetting/index.html
+[2m21:46:17[22m [34m[watch][39m dist/lessons/switch/index.html
+[2m21:46:17[22m [34m[watch][39m dist/lessons/tcp/index.html
+[2m21:46:17[22m [34m[watch][39m dist/lessons/transport-layer/index.html
+[2m21:46:17[22m [34m[watch][39m dist/lessons/types-of-ethernet-cabling/index.html
+[2m21:46:17[22m [34m[watch][39m dist/lessons/udp/index.html
+[2m21:46:17[22m [34m[watch][39m dist/lessons/types-of-ip-address/index.html
+[2m21:46:17[22m [34m[watch][39m dist/lessons/unicast-multicast-and-broadcast/index.html
+[2m21:46:17[22m [34m[watch][39m dist/lessons/what-is-a-network/index.html
+[2m21:46:17[22m [34m[watch][39m dist/lessons/vlsm/index.html
+[2m21:46:17[22m [34m[watch][39m dist/path/index.html
+[2m21:46:17[22m [34m[watch][39m dist/premium/index.html
+[2m21:46:17[22m [34m[watch][39m dist/profile/index.html
+[2m21:46:17[22m [34m[watch][39m dist/quizzes/index.html
+[2m21:46:17[22m [34m[watch][39m dist/quizzes/ipv4-addressing-basics/index.html
+[2m21:46:17[22m [34m[watch][39m dist/quizzes/switching-fundamentals/index.html
+[2m21:46:17[22m [34m[watch][39m dist/search/index.html
+[2m21:46:17[22m [34m[watch][39m dist/tools/index.html
+[2m21:46:17[22m [34m[watch][39m dist/tools/subnet-calculator/index.html
+[2m21:46:17[22m [34m[watch][39m dist/tools/subnet-mask-converter/index.html
+[2m21:46:19[22m [34m[watch][39m dist/legacy/index.html
+[2m21:46:20[22m [34m[watch][39m dist/404.html
+[2m21:46:21[22m [34m[watch][39m dist/index.html
+[2m21:46:21[22m [34m[watch][39m dist/about/index.html
+[2m21:46:21[22m [34m[watch][39m dist/articles/index.html
+[2m21:46:21[22m [34m[watch][39m dist/dashboard/index.html
+[2m21:46:21[22m [34m[watch][39m dist/glossary/index.html
+[2m21:46:21[22m [34m[watch][39m dist/incidents/index.html
+[2m21:46:21[22m [34m[watch][39m dist/interview-questions/index.html
+[2m21:46:21[22m [34m[watch][39m dist/articles/how-to-study-for-the-ccna/index.html
+[2m21:46:21[22m [34m[watch][39m dist/articles/understanding-the-osi-model/index.html
+[2m21:46:21[22m [34m[watch][39m dist/glossary/address-resolution-protocol/index.html
+[2m21:46:21[22m [34m[watch][39m dist/glossary/mac-address/index.html
+[2m21:46:21[22m [34m[watch][39m dist/glossary/spanning-tree-protocol/index.html
+[2m21:46:21[22m [34m[watch][39m dist/glossary/subnet-mask/index.html
+[2m21:46:21[22m [34m[watch][39m dist/glossary/vlan/index.html
+[2m21:46:21[22m [34m[watch][39m dist/incidents/interface-administratively-down/index.html
+[2m21:46:21[22m [34m[watch][39m dist/incidents/vlan-mismatch-between-switches/index.html
+[2m21:46:21[22m [34m[watch][39m dist/interview-questions/difference-between-tcp-and-udp/index.html
+[2m21:46:21[22m [34m[watch][39m dist/interview-questions/how-does-a-switch-learn-mac-addresses/index.html
+[2m21:46:21[22m [34m[watch][39m dist/interview-questions/what-is-a-subnet-mask/index.html
+[2m21:46:21[22m [34m[watch][39m dist/labs/cli-modes-and-navigation/index.html
+[2m21:46:21[22m [34m[watch][39m dist/labs/configure-access-vlans/index.html
+[2m21:46:21[22m [34m[watch][39m dist/labs/interface-basics/index.html
+[2m21:46:21[22m [34m[watch][39m dist/labs/help-and-tab-completion/index.html
+[2m21:46:21[22m [34m[watch][39m dist/labs/mac-tables-and-arp/index.html
+[2m21:46:21[22m [34m[watch][39m dist/labs/native-vlan-and-trunk-configuration/index.html
+[2m21:46:21[22m [34m[watch][39m dist/labs/network-foundations/index.html
+[2m21:46:21[22m [34m[watch][39m dist/labs/saving-your-work/index.html
+[2m21:46:21[22m [34m[watch][39m dist/labs/show-commands-basics/index.html
+[2m21:46:21[22m [34m[watch][39m dist/labs/trunk-ports-and-vlan-verification/index.html
+[2m21:46:21[22m [34m[watch][39m dist/labs/vlan-trunking-protocol-vtp/index.html
+[2m21:46:21[22m [34m[watch][39m dist/labs/your-first-switch-config/index.html
+[2m21:47:14[22m [34m[200][39m / [2m236ms[22m
+[2m21:47:14[22m [34m[200][39m /tools/ [2m17ms[22m
+[2m21:47:15[22m [34m[200][39m /tools/subnet-calculator/ [2m21ms[22m
+[2m21:47:15[22m [34m[200][39m /labs/configure-access-vlans/ [2m27ms[22m
+[2m21:47:16[22m [34m[200][39m /lessons/subnetting/ [2m39ms[22m
+[2m21:48:57[22m [34m[200][39m / [2m36ms[22m
+[2m21:49:09[22m [34m[200][39m / [2m41ms[22m
+[2m21:50:07[22m [34m[200][39m /tools/ [2m14ms[22m
+[2m21:50:21[22m [34m[200][39m /tools/subnet-calculator/ [2m16ms[22m
+[2m21:50:28[22m [34m[200][39m /tools/ [2m9ms[22m
+[2m21:50:29[22m [34m[200][39m /tools/ [2m9ms[22m
+[2m21:50:29[22m [34m[200][39m /tools/ [2m10ms[22m
+[2m21:50:29[22m [34m[200][39m /tools/ [2m10ms[22m
+[2m21:50:30[22m [34m[200][39m /tools/subnet-mask-converter/ [2m9ms[22m

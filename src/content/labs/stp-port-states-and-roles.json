@@ -1,0 +1,103 @@
+{
+  "title": "STP Port States & Roles",
+  "description": "Learn the STP port states: Blocking, Listening, Learning, Forwarding.",
+  "scenario": "Learn the STP port states: Blocking, Listening, Learning, Forwarding.",
+  "duration": "8 min",
+  "stage": 4,
+  "stageName": "Spanning Tree",
+  "category": "Spanning Tree",
+  "difficulty": "beginner",
+  "status": "published",
+  "icon": "🧪",
+  "order": 14,
+  "allowedCommands": [
+    "enable",
+    "show spanning-tree",
+    "show spanning-tree interface",
+    "exit",
+    "end",
+    "help",
+    "?"
+  ],
+  "objectives": [
+    {
+      "text": "View STP for VLAN 1",
+      "cmd": "show spanning-tree"
+    },
+    {
+      "text": "View STP for Fa0/1",
+      "cmd": "show spanning-tree interface FastEthernet0/1"
+    }
+  ],
+  "concepts": [
+    {
+      "title": "STP Port States",
+      "body": "Blocking (no forwarding), Listening (learning topology), Learning (building MAC table), Forwarding (normal operation).",
+      "code": "Blocking → Listening → Learning → Forwarding"
+    },
+    {
+      "title": "Forward Delay",
+      "body": "It takes 15 seconds to go from Listening to Learning, and another 15 to Forwarding. Total ~30 seconds convergence.",
+      "code": "Listening: 15s\nLearning:  15s\nTotal:     ~30s"
+    },
+    {
+      "title": "PortFast",
+      "body": "PortFast skips STP states on access ports so devices connect instantly. Only use on ports connected to end devices.",
+      "code": "SW1(config-if)# spanning-tree portfast"
+    }
+  ],
+  "topology": {
+    "devices": [
+      {
+        "id": "pc-a",
+        "label": "PC-A",
+        "type": "pc",
+        "x": 60,
+        "y": 75
+      },
+      {
+        "id": "sw1",
+        "label": "SW1",
+        "type": "switch",
+        "x": 210,
+        "y": 75
+      },
+      {
+        "id": "pc-b",
+        "label": "PC-B",
+        "type": "pc",
+        "x": 360,
+        "y": 75
+      }
+    ],
+    "links": [
+      {
+        "from": "pc-a",
+        "to": "sw1",
+        "label": "Fa0/1"
+      },
+      {
+        "from": "pc-b",
+        "to": "sw1",
+        "label": "Fa0/2"
+      }
+    ],
+    "table": [
+      {
+        "port": "Fa0/1",
+        "mode": "access",
+        "vlan": "1",
+        "peer": "PC-A"
+      },
+      {
+        "port": "Fa0/2",
+        "mode": "access",
+        "vlan": "1",
+        "peer": "PC-B"
+      }
+    ]
+  },
+  "tags": [],
+  "related": [],
+  "resources": []
+}

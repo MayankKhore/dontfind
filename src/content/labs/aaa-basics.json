@@ -1,0 +1,117 @@
+{
+  "title": "AAA Basics",
+  "description": "Enable AAA and require local username login on console and VTY lines.",
+  "scenario": "Enable AAA and require local username login on console and VTY lines.",
+  "duration": "8 min",
+  "stage": 5,
+  "stageName": "Security",
+  "category": "Security",
+  "difficulty": "intermediate",
+  "status": "published",
+  "icon": "🧪",
+  "order": 73,
+  "allowedCommands": [
+    "enable",
+    "configure terminal",
+    "aaa new-model",
+    "username admin password cisco123",
+    "line console 0",
+    "login local",
+    "line vty 0 4",
+    "login local",
+    "show running-config",
+    "exit",
+    "end",
+    "help",
+    "?"
+  ],
+  "objectives": [
+    {
+      "text": "Enable AAA",
+      "cmd": "aaa new-model"
+    },
+    {
+      "text": "Create local user",
+      "cmd": "username admin password cisco123"
+    },
+    {
+      "text": "Console uses local login",
+      "cmd": "login local"
+    },
+    {
+      "text": "VTY uses local login",
+      "cmd": "login local"
+    }
+  ],
+  "concepts": [
+    {
+      "title": "What is AAA?",
+      "body": "Authentication proves who you are, Authorization controls what you can do, Accounting records what you did.",
+      "code": "AAA = Authentication + Authorization + Accounting"
+    },
+    {
+      "title": "Local vs Server-Based",
+      "body": "Local AAA uses the username database stored on the device itself. Larger networks centralize it with RADIUS or TACACS+ servers.",
+      "code": "SW1(config)# aaa new-model\nSW1(config)# username admin password cisco123"
+    },
+    {
+      "title": "login local",
+      "body": "Applying \"login local\" on console/VTY lines forces users to authenticate against the local username database instead of a simple line password.",
+      "code": "SW1(config)# line console 0\nSW1(config-line)# login local\nSW1(config)# line vty 0 4\nSW1(config-line)# login local"
+    }
+  ],
+  "topology": {
+    "devices": [
+      {
+        "id": "pc-a",
+        "label": "PC-A",
+        "type": "pc",
+        "x": 60,
+        "y": 75
+      },
+      {
+        "id": "sw1",
+        "label": "SW1",
+        "type": "switch",
+        "x": 210,
+        "y": 75
+      },
+      {
+        "id": "pc-b",
+        "label": "PC-B",
+        "type": "pc",
+        "x": 360,
+        "y": 75
+      }
+    ],
+    "links": [
+      {
+        "from": "pc-a",
+        "to": "sw1",
+        "label": "Fa0/1"
+      },
+      {
+        "from": "pc-b",
+        "to": "sw1",
+        "label": "Fa0/2"
+      }
+    ],
+    "table": [
+      {
+        "port": "Fa0/1",
+        "mode": "access",
+        "vlan": "1",
+        "peer": "PC-A"
+      },
+      {
+        "port": "Fa0/2",
+        "mode": "access",
+        "vlan": "1",
+        "peer": "PC-B"
+      }
+    ]
+  },
+  "tags": [],
+  "related": [],
+  "resources": []
+}

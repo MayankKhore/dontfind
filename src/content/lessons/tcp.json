@@ -1,0 +1,75 @@
+{
+  "title": "TCP",
+  "description": "Reliable, ordered, connection-first delivery",
+  "tagline": "Reliable, ordered, connection-first delivery",
+  "duration": "11 min",
+  "stage": 3,
+  "stageName": "Transport Layer",
+  "category": "Transport Layer",
+  "difficulty": "beginner",
+  "status": "published",
+  "icon": "🔗",
+  "order": 110,
+  "sections": [
+    {
+      "icon": "📞",
+      "title": "TCP in One Line",
+      "body": "TCP (Transmission Control Protocol) first builds a connection, then delivers everything exactly once and in order — like a phone call: you say hello, wait for hi back, then talk."
+    },
+    {
+      "icon": "🤝",
+      "title": "The 3-Way Handshake",
+      "body": "Before any real data moves, both sides agree to talk:",
+      "code": "Client  --SYN---->        Server\n        (\"want to talk?\")\nClient  <--SYN+ACK--      Server\n        (\"sure, you talk too\")\nClient  --ACK---->        Server\n        (\"great, starting!\")"
+    },
+    {
+      "icon": "✅",
+      "title": "How TCP Stays Reliable",
+      "points": [
+        "Sequence numbers — every byte is counted, so order is known.",
+        "Acknowledgements (ACK) — receiver confirms what arrived.",
+        "Retransmission — no ACK came back? Send it again.",
+        "Flow control (windowing) — receiver says how much it can handle.",
+        "Duplicates are dropped — app never gets the same data twice."
+      ]
+    },
+    {
+      "icon": "👋",
+      "title": "Closing Politely",
+      "body": "TCP ends a session with a 4-step goodbye so nothing is cut off mid-sentence:",
+      "code": "FIN --> ACK <-- FIN <-- ACK -->\n(both sides agree to hang up)"
+    },
+    {
+      "icon": "📦",
+      "title": "Where TCP Shines",
+      "table": {
+        "head": [
+          "Use case",
+          "Why TCP fits"
+        ],
+        "rows": [
+          [
+            "Browsing / HTTPS",
+            "Page must arrive complete"
+          ],
+          [
+            "Email",
+            "Message must not be corrupt"
+          ],
+          [
+            "File transfer / SSH",
+            "Every byte matters"
+          ],
+          [
+            "Downloads",
+            "Missing pieces get resent"
+          ]
+        ]
+      },
+      "tip": "💡 Exam tip: SYN -> SYN/ACK -> ACK. If a question mentions reliability, ordering or handshakes, the answer is TCP."
+    }
+  ],
+  "tags": [],
+  "related": [],
+  "resources": []
+}

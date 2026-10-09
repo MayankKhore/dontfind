@@ -1,0 +1,125 @@
+{
+  "title": "Private VLAN Basics",
+  "description": "Understand primary, secondary (isolated & community) VLANs and how to isolate hosts within a VLAN.",
+  "scenario": "Understand primary, secondary (isolated & community) VLANs and how to isolate hosts within a VLAN.",
+  "duration": "9 min",
+  "stage": 3,
+  "stageName": "VLAN & Trunking",
+  "category": "VLAN & Trunking",
+  "difficulty": "beginner",
+  "status": "published",
+  "icon": "🧪",
+  "order": 60,
+  "allowedCommands": [
+    "enable",
+    "configure terminal",
+    "vlan",
+    "private-vlan",
+    "private-vlan primary",
+    "private-vlan isolated",
+    "private-vlan community",
+    "private-vlan association",
+    "switchport private-vlan host",
+    "switchport private-vlan mapping",
+    "show vlan private-vlan",
+    "show interfaces switchport",
+    "exit",
+    "end",
+    "help",
+    "?"
+  ],
+  "objectives": [
+    {
+      "text": "Create a primary VLAN",
+      "cmd": "vlan 100"
+    },
+    {
+      "text": "Set primary VLAN type",
+      "cmd": "private-vlan primary"
+    },
+    {
+      "text": "Create isolated VLAN",
+      "cmd": "vlan 101"
+    },
+    {
+      "text": "Verify private VLANs",
+      "cmd": "show vlan private-vlan"
+    }
+  ],
+  "concepts": [
+    {
+      "title": "What is a Private VLAN?",
+      "body": "A private VLAN (PVLAN) turns one broadcast domain (primary VLAN) into multiple isolated (sec) sub-domains. Hosts within a set of secondary VLANs can be isolated or grouped.",
+      "code": "Primary VLAN 100\n  → Isolated VLAN 101 (hosts cannot → each other)\n  → Community VLAN 102 (hosts can talk)"
+    },
+    {
+      "title": "Primary & Secondary VLANs",
+      "body": "The primary VLAN is the overall broadcast domain. An \"isolated\" VLAN means hosts reach only the promiscuous port. \"community\" VLANs let the group communicate among itself.",
+      "code": "Primary: carries promiscuous port traffic\nIsolated: hosts cannot peers — only promiscuous\nCommunity: peers inside the group can chat"
+    },
+    {
+      "title": "Basic Configuration",
+      "body": "Configure the primary and secondary VLAN kinds, then associate them.",
+      "code": "SW1(config)# vlan 100\nSW1(config-vlan)# private-vlan primary\nSW1(config)# vlan 101\nSW1(config-vlan)# private-vlan isolated\nSW1(config-vlan)# private-vlan association 101"
+    },
+    {
+      "title": "Verifying Private VLANs",
+      "body": "\"show vlan private-vlan\" shows the primary/secondary association table.",
+      "code": "SW1# show vlan private-vlan\nPrimary  Secondary  Ports\n100      101 (iso)  ...\n100      102 (com)  ..."
+    }
+  ],
+  "topology": {
+    "devices": [
+      {
+        "id": "pc-a",
+        "label": "PC-A",
+        "type": "pc",
+        "x": 60,
+        "y": 75
+      },
+      {
+        "id": "sw1",
+        "label": "SW1",
+        "type": "switch",
+        "x": 210,
+        "y": 75
+      },
+      {
+        "id": "pc-b",
+        "label": "PC-B",
+        "type": "pc",
+        "x": 360,
+        "y": 75
+      }
+    ],
+    "links": [
+      {
+        "from": "pc-a",
+        "to": "sw1",
+        "label": "Fa0/1"
+      },
+      {
+        "from": "pc-b",
+        "to": "sw1",
+        "label": "Fa0/2"
+      }
+    ],
+    "table": [
+      {
+        "port": "Fa0/1",
+        "mode": "private-vlan isolated",
+        "vlan": "100/101",
+        "peer": "PC-A"
+      },
+      {
+        "port": "Fa0/2",
+        "mode": "access",
+        "vlan": "1",
+        "peer": "PC-B"
+      }
+    ]
+  },
+  "tags": [],
+  "related": [],
+  "resources": []
+}

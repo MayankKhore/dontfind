@@ -1,0 +1,84 @@
+---
+/**
+ * RelatedResources.astro — renders an entry's `related` (cross-collection
+ * references) and `resources` (external / further reading links).
+ *
+ * Renders nothing when both lists are empty, so it is safe to include on
+ * every content template — that is exactly why every detail page can
+ * show the same "where next?" affordance.
+ *
+ * Props:
+ *   related  {Array<{collection, slug}>}  refs from the content schema
+ *   resources {Array<{label, href}>}      refs from the content schema
+ *   title    {string}                     heading text
+ */
+import { getCollection } from 'astro:content';
+import Icon from './Icon.astro';
+import { collectionHref, resolveRelated } from '../lib/content.js';
+
+const { related = [], resources = [], title = 'Where to go next' } = Astro.props;
+
+const resolved = [];
+if (related.length > 0) {
+  const collections = [...new Set(related.map((r) => r.collection))];
+  const loaded = await Promise.all(collections.map((name) => getCollection(name)));
+  const lookup = Object.fromEntries(collections.map((name, i) => [name, loaded[i]]));
+  for (const ref of resolveRelated(related, lookup)) {
+    resolved.push({
+      href: `${collectionHref(ref.collection)}/${ref.slug}/`,
+      title: ref.entry.data.term || ref.entry.data.question || ref.entry.data.title,
+      kind: ref.collection,
+      external: false,
+    });
+  }
+}
+
+const isExternal = (href) => /^https?:\/\//i.test(href);
+const nothingToShow = resolved.length === 0 && resources.length === 0;
+---
+
+{!nothingToShow && (
+  <section class="related" aria-labelledby="related-heading">
+    <h2 id="related-heading">
+      <Icon name="route" size={18} />
+      <span>{title}</span>
+    </h2>
+
+    {resolved.length > 0 && (
+      <div class="related__group">
+        <p class="related__label">Related on CCNA Path</p>
+        <ul class="related__list">
+          {resolved.map((item) => (
+            <li>
+              <a href={item.href} rel="related">
+                <Icon name={item.kind === 'labs' ? 'flask' : item.kind === 'lessons' ? 'book' : 'arrow-up-right'} size={14} />
+                <span>{item.title}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
+
+    {resources.length > 0 && (
+      <div class="related__group">
+        <p class="related__label">Further reading</p>
+        <ul class="related__list">
+          {resources.map((resource) => (
+            <li>
+              <a
+                href={resource.href}
+                rel={isExternal(resource.href) ? 'noopener noreferrer' : undefined}
+                target={isExternal(resource.href) ? '_blank' : undefined}
+              >
+                <Icon name={isExternal(resource.href) ? 'external' : 'file-text'} size={14} />
+                <span>{resource.label}</span>
+                {isExternal(resource.href) && <span class="sr-only">(opens in a new tab)</span>}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
+  </section>
+)}

@@ -1,0 +1,78 @@
+{
+  "title": "Router",
+  "description": "The gate between different networks",
+  "tagline": "The gate between different networks",
+  "duration": "9 min",
+  "stage": 2,
+  "stageName": "Network Component",
+  "category": "Network Component",
+  "difficulty": "beginner",
+  "status": "published",
+  "icon": "🚪",
+  "order": 106,
+  "sections": [
+    {
+      "icon": "🚪",
+      "title": "The Gate Between Networks",
+      "body": "A switch moves traffic INSIDE your LAN. A router moves traffic BETWEEN networks — it is the exit door of your LAN toward the Internet or other offices. Your home Wi-Fi box is actually a router (plus switch + more in one)."
+    },
+    {
+      "icon": "🗺️",
+      "title": "How It Decides Where to Send",
+      "body": "A router works like a car GPS: it checks its routing table and picks the best road for each packet. Routes come from three places:",
+      "points": [
+        "Connected routes — networks plugged directly into the router.",
+        "Static routes — a human typed them by hand.",
+        "Dynamic protocols (OSPF, EIGRP) — routers tell each other automatically."
+      ],
+      "code": "Routing table example\n-------------------------------\n10.1.0.0/16  ->  GigabitEthernet0/0   (direct)\n0.0.0.0/0    ->  203.0.113.1          (default route = \"everything else\")"
+    },
+    {
+      "icon": "📣",
+      "title": "Broadcasts Stop Here",
+      "body": "A broadcast says \"ATTENTION EVERYONE!\" inside one network. Routers never forward broadcasts to the next network — they act as sound-proof walls. That keeps big networks calm, which is why large networks are split into subnets joined by routers."
+    },
+    {
+      "icon": "⚔️",
+      "title": "Switch vs Router",
+      "table": {
+        "head": [
+          "Feature",
+          "Switch",
+          "Router"
+        ],
+        "rows": [
+          [
+            "OSI layer",
+            "Layer 2",
+            "Layer 3"
+          ],
+          [
+            "Address used",
+            "MAC",
+            "IP"
+          ],
+          [
+            "Moves",
+            "Frames inside a LAN",
+            "Packets between networks"
+          ],
+          [
+            "Broadcast domains",
+            "One big one",
+            "One per interface ✔"
+          ],
+          [
+            "Extras",
+            "VLANs later on",
+            "NAT, DHCP, firewall often built-in"
+          ]
+        ]
+      },
+      "tip": "💡 Exam tip: \"Which device separates broadcast domains?\" → Router. \"Which device creates many collision domains?\" → Switch (one per port)."
+    }
+  ],
+  "tags": [],
+  "related": [],
+  "resources": []
+}

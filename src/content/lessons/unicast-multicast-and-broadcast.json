@@ -1,0 +1,69 @@
+{
+  "title": "Unicast, Multicast & Broadcast",
+  "description": "One-to-one, one-to-group, one-to-all",
+  "tagline": "One-to-one, one-to-group, one-to-all",
+  "duration": "9 min",
+  "stage": 4,
+  "stageName": "Network Layer",
+  "category": "Network Layer",
+  "difficulty": "beginner",
+  "status": "published",
+  "icon": "📣",
+  "order": 113,
+  "sections": [
+    {
+      "icon": "🎯",
+      "title": "Unicast — One to One",
+      "body": "Normal everyday traffic: one sender talks to exactly ONE receiver. Browsing a website is unicast.",
+      "code": "PC-A -> 192.168.1.20   (only PC-B receives it)"
+    },
+    {
+      "icon": "📺",
+      "title": "Multicast — One to a Group",
+      "body": "One sender reaches MANY interested devices at once — like a live stream only subscribers watch. Uses a reserved address range:",
+      "points": [
+        "IPv4 multicast range: 224.0.0.0 – 239.255.255.255 (Class D).",
+        "Famous example: 224.0.0.5 = ALL OSPF routers.",
+        "Only devices that join the group actually process it."
+      ]
+    },
+    {
+      "icon": "📢",
+      "title": "Broadcast — One to EVERYONE",
+      "body": "A shout that all devices in the network must hear. Used by ARP (\"who has this IP?\") and DHCP requests.",
+      "code": "Limited broadcast : 255.255.255.255  (this network)\nDirected broadcast: 192.168.1.255    (last addr of subnet)\nMAC broadcast     : FF:FF:FF:FF:FF:FF"
+    },
+    {
+      "icon": "⚔️",
+      "title": "Side by Side",
+      "table": {
+        "head": [
+          "Type",
+          "Goes to",
+          "Example use"
+        ],
+        "rows": [
+          [
+            "Unicast",
+            "One host",
+            "Web browsing"
+          ],
+          [
+            "Multicast",
+            "Subscribed group",
+            "IPTV, routing updates"
+          ],
+          [
+            "Broadcast",
+            "All hosts in LAN",
+            "ARP, DHCP discover"
+          ]
+        ]
+      },
+      "tip": "💡 Exam tip: routers do NOT forward broadcasts. Multicast addresses always start between 224 and 239."
+    }
+  ],
+  "tags": [],
+  "related": [],
+  "resources": []
+}

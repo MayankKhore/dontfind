@@ -1,0 +1,116 @@
+{
+  "title": "VTP Modes & Versions",
+  "description": "Configure VTP modes and understand how VTP server, client, and transparent behave.",
+  "scenario": "Configure VTP modes and understand how VTP server, client, and transparent behave.",
+  "duration": "8 min",
+  "stage": 3,
+  "stageName": "VLAN & Trunking",
+  "category": "VLAN & Trunking",
+  "difficulty": "beginner",
+  "status": "published",
+  "icon": "🧪",
+  "order": 58,
+  "allowedCommands": [
+    "enable",
+    "configure terminal",
+    "vtp mode",
+    "vtp domain",
+    "vtp version",
+    "vtp password",
+    "show vtp status",
+    "exit",
+    "end",
+    "help",
+    "?"
+  ],
+  "objectives": [
+    {
+      "text": "Set VTP mode to server",
+      "cmd": "vtp mode server"
+    },
+    {
+      "text": "Set VTP version to 2",
+      "cmd": "vtp version 2"
+    },
+    {
+      "text": "Verify VTP status",
+      "cmd": "show vtp status"
+    }
+  ],
+  "concepts": [
+    {
+      "title": "VTP Modes",
+      "body": "VTP has three modes: Server (creates & advertises VLANs), Client (stores & learns, cannot create VLANs), Transparent (local VLANs only, forwards VTP messages).",
+      "code": "Server:     create VLANs, propagates\nClient:     learns VLANs, no create\nTransparent: local only, forwards"
+    },
+    {
+      "title": "VTP Versions",
+      "body": "VTPv1 is the original. VTPv2 adds support for Token Ring and better error handling. VTPv3 supports extended VLANs and password-security features. All switches in a domain should use the same version.",
+      "code": "Version 1: classic\nVersion 2: Token Ring support\nVersion 3: extended VLANs + security"
+    },
+    {
+      "title": "VTP Domain & Revision",
+      "body": "The domain name and revision number identify VTP messages. A higher revision number wins. Be careful — a switch with a high revision can wipe VLANs in the domain.",
+      "code": "SW1(config)# vtp domain CCNA\nSW1(config)# vtp version 2\nSW1(config)# vtp password cisco"
+    },
+    {
+      "title": "Verifying VTP",
+      "body": "\"show vtp status\" shows the mode and version on each switch. Verify all switches agree.",
+      "code": "SW1# show vtp status\nVTP Version: 2\nDomain Name: CCNA\nVTP Mode: Server\nConfiguration Revision: 3"
+    }
+  ],
+  "topology": {
+    "devices": [
+      {
+        "id": "pc-a",
+        "label": "PC-A",
+        "type": "pc",
+        "x": 60,
+        "y": 75
+      },
+      {
+        "id": "sw1",
+        "label": "SW1",
+        "type": "switch",
+        "x": 210,
+        "y": 75
+      },
+      {
+        "id": "pc-b",
+        "label": "PC-B",
+        "type": "pc",
+        "x": 360,
+        "y": 75
+      }
+    ],
+    "links": [
+      {
+        "from": "pc-a",
+        "to": "sw1",
+        "label": "Fa0/1"
+      },
+      {
+        "from": "pc-b",
+        "to": "sw1",
+        "label": "Fa0/2"
+      }
+    ],
+    "table": [
+      {
+        "port": "Fa0/1",
+        "mode": "access",
+        "vlan": "1",
+        "peer": "PC-A"
+      },
+      {
+        "port": "Fa0/2",
+        "mode": "access",
+        "vlan": "1",
+        "peer": "PC-B"
+      }
+    ]
+  },
+  "tags": [],
+  "related": [],
+  "resources": []
+}

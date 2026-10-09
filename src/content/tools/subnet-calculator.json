@@ -1,0 +1,17 @@
+{
+  "title": "Subnet Calculator",
+  "description": "Enter any IPv4 address and prefix length to instantly see the network address, broadcast address, usable host range, subnet mask and wildcard mask.",
+  "category": "IP Tools",
+  "difficulty": "beginner",
+  "status": "published",
+  "icon": "🧮",
+  "toolType": "subnet",
+  "tags": ["subnetting", "ipv4", "calculator"],
+  "related": [
+    { "collection": "lessons", "slug": "subnetting" },
+    { "collection": "quizzes", "slug": "ipv4-addressing-basics" }
+  ],
+  "resources": [
+    { "label": "Subnetting lessons", "href": "/lessons/" }
+  ]
+}

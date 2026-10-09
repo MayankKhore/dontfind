@@ -1,0 +1,155 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import Badge from '../../components/Badge.astro';
+import Button from '../../components/Button.astro';
+import Icon from '../../components/Icon.astro';
+import Alert from '../../components/Alert.astro';
+import RelatedResources from '../../components/RelatedResources.astro';
+import CTABand from '../../components/CTABand.astro';
+import { getCollection } from 'astro:content';
+import { published } from '../../lib/content.js';
+import { articleSchema } from '../../lib/seo.js';
+
+export async function getStaticPaths() {
+  const questions = published(await getCollection('interview'));
+  return questions.map((entry, i) => ({
+    params: { slug: entry.id },
+    props: { entry, prev: questions[i - 1] ?? null, next: questions[i + 1] ?? null },
+  }));
+}
+
+const { entry, prev, next } = Astro.props;
+const q = entry.data;
+const path = `/interview-questions/${entry.id}/`;
+
+const breadcrumbs = [
+  { href: '/', label: 'Home' },
+  { href: '/interview-questions/', label: 'Interview Questions' },
+  { label: q.question },
+];
+
+/** Rough length of the model answer, used for the "reading time" hint. */
+const answerWords = q.answer.split(/\s+/).length;
+const answerMinutes = Math.max(1, Math.round(answerWords / 200));
+
+/**
+ * One-sentence summary built from the model answer.
+ *
+ * Slicing the answer at a fixed offset cut mid-sentence; `buildDescription`
+ * truncates on a word boundary instead.
+ */
+const summary = q.answer.replace(/\s+/g, ' ').trim();
+---
+
+<BaseLayout
+  title={q.question}
+  description={summary}
+  path={path}
+  breadcrumbs={breadcrumbs}
+  pageType="interview"
+  collection="interview"
+  ogType="article"
+  publishedTime={q.updated}
+  modifiedTime={q.updated}
+  schema={articleSchema({
+    title: q.question,
+    description: summary,
+    path,
+    datePublished: q.updated,
+    dateModified: q.updated,
+    difficulty: q.difficulty,
+    keywords: q.tags,
+  })}
+>
+  <div class="container">
+    <PageHeader
+      kicker={q.category}
+      icon="mic"
+      title={q.question}
+      lead="A strong answer is structured, not exhaustive. Give the headline, explain why, then stop talking."
+    >
+      <div slot="meta" class="page-header__meta">
+        <Badge variant={q.difficulty} label={q.difficulty} />
+        {q.followUps.length > 0 && (
+          <span class="badge badge--count">{q.followUps.length} follow-ups</span>
+        )}
+        <span class="badge badge--count">~{answerMinutes} min answer</span>
+      </div>
+    </PageHeader>
+
+    <div class="qa u-mt-5">
+      <!-- ================= Model answer ================= -->
+      <section class="qa__block">
+        <p class="qa__label">
+          <Icon name="check-circle" size={14} />
+          <span>Model answer</span>
+        </p>
+        <p class="qa__answer">{q.answer}</p>
+      </section>
+
+      {/* ================= Follow-ups ================= */}
+      {q.followUps.length > 0 && (
+        <section class="qa__block">
+          <p class="qa__label">
+            <Icon name="help-circle" size={14} />
+            <span>Expect these follow-ups</span>
+          </p>
+          <ul class="qa__followups">
+            {q.followUps.map((followUp) => <li>{followUp}</li>)}
+          </ul>
+          <Alert variant="info" title="How to answer a follow-up">
+            Answer the question asked, in one or two sentences, then stop. Interviewers are
+            checking whether you know where the edges of your answer are.
+          </Alert>
+        </section>
+      )}
+
+      {q.tags.length > 0 && (
+        <ul class="chips">
+          {q.tags.map((tag) => <li class="chip">{tag}</li>)}
+        </ul>
+      )}
+    </div>
+
+    <RelatedResources related={q.related} resources={q.resources} />
+
+    <nav class="pager" aria-label="Question navigation">
+      {prev ? (
+        <a class="pager__link" href={`/interview-questions/${prev.id}/`} rel="prev">
+          <span class="pager__dir">
+            <Icon name="arrow-left" size={13} />
+            Previous question
+          </span>
+          <span class="pager__title">{prev.data.question}</span>
+        </a>
+      ) : (
+        <span />
+      )}
+      {next ? (
+        <a class="pager__link pager__link--next" href={`/interview-questions/${next.id}/`} rel="next">
+          <span class="pager__dir">
+            Next question
+            <Icon name="arrow-right" size={13} />
+          </span>
+          <span class="pager__title">{next.data.question}</span>
+        </a>
+      ) : (
+        <span />
+      )}
+    </nav>
+
+    <CTABand
+      title="Reading the answer is not the same as saying it"
+      text="Practise the scenario questions out loud — that is what an interview actually tests."
+    >
+      <Fragment slot="actions">
+        <Button href="/incidents/" variant="primary">
+          <Icon name="alert-triangle" size={16} />
+          <span>Troubleshooting scenarios</span>
+        </Button>
+        <Button href="/interview-questions/">All questions</Button>
+      </Fragment>
+    </CTABand>
+  </div>
+</BaseLayout>

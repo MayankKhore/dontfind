@@ -1,0 +1,94 @@
+---
+/**
+ * SearchOverlay.astro — global ⌘K / Ctrl+K search.
+ *
+ * Deliberately NOT a popup: it only appears when the reader asks for it
+ * (click the search trigger, or press the shortcut), traps focus while
+ * open, closes on Escape, and restores focus to the trigger on close.
+ *
+ * Quick links are rendered server-side so the overlay is useful on first
+ * paint; the full index is fetched lazily the first time it is opened and
+ * then cached in memory for the session.
+ *
+ * Props: quickLinks (from lib/site.js)
+ */
+import Icon from './Icon.astro';
+import Kbd from './Kbd.astro';
+import { QUICK_LINKS } from '../lib/site.js';
+---
+
+<div class="search-overlay" data-search-overlay hidden>
+  <div class="search-overlay__backdrop" data-search-close></div>
+
+  <div
+    class="search-overlay__dialog"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="search-overlay-title"
+  >
+    <h2 class="sr-only" id="search-overlay-title">Search CCNA Path</h2>
+
+    <div class="search-overlay__field">
+      <Icon name="search" size={18} />
+      <input
+        type="search"
+        data-search-overlay-input
+        placeholder="Search lessons, labs, quizzes, tools…"
+        autocomplete="off"
+        spellcheck="false"
+        role="combobox"
+        aria-expanded="true"
+        aria-controls="search-overlay-results"
+        aria-autocomplete="list"
+        aria-label="Search all content"
+      />
+      <Kbd keys="Esc" />
+    </div>
+
+    <div class="search-overlay__body">
+      <p class="search-overlay__hint" data-search-overlay-hint>Quick links</p>
+
+      <ul class="search-overlay__results" id="search-overlay-results" role="listbox" data-search-overlay-results>
+        {QUICK_LINKS.map((link, i) => (
+          <li role="presentation">
+            <a
+              class="search-overlay__result"
+              href={link.href}
+              role="option"
+              aria-selected={i === 0 ? 'true' : 'false'}
+              data-overlay-item
+            >
+              <Icon name={link.icon} size={17} />
+              <span class="search-overlay__result-title">{link.label}</span>
+              <span class="search-overlay__result-type">{link.type}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+
+      <div class="empty" data-search-overlay-empty hidden>
+        <span class="empty__icon" aria-hidden="true"><Icon name="search" size={20} /></span>
+        <p class="empty__title">No matches</p>
+        <p class="empty__text">
+          Nothing matched that. Try a protocol name, a command, or a topic like “VLAN”.
+        </p>
+      </div>
+
+      <p class="status-line" data-search-overlay-loading hidden>
+        <span class="spinner" aria-hidden="true"></span>
+        <span>Searching…</span>
+      </p>
+    </div>
+
+    <div class="search-overlay__foot">
+      <span><Kbd keys={['↑', '↓']} /> Navigate</span>
+      <span><Kbd keys="Enter" /> Open</span>
+      <span><Kbd keys="Esc" /> Close</span>
+      <span class="u-dim">Searches every published lesson, lab, quiz, tool and term</span>
+    </div>
+  </div>
+</div>
+
+<script>
+  import '../scripts/search-palette.js';
+</script>

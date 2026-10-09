@@ -1,0 +1,47 @@
+{
+  "title": "Switching Fundamentals Quiz",
+  "description": "Test your knowledge of MAC address tables, VLANs, trunking and spanning tree.",
+  "category": "Switching",
+  "difficulty": "intermediate",
+  "status": "published",
+  "icon": "❓",
+  "tags": ["switching", "vlan", "stp"],
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "How does a switch build its MAC address table?",
+      "options": [
+        { "value": "a", "text": "It is manually configured by an administrator" },
+        { "value": "b", "text": "It learns the source MAC address of incoming frames" },
+        { "value": "c", "text": "It queries a central MAC server" },
+        { "value": "d", "text": "It copies the ARP table from connected hosts" }
+      ],
+      "answer": "b",
+      "explanation": "A switch records the source MAC address and the ingress port of each frame, building the table dynamically."
+    },
+    {
+      "id": "q2",
+      "prompt": "What does an 802.1Q tag add to an Ethernet frame?",
+      "options": [
+        { "value": "a", "text": "A 4-byte field identifying the VLAN" },
+        { "value": "b", "text": "A 12-byte IP header" },
+        { "value": "c", "text": "A CRC checksum" },
+        { "value": "d", "text": "A MAC address rewrite" }
+      ],
+      "answer": "a",
+      "explanation": "802.1Q inserts a 4-byte tag containing the 12-bit VLAN ID and priority information."
+    },
+    {
+      "id": "q3",
+      "prompt": "What is the purpose of Spanning Tree Protocol (STP)?",
+      "options": [
+        { "value": "a", "text": "To encrypt frames between switches" },
+        { "value": "b", "text": "To prevent Layer 2 loops by blocking redundant paths" },
+        { "value": "c", "text": "To assign IP addresses dynamically" },
+        { "value": "d", "text": "To aggregate multiple links" }
+      ],
+      "answer": "b",
+      "explanation": "STP creates a loop-free topology by placing redundant ports into a blocking state."
+    }
+  ]
+}

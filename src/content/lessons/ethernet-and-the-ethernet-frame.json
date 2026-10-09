@@ -1,0 +1,75 @@
+{
+  "title": "Ethernet & the Ethernet Frame",
+  "description": "The language of every LAN",
+  "tagline": "The language of every LAN",
+  "duration": "10 min",
+  "stage": 7,
+  "stageName": "Data Link Layer",
+  "category": "Data Link Layer",
+  "difficulty": "intermediate",
+  "status": "published",
+  "icon": "🔗",
+  "order": 122,
+  "sections": [
+    {
+      "icon": "🔗",
+      "title": "What Ethernet Is",
+      "body": "Ethernet is THE Layer-2 technology used in almost every wired LAN today. It defines how devices format data (frames), how they are addressed (MAC), and how they take turns on the wire."
+    },
+    {
+      "icon": "📦",
+      "title": "Anatomy of an Ethernet Frame",
+      "table": {
+        "head": [
+          "Field",
+          "Job"
+        ],
+        "rows": [
+          [
+            "Preamble",
+            "Wake-up signal so receivers sync"
+          ],
+          [
+            "Destination MAC",
+            "Who should receive it"
+          ],
+          [
+            "Source MAC",
+            "Who sent it"
+          ],
+          [
+            "Type",
+            "Whats inside: IPv4 / IPv6 / ARP"
+          ],
+          [
+            "Data",
+            "The actual payload (packet)"
+          ],
+          [
+            "FCS",
+            "Checksum — detects corrupted frames"
+          ]
+        ]
+      }
+    },
+    {
+      "icon": "🛡️",
+      "title": "FCS — The Integrity Check",
+      "body": "Sender calculates a number from the frame contents and puts it in FCS. Receiver recalculates; if it differs, the frame was damaged in transit and is silently dropped. Ethernet does NOT resend — that is TCPs job if needed."
+    },
+    {
+      "icon": "📏",
+      "title": "Size Rules",
+      "points": [
+        "Minimum frame: 64 bytes.",
+        "Maximum standard frame: 1518 bytes.",
+        "Payload limit = 1500 bytes — the famous MTU.",
+        "Too small (\"runt\") or too big (\"giant\") = discarded."
+      ],
+      "tip": "💡 Exam tip: MTU 1500 lives at Layer 2 with Ethernet."
+    }
+  ],
+  "tags": [],
+  "related": [],
+  "resources": []
+}

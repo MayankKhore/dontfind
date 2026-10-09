@@ -1,0 +1,109 @@
+{
+  "title": "VLAN Tagging",
+  "description": "Understand 802.1Q tagging and how trunk frames identify their VLAN.",
+  "scenario": "Understand 802.1Q tagging and how trunk frames identify their VLAN.",
+  "duration": "7 min",
+  "stage": 3,
+  "stageName": "VLAN & Trunking",
+  "category": "VLAN & Trunking",
+  "difficulty": "beginner",
+  "status": "published",
+  "icon": "🧪",
+  "order": 57,
+  "allowedCommands": [
+    "enable",
+    "show interfaces trunk",
+    "show interfaces switchport",
+    "show interfaces",
+    "exit",
+    "end",
+    "help",
+    "?"
+  ],
+  "objectives": [
+    {
+      "text": "View trunk details",
+      "cmd": "show interfaces trunk"
+    },
+    {
+      "text": "View switchport details",
+      "cmd": "show interfaces switchport"
+    }
+  ],
+  "concepts": [
+    {
+      "title": "Why Tag Frames?",
+      "body": "When multiple VLANs cross one physical link, frames need a tag so the receiving switch knows which VLAN they belong to. This is the job of 802.1Q.",
+      "code": "VLAN 10 frame + VLAN 20 frame → one trunk\nTrunk frame = original frame + 802.1Q tag"
+    },
+    {
+      "title": "802.1Q Tag Structure",
+      "body": "The 802.1Q tag is 4 bytes inserted after the source MAC: Tag Protocol ID (TPID) + Priority + VLAN ID (VID, 12 bits = 1-4094).",
+      "code": "| Dst MAC | Src MAC | [TPID + VID] | Payload | FCS |\n                      ↑ 802.1Q tag"
+    },
+    {
+      "title": "Tagged vs Untagged",
+      "body": "Access ports send untagged frames. Trunk ports tag all frames EXCEPT the native VLAN, which is sent untagged.",
+      "code": "Access: Fa0/1 → untagged frame\nTrunk: Gi0/1 → tagged + native VLAN untagged"
+    },
+    {
+      "title": "Verifying Tagging",
+      "body": "\"show interfaces trunk\" shows operational mode and encapsulation. \"show interfaces switchport\" shows switchport admin/operational details.",
+      "code": "SW1# show interfaces trunk\nPort  Mode  Encapsulation  Status  Native vlan\nGi0/1 on    802.1q        trunking  99"
+    }
+  ],
+  "topology": {
+    "devices": [
+      {
+        "id": "pc-a",
+        "label": "PC-A",
+        "type": "pc",
+        "x": 60,
+        "y": 75
+      },
+      {
+        "id": "sw1",
+        "label": "SW1",
+        "type": "switch",
+        "x": 210,
+        "y": 75
+      },
+      {
+        "id": "pc-b",
+        "label": "PC-B",
+        "type": "pc",
+        "x": 360,
+        "y": 75
+      }
+    ],
+    "links": [
+      {
+        "from": "pc-a",
+        "to": "sw1",
+        "label": "Fa0/1"
+      },
+      {
+        "from": "pc-b",
+        "to": "sw1",
+        "label": "Fa0/2"
+      }
+    ],
+    "table": [
+      {
+        "port": "Fa0/1",
+        "mode": "access",
+        "vlan": "1",
+        "peer": "PC-A"
+      },
+      {
+        "port": "Fa0/2",
+        "mode": "access",
+        "vlan": "1",
+        "peer": "PC-B"
+      }
+    ]
+  },
+  "tags": [],
+  "related": [],
+  "resources": []
+}

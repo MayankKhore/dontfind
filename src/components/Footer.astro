@@ -1,0 +1,57 @@
+---
+/**
+ * Footer.astro — site footer.
+ *
+ * Crawlable column links plus a short, honest statement of what the
+ * platform is (and is not). Deliberately quiet: the reader should hit
+ * a hard stop, not another call to action.
+ */
+import Icon from './Icon.astro';
+import { SITE, FOOTER_COLUMNS, SECTIONS } from '../lib/site.js';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="site-footer__grid">
+      <div>
+        <p class="site-footer__brand">
+          <span class="brand__mark" aria-hidden="true">
+            <Icon name="network" size={17} />
+          </span>
+          <span>{SITE.name}</span>
+        </p>
+        <p class="site-footer__blurb">{SITE.description}</p>
+        <p class="site-footer__blurb u-dim" style="margin-top:var(--sp-3);font-size:var(--fs-xs)">
+          Every lesson, lab and tool works offline after first load. No account, no tracking.
+        </p>
+      </div>
+
+      {FOOTER_COLUMNS.map((col) => (
+        <nav aria-label={col.title}>
+          <h2>{col.title}</h2>
+          <ul>
+            {col.links.map((link) => (
+              <li><a href={link.href}>{link.label}</a></li>
+            ))}
+          </ul>
+        </nav>
+      ))}
+    </div>
+
+    <div class="site-footer__bottom">
+      <p>
+        &copy; {year} {SITE.name}. Not affiliated with, endorsed by, or sponsored by Cisco Systems.
+      </p>
+      <nav class="site-footer__legal" aria-label="Legal and section links">
+        <a href="/about/">About</a>
+        <a href="/premium/">Premium</a>
+        <a href="/sitemap-index.xml">Sitemap</a>
+        <a href="/legacy/">Classic app</a>
+        <span aria-hidden="true">·</span>
+        <span>{SECTIONS.length} sections</span>
+      </nav>
+    </div>
+  </div>
+</footer>

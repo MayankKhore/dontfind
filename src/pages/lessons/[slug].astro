@@ -1,0 +1,197 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import Sidebar from '../../components/Sidebar.astro';
+import Button from '../../components/Button.astro';
+import Badge from '../../components/Badge.astro';
+import Icon from '../../components/Icon.astro';
+import Alert from '../../components/Alert.astro';
+import DataTable from '../../components/DataTable.astro';
+import RelatedResources from '../../components/RelatedResources.astro';
+import CTABand from '../../components/CTABand.astro';
+import { getCollection } from 'astro:content';
+import { published } from '../../lib/content.js';
+import { articleSchema } from '../../lib/seo.js';
+
+export async function getStaticPaths() {
+  const lessons = published(await getCollection('lessons'));
+  return lessons.map((entry, i) => ({
+    params: { slug: entry.id },
+    props: { entry, prev: lessons[i - 1] ?? null, next: lessons[i + 1] ?? null },
+  }));
+}
+
+const { entry, prev, next } = Astro.props;
+const lesson = entry.data;
+const path = `/lessons/${entry.id}/`;
+
+const breadcrumbs = [
+  { href: '/', label: 'Home' },
+  { href: '/lessons/', label: 'Lessons' },
+  { label: lesson.title },
+];
+
+/** Estimated reading time so the reader knows what they are committing to. */
+const words = lesson.sections.reduce((n, s) => n + (s.body?.split(/\s+/).length || 0), 0);
+const readMinutes = Math.max(1, Math.round(words / 220));
+---
+
+<BaseLayout
+  title={lesson.title}
+  description={lesson.description || lesson.tagline || `${lesson.title} — a CCNA Path lesson.`}
+  path={path}
+  breadcrumbs={breadcrumbs}
+  pageType="lesson"
+  collection="lessons"
+  ogType="article"
+  publishedTime={lesson.updated}
+  modifiedTime={lesson.updated}
+  schema={articleSchema({
+    title: lesson.title,
+    description: lesson.description || lesson.tagline,
+    path,
+    difficulty: lesson.difficulty,
+    keywords: lesson.tags,
+  })}
+>
+  <div class="reading-progress" aria-hidden="true">
+    <span class="reading-progress__fill" data-reading-progress></span>
+  </div>
+
+  <div class="container container--wide">
+    <PageHeader
+      kicker={lesson.stageName || lesson.category}
+      icon="book"
+      title={lesson.title}
+      lead={lesson.tagline || lesson.description}
+    >
+      <div slot="meta" class="page-header__meta">
+        <Badge variant={lesson.difficulty} label={lesson.difficulty} />
+        {lesson.duration && (
+          <span class="badge">
+            <Icon name="clock" size={13} />
+            {lesson.duration}
+          </span>
+        )}
+        <span class="badge badge--count">{lesson.sections.length} sections</span>
+        <span class="badge badge--count">~{readMinutes} min read</span>
+      </div>
+    </PageHeader>
+
+    <div class="shell">
+      <Sidebar
+        title="On this page"
+        groups={[
+          {
+            items: lesson.sections.map((section, i) => ({
+              href: `#section-${i + 1}`,
+              label: section.title,
+            })),
+          },
+        ]}
+      >
+        <div class="sidebar__group">
+          <Button className="btn--block btn--sm" data-lesson-read data-lesson-id={`lesson:${entry.id}`}>
+            <Icon name="check-circle" size={15} />
+            <span>Mark as read</span>
+          </Button>
+        </div>
+      </Sidebar>
+
+      <article class="prose" data-article-body>
+        {lesson.sections.map((section, i) => (
+          <section id={`section-${i + 1}`}>
+            <h2>
+              {section.icon && <span aria-hidden="true">{section.icon}</span>}
+              <span>{section.title}</span>
+            </h2>
+
+            {section.body && <p>{section.body}</p>}
+
+            {section.points?.length > 0 && (
+              <ul>
+                {section.points.map((point) => <li>{point}</li>)}
+              </ul>
+            )}
+
+            {section.code && <pre><code>{section.code}</code></pre>}
+
+            {section.table?.head && (
+              <DataTable head={section.table.head} rows={section.table.rows} />
+            )}
+
+            {section.tip && <Alert variant="info" title="Exam tip">{section.tip}</Alert>}
+          </section>
+        ))}
+      </article>
+    </div>
+<RelatedResources related={lesson.related} resources={lesson.resources} />
+
+    <nav class="pager" aria-label="Lesson navigation">
+      {prev ? (
+        <a class="pager__link" href={`/lessons/${prev.id}/`} rel="prev">
+          <span class="pager__dir">
+            <Icon name="arrow-left" size={13} />
+            Previous lesson
+          </span>
+          <span class="pager__title">{prev.data.title}</span>
+        </a>
+      ) : (
+        <span />
+      )}
+      {next ? (
+        <a class="pager__link pager__link--next" href={`/lessons/${next.id}/`} rel="next">
+          <span class="pager__dir">
+            Next lesson
+            <Icon name="arrow-right" size={13} />
+          </span>
+          <span class="pager__title">{next.data.title}</span>
+        </a>
+      ) : (
+        <span />
+      )}
+    </nav>
+
+    <CTABand
+      title="Understand it? Prove it."
+      text="Now run the commands yourself. The matching lab turns this theory into muscle memory."
+    >
+      <Fragment slot="actions">
+        <Button href="/labs/" variant="primary">
+          <Icon name="terminal" size={16} />
+          <span>Find the matching lab</span>
+        </Button>
+        <Button href="/quizzes/">Take a quiz</Button>
+      </Fragment>
+    </CTABand>
+  </div>
+</BaseLayout>
+
+<script>
+  import '../../scripts/progress.js';
+
+  // Reading progress bar — subtle feedback, not a distraction.
+  const article = document.querySelector('[data-article-body]');
+  const bar = document.querySelector('[data-reading-progress]');
+  if (article && bar) {
+    const update = () => {
+      const rect = article.getBoundingClientRect();
+      const total = rect.height - window.innerHeight * 0.4;
+      const seen = Math.min(Math.max(-rect.top, 0), Math.max(total, 1));
+      bar.style.width = `${(seen / Math.max(total, 1)) * 100}%`;
+    };
+    update();
+    window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+  }
+
+  document.querySelectorAll('[data-lesson-read]').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const { markComplete } = await import('../../scripts/progress.js');
+      markComplete(btn.getAttribute('data-lesson-id'));
+      btn.dataset.state = 'done';
+      btn.disabled = true;
+      btn.innerHTML = '✓ Read';
+    });
+  });
+</script>

@@ -1,0 +1,95 @@
+{
+  "title": "Network Cables",
+  "description": "Copper, fiber, and which wire goes where",
+  "tagline": "Copper, fiber, and which wire goes where",
+  "duration": "10 min",
+  "stage": 2,
+  "stageName": "Network Component",
+  "category": "Network Component",
+  "difficulty": "beginner",
+  "status": "published",
+  "icon": "🧵",
+  "order": 107,
+  "sections": [
+    {
+      "icon": "🧵",
+      "title": "Copper — Twisted Pair (UTP)",
+      "body": "The most common cable in offices: 8 thin copper wires twisted into 4 pairs (twisting reduces interference), ending in an RJ-45 plug that clicks into your switch like a phone charger.",
+      "table": {
+        "head": [
+          "Category",
+          "Top speed",
+          "Max length"
+        ],
+        "rows": [
+          [
+            "Cat5e",
+            "1 Gbps",
+            "100 m"
+          ],
+          [
+            "Cat6",
+            "10 Gbps (short runs)",
+            "100 m"
+          ],
+          [
+            "Cat6a",
+            "10 Gbps",
+            "100 m"
+          ]
+        ]
+      }
+    },
+    {
+      "icon": "🔀",
+      "title": "Straight-Through vs Crossover",
+      "body": "Two ways to wire the RJ-45 ends. The old rule is simple:",
+      "table": {
+        "head": [
+          "Connecting...",
+          "Use this cable"
+        ],
+        "rows": [
+          [
+            "Different devices (PC→switch, switch→router)",
+            "Straight-through"
+          ],
+          [
+            "Same devices (PC→PC, switch→switch)",
+            "Crossover"
+          ]
+        ]
+      },
+      "code": "T568B order (straight-through, both ends):\n1 Orange-W  2 Orange   3 Green-W  4 Blue\n5 Blue-W    6 Green    7 Brown-W  8 Brown"
+    },
+    {
+      "icon": "✨",
+      "title": "Fiber Optic — Light Speed",
+      "body": "Fiber sends light through glass instead of electricity through copper. It ignores electrical noise completely and travels MUCH farther — that is why ISPs and data centers love it.",
+      "points": [
+        "Multimode (orange): short hops, ~550 m, cheaper.",
+        "Single-mode (yellow): tens of kilometers, used by providers.",
+        "Downside: costs more and is trickier to install than copper."
+      ]
+    },
+    {
+      "icon": "🔧",
+      "title": "The Console Cable",
+      "body": "A special cable from your laptop to a device console port. It carries no network traffic — it just gives you a command-line window so you can configure a brand-new switch/router (exactly what our CLI labs simulate)."
+    },
+    {
+      "icon": "📝",
+      "title": "30-Second Cheat Sheet",
+      "points": [
+        "UTP copper → up to 100 m → cheap default choice.",
+        "Fiber → long distance + zero interference → higher cost.",
+        "Straight-through → unlike devices. Crossover → like devices.",
+        "Console cable → direct management access."
+      ],
+      "tip": "💡 Modern ports have Auto-MDIX which fixes a wrong cable automatically — but CCNA still tests the classic straight vs crossover rule!"
+    }
+  ],
+  "tags": [],
+  "related": [],
+  "resources": []
+}

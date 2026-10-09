@@ -1,0 +1,34 @@
+---
+/**
+ * ThemeToggle.astro — light/dark switch.
+ *
+ * Both glyphs are rendered and swapped with CSS keyed on the root
+ * `data-theme` attribute, so the correct icon is painted on the very
+ * first frame (no flicker, no hydration mismatch). The inline script
+ * in BaseHead applies the stored/OS theme before first paint.
+ */
+import Icon from './Icon.astro';
+
+const { class: className = '' } = Astro.props;
+---
+
+<button
+  type="button"
+  class={['icon-btn', 'theme-toggle', className].filter(Boolean).join(' ')}
+  data-theme-toggle
+  aria-label="Switch between light and dark theme"
+  aria-pressed="false"
+  title="Switch theme"
+>
+  <span class="theme-toggle__icon theme-toggle__icon--moon" aria-hidden="true">
+    <Icon name="moon" size={18} />
+  </span>
+  <span class="theme-toggle__icon theme-toggle__icon--sun" aria-hidden="true">
+    <Icon name="sun" size={18} />
+  </span>
+  <span class="sr-only" data-theme-toggle-label>Switch theme</span>
+</button>
+
+<script>
+  import '../scripts/theme.js';
+</script>

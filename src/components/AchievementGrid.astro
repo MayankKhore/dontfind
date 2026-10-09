@@ -1,0 +1,75 @@
+---
+/**
+ * AchievementGrid.astro — the badge wall.
+ *
+ * Rendered server-side with every badge visible but locked (the
+ * `data-earned` attribute is flipped by dashboard.js once it has read
+ * local storage). Locked badges stay legible rather than hidden, because
+ * seeing what is available is the point.
+ *
+ * Props: title, text, limit (0 = all)
+ */
+import Icon from './Icon.astro';
+import { ACHIEVEMENTS } from '../lib/achievements.js';
+
+const { title = 'Achievements', text, limit = 0 } = Astro.props;
+const list = limit > 0 ? ACHIEVEMENTS.slice(0, limit) : ACHIEVEMENTS;
+---
+
+<section aria-labelledby="achievements-heading">
+  <div class="section-head">
+    <div class="section-head__copy">
+      <span class="eyebrow">Progress</span>
+      <h2 class="section-head__title" id="achievements-heading">
+        <Icon name="award" size={22} />
+        <span>{title}</span>
+      </h2>
+      {text && <p class="section-head__text">{text}</p>}
+    </div>
+    <p class="badge badge--count">
+      <span data-dash-stat="achievements">0</span>/{list.length}
+    </p>
+  </div>
+
+  <ul class="achievements">
+    {list.map((badge) => (
+      <li class="achievement" data-achievement={badge.key} data-earned="false">
+        <span class="achievement__badge" aria-hidden="true">
+          <Icon name={badge.icon} size={22} />
+        </span>
+        <p class="achievement__title">{badge.title}</p>
+        <p class="achievement__desc">{badge.desc}</p>
+        <p class="achievement__state sr-only" data-state-text>Locked</p>
+      </li>
+    ))}
+  </ul>
+</div>
+
+<style>
+  .achievement__state {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+  }
+  .achievement {
+    position: relative;
+  }
+  .achievement[data-earned='true'] .achievement__state {
+    position: static;
+    width: auto;
+    height: auto;
+    clip: auto;
+    font-size: var(--fs-2xs);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-caps);
+    font-weight: 700;
+    color: var(--green);
+  }
+</style>
+
+<script>
+  import '../scripts/dashboard.js';
+</script>

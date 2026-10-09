@@ -1,0 +1,137 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Icon from '../components/Icon.astro';
+import Button from '../components/Button.astro';
+import Alert from '../components/Alert.astro';
+import Accordion from '../components/Accordion.astro';
+
+const breadcrumbs = [
+  { href: '/', label: 'Home' },
+  { label: 'Premium' },
+];
+
+const tiers = [
+  {
+    name: 'Free',
+    price: '£0',
+    period: 'forever',
+    featured: false,
+    cta: { label: 'You are here', href: '/path/', disabled: true },
+    features: [
+      { label: 'Every lesson, lab and quiz', included: true },
+      { label: 'All network tools and calculators', included: true },
+      { label: 'Incident troubleshooting scenarios', included: true },
+      { label: 'Progress tracking and streaks', included: true },
+      { label: 'Works offline, no account needed', included: true },
+    ],
+  },
+  {
+    name: 'Premium',
+    price: '£4',
+    period: 'per month',
+    featured: true,
+    cta: { label: 'Join the waitlist', href: '/about/#contact' },
+    features: [
+      { label: 'Everything in Free', included: true },
+      { label: 'Full CCNA exam simulations under timer', included: true },
+      { label: 'Downloadable lab packs for Packet Tracer', included: true },
+      { label: 'Spaced-repetition revision scheduler', included: true },
+      { label: 'Progress sync across devices', included: true },
+      { label: 'Priority access to new labs', included: true },
+    ],
+  },
+];
+
+const faqs = [
+  {
+    title: 'Is the free tier really free?',
+    text: 'Yes. Every lesson, lab, quiz, tool and incident scenario is free, with no account and no sign-up. Premium funds the writing and the simulator work.',
+  },
+  {
+    title: 'Do I need to buy anything to practise?',
+    text: 'No. The CLI simulator runs entirely in your browser and does not need Packet Tracer, Packet Capturer, or physical hardware. Premium adds optional download packs if you prefer to work in Cisco\'s own tools.',
+  },
+  {
+    title: 'Can I cancel Premium?',
+    text: 'There is no subscription yet — Premium is a waitlist while the paid tier is built. Nothing is charged today and you can leave at any time.',
+  },
+  {
+    title: 'Will my progress sync if I subscribe?',
+    text: 'That is the point of Premium. Today progress lives only in your browser; syncing would move it to an account so you can study across devices.',
+  },
+];
+---
+
+<BaseLayout
+  title="Premium"
+  description="CCNA Path Premium adds timed exam simulations, Packet Tracer lab packs, spaced-repetition revision and cross-device progress sync. The entire free tier stays free."
+  path="/premium/"
+  breadcrumbs={breadcrumbs}
+  pageType="page"
+>
+  <div class="container">
+    <PageHeader
+      kicker="Support the project"
+      icon="sparkles"
+      title="Premium, when it's ready"
+      lead="The free tier is not a trial. Everything that matters for learning is free forever — Premium funds the parts that take months to build."
+    />
+
+    <div class="grid grid--stats" style="margin-bottom:var(--section-gap)">
+      <div class="stat"><p class="stat__label">Free content</p><p class="stat__value">100%</p><p class="stat__hint">of lessons, labs and tools</p></div>
+      <div class="stat"><p class="stat__label">Account needed</p><p class="stat__value">No</p><p class="stat__hint">progress stays in your browser</p></div>
+      <div class="stat"><p class="stat__label">Today</p><p class="stat__value">£0</p><p class="stat__hint">waitlist only, nothing charged</p></div>
+    </div>
+
+    <div class="tier-grid">
+      {tiers.map((tier) => (
+        <section class={['tier', tier.featured && 'tier--featured'].filter(Boolean).join(' ')}>
+          {tier.featured && <span class="tier__flag">Coming soon</span>}
+          <div>
+            <h2 class="tier__name">{tier.name}</h2>
+            <p class="tier__price">
+              {tier.price} <span>{tier.period}</span>
+            </p>
+          </div>
+          <ul class="tier__features">
+            {tier.features.map((feature) => (
+              <li data-included={String(feature.included)}>
+                <Icon name={feature.included ? 'check-circle' : 'x'} size={16} />
+                <span>{feature.label}</span>
+              </li>
+            ))}
+          </ul>
+          <div>
+            {tier.cta.disabled ? (
+              <Button href={tier.cta.href} block aria-disabled="true" variant="outline">
+                <span>{tier.cta.label}</span>
+              </Button>
+            ) : (
+              <Button href={tier.cta.href} block variant="primary">
+                <span>{tier.cta.label}</span>
+                <Icon name="arrow-right" size={16} />
+              </Button>
+            )}
+          </div>
+        </section>
+      ))}
+    </div>
+
+    <div class="u-mt-6">
+      <Alert variant="info" title="Nothing is for sale yet">
+        Premium is a waitlist, not a checkout. No payment details are collected and no
+        card is ever charged. If you want to support the project, the
+        <a href="/about/">about page</a> explains the other ways to help.
+      </Alert>
+    </div>
+
+    <div class="u-mt-6">
+      <h2 class="section-head__title" style="margin-bottom:var(--sp-4)">
+        <Icon name="help-circle" size={22} />
+        <span>Questions</span>
+      </h2>
+      <Accordion items={faqs} open={[0]} label="Premium questions" />
+    </div>
+  </div>
+</BaseLayout>

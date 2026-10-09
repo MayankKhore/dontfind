@@ -1,0 +1,41 @@
+---
+/**
+ * PageHeader.astro — the one header treatment every page type uses.
+ *
+ * Replaces the old bespoke `.page-hero` blocks so a lesson, a lab, a
+ * glossary term and a tool all introduce themselves identically.
+ *
+ * Props:
+ *   title   {string}
+ *   lead    {string}   one-sentence summary (kept to ~68ch)
+ *   kicker  {string}   small pill above the title (counts, categories)
+ *   icon    {string}   Icon name shown inside the kicker
+ *   compact {boolean}  tighter spacing for dense pages
+ *   class   {string}
+ * Slots:
+ *   meta     badges / small metadata chips
+ *   actions  buttons
+ *   default  anything below the actions (rare)
+ */
+import Icon from './Icon.astro';
+
+const { title, lead, kicker, icon, compact = false, class: className = '' } = Astro.props;
+const cls = ['page-header', compact && 'page-header--flush', className].filter(Boolean).join(' ');
+---
+
+<header class={cls}>
+  {kicker && (
+    <p class="page-header__kicker">
+      {icon && <Icon name={icon} size={14} />}
+      <span>{kicker}</span>
+    </p>
+  )}
+
+  <h1 class="page-header__title">{title}</h1>
+
+  {lead && <p class="page-header__lead">{lead}</p>}
+
+  <slot name="meta" />
+  <slot name="actions" />
+  <slot />
+</header>

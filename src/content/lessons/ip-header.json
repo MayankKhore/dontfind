@@ -1,0 +1,79 @@
+{
+  "title": "IP Header",
+  "description": "The envelope wrapped around every packet",
+  "tagline": "The envelope wrapped around every packet",
+  "duration": "10 min",
+  "stage": 4,
+  "stageName": "Network Layer",
+  "category": "Network Layer",
+  "difficulty": "beginner",
+  "status": "published",
+  "icon": "✉️",
+  "order": 112,
+  "sections": [
+    {
+      "icon": "✉️",
+      "title": "What the IP Header Is",
+      "body": "Every packet gets an IP header stuck on the front — like an envelope with a \"from\" and \"to\" address plus a few delivery notes. Routers read ONLY this header to move packets across the world. IPv4 header = 20 bytes (up to 60 with options)."
+    },
+    {
+      "icon": "🧾",
+      "title": "The Fields That Matter",
+      "table": {
+        "head": [
+          "Field",
+          "What it says"
+        ],
+        "rows": [
+          [
+            "Version",
+            "IPv4 or IPv6"
+          ],
+          [
+            "Header Length",
+            "How big the envelope itself is"
+          ],
+          [
+            "Total Length",
+            "Header + data size"
+          ],
+          [
+            "TTL",
+            "Hops allowed; each router subtracts 1 — stops endless loops"
+          ],
+          [
+            "Protocol",
+            "Whats inside: 6 = TCP, 17 = UDP, 1 = ICMP"
+          ],
+          [
+            "Source IP",
+            "Sender address"
+          ],
+          [
+            "Destination IP",
+            "Receiver address"
+          ]
+        ]
+      }
+    },
+    {
+      "icon": "⏳",
+      "title": "TTL — The Lifesaver",
+      "body": "Imagine two routers pointing at each other by mistake: a packet would bounce forever. TTL prevents this. It starts at 64 (or 128); every router subtracts 1. At 0 the packet is thrown away.",
+      "code": "ping reply shows ttl=57\n-> started at 64, passed through 7 routers"
+    },
+    {
+      "icon": "🏷️",
+      "title": "Protocol Field = Which L4 Opens It",
+      "points": [
+        "6  -> TCP (web, email, files)",
+        "17 -> UDP (voice, DNS)",
+        "1  -> ICMP (ping)"
+      ],
+      "tip": "💡 Exam tip: know 6=TCP, 17=UDP, 1=ICMP — and that TTL decreases by 1 at every router."
+    }
+  ],
+  "tags": [],
+  "related": [],
+  "resources": []
+}

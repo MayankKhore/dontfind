@@ -1,0 +1,129 @@
+{
+  "title": "Ports",
+  "description": "Flat numbers that identify applications",
+  "tagline": "Flat numbers that identify applications",
+  "duration": "8 min",
+  "stage": 3,
+  "stageName": "Transport Layer",
+  "category": "Transport Layer",
+  "difficulty": "beginner",
+  "status": "published",
+  "icon": "🚪",
+  "order": 109,
+  "sections": [
+    {
+      "icon": "🚪",
+      "title": "A Port Is an App Number",
+      "body": "A port is just a number (0–65535) that identifies WHICH application should receive the data. Your PC can talk to 50 servers at once only because every session uses its own port pair.",
+      "code": "Browser  -> server:443    (HTTPS)\nEmail    -> server:25     (SMTP)\nGame     -> server:27015\nAll on ONE internet connection!"
+    },
+    {
+      "icon": "📊",
+      "title": "Well-Known Ports to Memorize",
+      "table": {
+        "head": [
+          "Port",
+          "Protocol",
+          "Used for"
+        ],
+        "rows": [
+          [
+            "20/21",
+            "FTP",
+            "File transfer"
+          ],
+          [
+            "22",
+            "SSH",
+            "Secure remote login"
+          ],
+          [
+            "23",
+            "Telnet",
+            "Old remote login (insecure)"
+          ],
+          [
+            "25",
+            "SMTP",
+            "Sending email"
+          ],
+          [
+            "53",
+            "DNS",
+            "Name to IP lookup"
+          ],
+          [
+            "67/68",
+            "DHCP",
+            "Automatic IP assignment"
+          ]
+        ]
+      }
+    },
+    {
+      "icon": "🌐",
+      "title": "Web & Mail Ports Too",
+      "table": {
+        "head": [
+          "Port",
+          "Protocol",
+          "Used for"
+        ],
+        "rows": [
+          [
+            "80",
+            "HTTP",
+            "Websites"
+          ],
+          [
+            "110",
+            "POP3",
+            "Receiving email"
+          ],
+          [
+            "143",
+            "IMAP",
+            "Receiving email (synced)"
+          ],
+          [
+            "443",
+            "HTTPS",
+            "Secure websites"
+          ]
+        ]
+      }
+    },
+    {
+      "icon": "🔢",
+      "title": "Three Port Ranges",
+      "table": {
+        "head": [
+          "Range",
+          "Name",
+          "Who uses it"
+        ],
+        "rows": [
+          [
+            "0 – 1023",
+            "Well-known",
+            "Standard services (HTTP, DNS...)"
+          ],
+          [
+            "1024 – 49151",
+            "Registered",
+            "Vendor apps (games, databases)"
+          ],
+          [
+            "49152 – 65535",
+            "Dynamic",
+            "Your OS picks one per session"
+          ]
+        ]
+      },
+      "tip": "💡 Exam tip: memorize SSH=22, DNS=53, HTTP=80, HTTPS=443 as absolute minimum — CCNA asks them constantly. IP + port together is called a SOCKET."
+    }
+  ],
+  "tags": [],
+  "related": [],
+  "resources": []
+}

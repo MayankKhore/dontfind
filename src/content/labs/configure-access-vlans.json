@@ -1,0 +1,124 @@
+{
+  "title": "Configure Access VLANs",
+  "description": "Create VLAN 20, name it ENGINEERING, and assign PC-A to it. Verify the access port.",
+  "scenario": "Create VLAN 20, name it ENGINEERING, and assign PC-A to it. Verify the access port.",
+  "duration": "12 min",
+  "stage": 3,
+  "stageName": "VLAN & Trunking",
+  "category": "VLAN & Trunking",
+  "difficulty": "beginner",
+  "status": "published",
+  "icon": "🧪",
+  "order": 9,
+  "allowedCommands": [
+    "enable",
+    "configure terminal",
+    "vlan",
+    "name",
+    "interface",
+    "switchport mode access",
+    "switchport access vlan",
+    "show vlan brief",
+    "show interfaces status",
+    "show running-config",
+    "write memory",
+    "exit",
+    "end",
+    "help",
+    "?"
+  ],
+  "objectives": [
+    {
+      "text": "Create VLAN 20",
+      "cmd": "vlan 20"
+    },
+    {
+      "text": "Name it ENGINEERING",
+      "cmd": "name ENGINEERING"
+    },
+    {
+      "text": "Assign Fa0/1 to VLAN 20",
+      "cmd": "switchport access vlan 20"
+    },
+    {
+      "text": "Verify the access port",
+      "cmd": "show vlan brief"
+    }
+  ],
+  "concepts": [
+    {
+      "title": "What is a VLAN?",
+      "body": "A VLAN is a virtual broadcast domain. Devices in VLAN 10 cannot see broadcasts from VLAN 20, even on the same switch.",
+      "code": "VLAN 10 = SALES\nVLAN 20 = ENGINEERING"
+    },
+    {
+      "title": "Creating a VLAN",
+      "body": "Create a VLAN in global config, then give it a name. The name is documentation — it tells you what the VLAN is for.",
+      "code": "SW1(config)# vlan 20\nSW1(config-vlan)# name ENGINEERING"
+    },
+    {
+      "title": "Assigning Access Ports",
+      "body": "An access port belongs to one VLAN. Use \"switchport mode access\" then \"switchport access vlan 20\" to place a port in VLAN 20.",
+      "code": "SW1(config)# interface FastEthernet0/1\nSW1(config-if)# switchport mode access\nSW1(config-if)# switchport access vlan 20"
+    },
+    {
+      "title": "Verifying VLANs",
+      "body": "Always verify. \"show vlan brief\" shows every VLAN and which ports are assigned to it.",
+      "code": "SW1# show vlan brief\nVLAN Name          Status  Ports\n20   ENGINEERING   active  Fa0/1"
+    }
+  ],
+  "topology": {
+    "devices": [
+      {
+        "id": "pc-a",
+        "label": "PC-A",
+        "type": "pc",
+        "x": 60,
+        "y": 75
+      },
+      {
+        "id": "sw1",
+        "label": "SW1",
+        "type": "switch",
+        "x": 210,
+        "y": 75
+      },
+      {
+        "id": "pc-b",
+        "label": "PC-B",
+        "type": "pc",
+        "x": 360,
+        "y": 75
+      }
+    ],
+    "links": [
+      {
+        "from": "pc-a",
+        "to": "sw1",
+        "label": "Fa0/1"
+      },
+      {
+        "from": "pc-b",
+        "to": "sw1",
+        "label": "Fa0/2"
+      }
+    ],
+    "table": [
+      {
+        "port": "Fa0/1",
+        "mode": "access",
+        "vlan": "20",
+        "peer": "PC-A"
+      },
+      {
+        "port": "Fa0/2",
+        "mode": "access",
+        "vlan": "1",
+        "peer": "PC-B"
+      }
+    ]
+  },
+  "tags": [],
+  "related": [],
+  "resources": []
+}

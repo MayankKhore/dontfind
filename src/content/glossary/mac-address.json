@@ -1,0 +1,10 @@
+{
+  "title": "MAC Address",
+  "term": "MAC address",
+  "acronymFor": "Media Access Control address",
+  "definition": "A 48-bit hardware address assigned to a network interface, written as six hexadecimal octets (e.g. 00:1B:44:11:3A:B7). The first three octets identify the manufacturer (OUI); the last three are unique to the device. Switches use MAC addresses to forward frames within a VLAN.",
+  "category": "Layer 2",
+  "difficulty": "beginner",
+  "status": "published",
+  "tags": ["mac", "layer2", "ethernet"]
+}

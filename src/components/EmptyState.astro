@@ -1,0 +1,41 @@
+---
+/**
+ * EmptyState.astro — the single "nothing here" treatment.
+ *
+ * Used for: no search results, no progress recorded yet, empty
+ * collections, and storage-unavailable fallbacks. Keeping one
+ * component means every zero state reads the same way and always
+ * offers a next action.
+ *
+ * Props:
+ *   title   {string}
+ *   text    {string}
+ *   icon    {string}  Icon name (defaults to a search glyph)
+ *   hidden  {boolean} start hidden and let a script reveal it
+ *   class   {string}
+ * Slots:
+ *   actions  buttons / links
+ *   default  extra content
+ */
+import Icon from './Icon.astro';
+
+const { title = 'Nothing here yet', text, icon = 'search', hidden = false, class: className = '', ...rest } =
+  Astro.props;
+---
+
+<div
+  class={['empty', className].filter(Boolean).join(' ')}
+  data-empty
+  hidden={hidden || undefined}
+  {...rest}
+>
+  <span class="empty__icon" aria-hidden="true">
+    <Icon name={icon} size={22} />
+  </span>
+  <p class="empty__title">{title}</p>
+  {text && <p class="empty__text">{text}</p>}
+  <div class="empty__actions">
+    <slot name="actions" />
+  </div>
+  <slot />
+</div>

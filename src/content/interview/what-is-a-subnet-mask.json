@@ -1,0 +1,13 @@
+{
+  "title": "What is a subnet mask and why do we need it?",
+  "question": "What is a subnet mask and why do we need it?",
+  "answer": "A subnet mask is a 32-bit value that separates the network portion of an IPv4 address from the host portion. Devices use it together with the address to determine the network an address belongs to. If two hosts are in the same subnet they communicate directly at Layer 2; if they are in different subnets they must send traffic via a router (default gateway).",
+  "followUps": [
+    "How is a subnet mask represented in CIDR notation?",
+    "What happens if two hosts have mismatched subnet masks?"
+  ],
+  "category": "IPv4 Addressing",
+  "difficulty": "beginner",
+  "status": "published",
+  "tags": ["subnetting", "ipv4"]
+}

@@ -1,0 +1,91 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import Badge from '../../components/Badge.astro';
+import Button from '../../components/Button.astro';
+import Icon from '../../components/Icon.astro';
+import RelatedResources from '../../components/RelatedResources.astro';
+import CTABand from '../../components/CTABand.astro';
+import { getCollection, render } from 'astro:content';
+import { published } from '../../lib/content.js';
+import { articleSchema } from '../../lib/seo.js';
+import { formatDate } from '../../lib/format.js';
+
+export async function getStaticPaths() {
+  const articles = published(await getCollection('articles'));
+  return articles.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const article = entry.data;
+const { Content } = await render(entry);
+const path = `/articles/${entry.id}/`;
+
+const breadcrumbs = [
+  { href: '/', label: 'Home' },
+  { href: '/articles/', label: 'Articles' },
+  { label: article.title },
+];
+
+const readMinutes = Math.max(1, Math.round((article.excerpt?.split(/\s+/).length || 0) / 180));
+---
+
+<BaseLayout
+  title={article.title}
+  description={article.description || article.excerpt}
+  path={path}
+  breadcrumbs={breadcrumbs}
+  pageType="article"
+  collection="articles"
+  ogType="article"
+  publishedTime={article.publishedAt}
+  modifiedTime={article.updated}
+  schema={articleSchema({
+    title: article.title,
+    description: article.description || article.excerpt,
+    path,
+    datePublished: article.publishedAt,
+    dateModified: article.updated,
+    difficulty: article.difficulty,
+    keywords: article.tags,
+  })}
+>
+  <div class="container container--narrow">
+    <PageHeader
+      kicker={article.category}
+      icon="file-text"
+      title={article.title}
+      lead={article.excerpt}
+    >
+      <div slot="meta" class="page-header__meta">
+        <Badge variant={article.difficulty} label={article.difficulty} />
+        {article.publishedAt && (
+          <span class="badge">
+            <Icon name="calendar" size={13} />
+            {formatDate(article.publishedAt)}
+          </span>
+        )}
+        <span class="badge badge--count">~{readMinutes} min read</span>
+      </div>
+    </PageHeader>
+
+    <article class="prose">
+      <Content />
+    </article>
+
+    <RelatedResources related={article.related} resources={article.resources} />
+
+    <CTABand
+      title="Reading is the easy half"
+      text="Put the idea into practice — the labs and quizzes are where an article turns into a skill."
+    >
+      <Fragment slot="actions">
+        <Button href="/labs/" variant="primary">
+          <Icon name="terminal" size={16} />
+          <span>Open a lab</span>
+        </Button>
+        <Button href="/path/">See the learning path</Button>
+      </Fragment>
+    </CTABand>
+  </div>
+</BaseLayout>

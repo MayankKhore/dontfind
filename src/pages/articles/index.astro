@@ -1,0 +1,79 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import CollectionBrowser from '../../components/CollectionBrowser.astro';
+import Button from '../../components/Button.astro';
+import Icon from '../../components/Icon.astro';
+import EmptyState from '../../components/EmptyState.astro';
+import { getCollection } from 'astro:content';
+import { published, uniqueValues } from '../../lib/content.js';
+import { formatDate } from '../../lib/format.js';
+
+const articles = published(await getCollection('articles'));
+const categories = uniqueValues(articles, 'category');
+
+const items = articles.map((article) => ({
+  href: `/articles/${article.id}/`,
+  title: article.data.title,
+  kicker: article.data.category,
+  description: article.data.excerpt || article.data.description,
+  icon: 'file-text',
+  difficulty: article.data.difficulty,
+  meta: article.data.publishedAt ? [formatDate(article.data.publishedAt)] : [],
+  category: article.data.category,
+  level: article.data.difficulty,
+  searchText: [article.data.title, article.data.excerpt].filter(Boolean).join(' '),
+}));
+
+const breadcrumbs = [
+  { href: '/', label: 'Home' },
+  { label: 'Articles' },
+];
+---
+
+<BaseLayout
+  title="Networking Articles & Study Guides"
+  description="Long-form articles, study guides and deep dives on CCNA topics, written for people who want to understand rather than memorise."
+  path="/articles/"
+  breadcrumbs={breadcrumbs}
+>
+  <div class="container container--wide">
+    <PageHeader
+      kicker={`${articles.length} articles`}
+      icon="file-text"
+      title="Articles &amp; study guides"
+      lead="Deeper explanations, study strategies and background reading for exam day — and for the job that comes after it."
+    >
+      <div slot="actions" class="cluster">
+        <Button href="/path/" variant="primary">
+          <Icon name="route" size={16} />
+          <span>See what's covered</span>
+        </Button>
+      </div>
+    </PageHeader>
+
+    {articles.length > 0 ? (
+      <CollectionBrowser
+        items={items}
+        grid="grid--2"
+        noun="articles"
+        label="Search articles"
+        placeholder="Search articles — try “study plan” or “OSI”…"
+        emptyTitle="No articles match"
+        emptyText="Nothing matched that search. Try a broader term."
+        filters={[{ key: 'category', label: 'Category', options: categories }]}
+      />
+    ) : (
+      <EmptyState
+        icon="file-text"
+        title="No articles published yet"
+        text="Articles are on the way. In the meantime the lessons, labs and quizzes cover the same ground in a more hands-on way."
+      >
+        <Fragment slot="actions">
+          <Button href="/lessons/" variant="primary" size="sm">Browse lessons</Button>
+          <Button href="/labs/" size="sm">Open a lab</Button>
+        </Fragment>
+      </EmptyState>
+    )}
+  </div>
+</BaseLayout>

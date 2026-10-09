@@ -1,0 +1,273 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/Button.astro';
+import Card from '../components/Card.astro';
+import Icon from '../components/Icon.astro';
+import Section from '../components/Section.astro';
+import CodeBlock from '../components/CodeBlock.astro';
+import { getCollection } from 'astro:content';
+import { SITE, SECTIONS } from '../lib/site.js';
+import { published } from '../lib/content.js';
+
+const [labs, lessons, quizzes, tools, interview, incidents, glossary, articles] =
+  await Promise.all([
+    getCollection('labs'),
+    getCollection('lessons'),
+    getCollection('quizzes'),
+    getCollection('tools'),
+    getCollection('interview'),
+    getCollection('incidents'),
+    getCollection('glossary'),
+    getCollection('articles'),
+  ]);
+
+const counts = {
+  labs: published(labs).length,
+  lessons: published(lessons).length,
+  quizzes: published(quizzes).length,
+  tools: published(tools).length,
+  interview: published(interview).length,
+  incidents: published(incidents).length,
+  glossary: published(glossary).length,
+  articles: published(articles).length,
+};
+
+const totalItems = Object.values(counts).reduce((a, b) => a + b, 0);
+
+/** Section directory — one card per collection, with real counts. */
+const directory = SECTIONS.map((section) => ({
+  ...section,
+  count: counts[section.collection] ?? 0,
+}));
+
+/** A representative sample for the preview. */
+const sampleLabs = published(labs).filter((lab) => lab.data.stage === 3).slice(0, 3);
+
+const previewCommands = [
+  'SW1> enable',
+  'SW1# configure terminal',
+  'SW1(config)# vlan 20',
+  'SW1(config-vlan)# name ENGINEERING',
+  'SW1(config)# interface FastEthernet0/1',
+  'SW1(config-if)# switchport access vlan 20',
+  'SW1# show vlan brief',
+  '',
+  'VLAN Name          Status  Ports',
+  '20   ENGINEERING   active  Fa0/1',
+];
+
+const flow = [
+  {
+    title: 'Learn the idea',
+    text: 'Short lessons explain one concept properly — OSI layers, subnetting, VLANs — before you touch a device.',
+    icon: 'book',
+    href: '/lessons/',
+  },
+  {
+    title: 'Practise the command',
+    text: 'A real Cisco IOS sandbox. Type the command, get instant feedback, and learn from the error message.',
+    icon: 'terminal',
+    href: '/labs/',
+  },
+  {
+    title: 'Prove it under exam conditions',
+    text: 'Quizzes mark every option and explain the answer, so you learn from the ones you get wrong.',
+    icon: 'help-circle',
+    href: '/quizzes/',
+  },
+  {
+    title: 'Troubleshoot like an engineer',
+    text: 'Incident scenarios hand you a broken network and a symptom. Find the fault and fix it.',
+    icon: 'alert-triangle',
+    href: '/incidents/',
+  },
+];
+---
+
+<BaseLayout title={SITE.name} description={SITE.description} pageType="page">
+  <section class="hero">
+    <div class="container container--wide hero__inner">
+      <div class="hero__copy">
+        <p class="page-header__kicker">
+          <Icon name="sparkles" size={14} />
+          <span>{totalItems} hands-on resources · no account needed</span>
+        </p>
+
+        <h1 class="hero__title">
+          Learn networking by <span class="grad">actually doing it</span>
+        </h1>
+
+        <p class="hero__lead">
+          Read a lesson, then configure a real switch in your browser. Quizzes explain
+          every answer. When something breaks, diagnose it yourself. Everything runs
+          locally — no hardware, no sign-up.
+        </p>
+
+        <div class="hero__actions">
+          <Button href="/path/" variant="primary" size="lg">
+            <Icon name="route" size={17} />
+            <span>Start the learning path</span>
+          </Button>
+          <Button href="/labs/" size="lg">
+            <Icon name="terminal" size={17} />
+            <span>Jump into a lab</span>
+          </Button>
+        </div>
+
+        <dl class="hero__stats">
+          {[
+            { value: counts.labs, label: 'Guided labs' },
+            { value: counts.lessons, label: 'Lessons' },
+            { value: counts.incidents, label: 'Incidents' },
+            { value: counts.tools, label: 'Tools' },
+          ].map((stat) => (
+            <div>
+              <dt class="hero__stat-label">{stat.label}</dt>
+              <dd class="hero__stat-value u-tabular">{stat.value}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+
+      <div class="hero__visual">
+        <CodeBlock
+          title="SW1 — configure a VLAN"
+          lang="cisco ios"
+          code={previewCommands.join('\n')}
+        />
+        <p class="hero__note">
+          <Icon name="info" size={15} />
+          <span>
+            This runs in your browser. It models Cisco IOS closely enough to practise on —
+            and it cannot break your real network.
+          </span>
+        </p>
+      </div>
+    </div>
+  </section>
+<section class="container container--wide home-section">
+    <Section
+      eyebrow="Method"
+      title="Four steps, repeated until it sticks"
+      text="Theory without practice does not survive a lab. Each pass through this loop moves a topic from recognition to reflex."
+    >
+      <ol class="steps-flow">
+        {flow.map((step) => (
+          <li>
+            <span class="steps-flow__num" aria-hidden="true" />
+            <p class="icon-inline">
+              <Icon name={step.icon} size={17} />
+              <span class="steps-flow__title">{step.title}</span>
+            </p>
+            <p class="steps-flow__text">{step.text}</p>
+            <a class="section-head__action" href={step.href}>
+              Browse
+              <Icon name="arrow-right" size={14} />
+            </a>
+          </li>
+        ))}
+      </ol>
+    </Section>
+  </section>
+
+  <section class="home-section--alt">
+    <div class="container container--wide home-section">
+      <Section
+        eyebrow="Library"
+        title="Everything on the platform"
+        text="Eight sections, one consistent interface. Progress is saved in your browser and follows you between devices."
+      >
+        <div class="grid grid--3">
+          {directory.map((section) => (
+            <Card
+              title={section.label}
+              href={`${section.href}/`}
+              kicker={`${section.count} ${section.count === 1 ? section.unit : `${section.unit}s`}`}
+              description={section.description}
+              icon={section.icon}
+              action="Open"
+              attrs={{ 'data-search-text': `${section.label} ${section.description}` }}
+            />
+          ))}
+        </div>
+      </Section>
+    </div>
+  </section>
+
+  <section class="container container--wide home-section">
+    <Section
+      eyebrow="Popular right now"
+      title="Start with a VLAN lab"
+      text="VLANs are the single highest-value thing a CCNA candidate can practise by hand — and these three build on each other."
+      href="/labs/"
+      linkLabel={`All ${counts.labs} labs`}
+    >
+      <div class="grid grid--3">
+        {sampleLabs.map((lab) => (
+          <Card
+            title={lab.data.title}
+            href={`/labs/${lab.id}/`}
+            kicker={lab.data.stageName}
+            description={lab.data.description || lab.data.scenario}
+            difficulty={lab.data.difficulty}
+            meta={[`${lab.data.objectives.length} objectives`]}
+            action="Open lab"
+            attrs={{ 'data-search-text': `${lab.data.title} ${lab.data.description || ''}` }}
+          />
+        ))}
+      </div>
+    </Section>
+  </section>
+
+  <section class="container container--wide">
+    <div class="cta">
+      <div class="cta__inner">
+        <div class="cta__copy">
+          <h2 class="cta__title">
+            <Icon name="gauge" size={20} />
+            <span>Track your progress as you go</span>
+          </h2>
+          <p class="cta__text">
+            Mark lessons read, complete labs, finish quizzes. Your dashboard keeps the
+            streak, the stage progress and the next best thing to study.
+          </p>
+        </div>
+        <div class="cta__actions">
+          <Button href="/dashboard/" variant="primary" size="lg">
+            <Icon name="gauge" size={17} />
+            <span>Open dashboard</span>
+          </Button>
+          <Button href="/search/" size="lg">
+            <Icon name="search" size={17} />
+            <span>Search everything</span>
+          </Button>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero__note {
+    display: flex;
+    gap: var(--sp-2);
+    align-items: flex-start;
+    margin-top: var(--sp-4);
+    font-size: var(--fs-xs);
+    color: var(--text-dim);
+    line-height: 1.55;
+  }
+  .hero__note svg {
+    flex: none;
+    margin-top: 1px;
+  }
+  /* dt must precede dd in markup; column-reverse puts the number on top. */
+  .hero__stats > div {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 2px;
+  }
+  .steps-flow .section-head__action {
+    margin-top: calc(-1 * var(--sp-2));
+  }
+</style>

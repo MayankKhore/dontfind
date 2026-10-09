@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="CCNA Path — Learn networking in your browser">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#58a6ff"/>
+      <stop offset="1" stop-color="#39c5cf"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="#0a0e14"/>
+  <circle cx="1020" cy="120" r="220" fill="#58a6ff" opacity="0.06"/>
+  <circle cx="120" cy="560" r="200" fill="#39c5cf" opacity="0.06"/>
+  <text x="80" y="300" font-family="Segoe UI, sans-serif" font-size="72" font-weight="800" fill="#e6edf3">CCNA Path</text>
+  <text x="80" y="368" font-family="Segoe UI, sans-serif" font-size="36" fill="url(#g)">Learn networking in your browser</text>
+  <text x="80" y="430" font-family="Segoe UI, sans-serif" font-size="24" fill="#8b949e">Guided CLI labs · Lessons · Quizzes · Tools · Interview questions</text>
+</svg>

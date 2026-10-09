@@ -1,0 +1,350 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import TabBar from '../../components/TabBar.astro';
+import CliSimulator from '../../components/CliSimulator.astro';
+import Topology from '../../components/Topology.astro';
+import Alert from '../../components/Alert.astro';
+import Badge from '../../components/Badge.astro';
+import Button from '../../components/Button.astro';
+import Icon from '../../components/Icon.astro';
+import ProgressIndicator from '../../components/ProgressIndicator.astro';
+import RelatedResources from '../../components/RelatedResources.astro';
+import CTABand from '../../components/CTABand.astro';
+import DataTable from '../../components/DataTable.astro';
+import { getCollection } from 'astro:content';
+import { published } from '../../lib/content.js';
+import { resolveLabUi, filterTopology, deviceLabel } from '../../lib/lab-ui.js';
+import { learningResourceSchema } from '../../lib/seo.js';
+
+export async function getStaticPaths() {
+  const labs = published(await getCollection('labs'));
+  return labs.map((entry, i) => ({
+    params: { slug: entry.id },
+    props: { entry, prev: labs[i - 1] ?? null, next: labs[i + 1] ?? null },
+  }));
+}
+
+const { entry, prev, next } = Astro.props;
+const lab = entry.data;
+const path = `/labs/${entry.id}/`;
+const lessonId = `lab:${entry.id}`;
+
+const breadcrumbs = [
+  { href: '/', label: 'Home' },
+  { href: '/labs/', label: 'Labs' },
+  { label: lab.title },
+];
+
+const objectiveCommands = lab.objectives.map((o) => o.cmd);
+
+/**
+ * Per-lab UI config (see `src/lib/lab-ui.js`): which bench visuals and
+ * devices this lesson needs. Panels render from here — never from title
+ * or URL checks — so hidden pieces leave no tabs, panels or gaps behind.
+ */
+const labUi = resolveLabUi(lab);
+const topology = filterTopology(lab.topology || null, labUi.requiredDevices);
+const hasConcepts = lab.concepts.length > 0;
+const tableRows =
+  labUi.renderPortMap && topology?.table?.length
+    ? topology.table.map((row) => Object.values(row).map(String))
+    : [];
+const tableHead =
+  labUi.renderPortMap && topology?.table?.length
+    ? Object.keys(topology.table[0]).map((k) => k.replace(/^\w/, (c) => c.toUpperCase()))
+    : [];
+
+/** Panels shown as tabs — only the ones that have real content. */
+const tabs = [
+  labUi.renderTerminal && { id: 'terminal', label: 'Lab terminal', icon: 'terminal' },
+  labUi.renderTopology && { id: 'topology', label: 'Topology', icon: 'network' },
+  tableRows.length > 0 && { id: 'ports', label: 'Port map', icon: 'list' },
+  labUi.renderConcepts && hasConcepts && { id: 'concepts', label: 'Concepts', icon: 'lightbulb' },
+].filter(Boolean);
+---
+
+<BaseLayout
+  title={lab.title}
+  description={lab.description || lab.scenario}
+  path={path}
+  breadcrumbs={breadcrumbs}
+  pageType="lab"
+  collection="labs"
+  schema={learningResourceSchema({
+    title: lab.title,
+    description: lab.description || lab.scenario,
+    path,
+    collection: 'labs',
+    difficulty: lab.difficulty,
+    timeRequired: lab.duration,
+    teaches: lab.objectives.map((o) => o.text).join('; '),
+    keywords: lab.tags,
+  })}
+>
+  <div class="container container--wide">
+    <PageHeader
+      kicker={`${lab.stageName ?? 'Lab'} · Stage ${lab.stage ?? '—'}`}
+      icon="flask"
+      title={lab.title}
+      lead={lab.scenario}
+    >
+      <div slot="meta" class="page-header__meta">
+        <Badge variant={lab.difficulty} label={lab.difficulty} />
+        {lab.duration && (
+          <span class="badge">
+            <Icon name="clock" size={13} />
+            {lab.duration}
+          </span>
+        )}
+        <span class="badge badge--count">{lab.objectives.length} objectives</span>
+      </div>
+    </PageHeader>
+
+    <div class:list={['lesson-grid', labUi.focus && 'lesson-grid--focus']}>
+      <div>
+        {labUi.focus ? (
+          /* Simplified terminal-first layout: the terminal and the learning
+             content stack and use the full width — no tab bar, no
+             topology/port panels, no layout gaps left behind. */
+          <div class="lab-stack">
+            {labUi.renderTerminal && (
+              <section class="lab-stack__block" aria-label="Lab terminal">
+                <CliSimulator
+                  allowed={lab.allowedCommands}
+                  objectives={objectiveCommands}
+                  objectiveItems={lab.objectives}
+                  lessonId={lessonId}
+                  tabs={labUi.terminalDevices}
+                  focus
+                  initialMode={labUi.initialMode}
+                  setup={labUi.setup}
+                  title={`${lab.title} — ${deviceLabel(labUi.terminalDevices[0])}`}
+                />
+
+                <div class="u-mt-4">
+                  <Alert variant="info" title="This is a simulated IOS">
+                    Nothing you type can reach a real network. Press <code>Tab</code> to complete a
+                    command, <code>?</code> for help, and <code>Ctrl+L</code> to clear the screen.
+                  </Alert>
+                </div>
+              </section>
+            )}
+
+            {labUi.renderConcepts && hasConcepts && (
+              <section class="lab-stack__block" aria-label="Lesson concepts">
+                <h2 class="lab-stack__heading">
+                  <Icon name="lightbulb" size={15} />
+                  <span>Concepts for this lesson</span>
+                </h2>
+                <div class="lab-stack__concepts">
+                  {lab.concepts.map((concept) => (
+                    <section class="concept">
+                      <h4>
+                        <Icon name="lightbulb" size={15} />
+                        <span>{concept.title}</span>
+                      </h4>
+                      <p>{concept.body}</p>
+                      {concept.code && <pre><code>{concept.code}</code></pre>}
+                    </section>
+                  ))}
+                </div>
+              </section>
+            )}
+          </div>
+        ) : (
+          <>
+            <TabBar tabs={tabs} label="Lab resources" />
+
+            {labUi.renderTerminal && (
+              <div
+                class="tabs__panel"
+                role="tabpanel"
+                id="panel-terminal"
+                data-panel="terminal"
+                aria-labelledby="tab-terminal"
+                tabindex="0"
+              >
+                <CliSimulator
+                  allowed={lab.allowedCommands}
+                  objectives={objectiveCommands}
+                  objectiveItems={lab.objectives}
+                  lessonId={lessonId}
+                  tabs={labUi.terminalDevices}
+                  initialMode={labUi.initialMode}
+                  setup={labUi.setup}
+                  title={`${lab.title} — SW1`}
+                />
+
+                <div class="u-mt-4">
+                  <Alert variant="info" title="This is a simulated IOS">
+                    Nothing you type can reach a real network. Press <code>Tab</code> to complete a
+                    command, <code>?</code> for help, and <code>Ctrl+L</code> to clear the screen.
+                  </Alert>
+                </div>
+              </div>
+            )}
+            {labUi.renderTopology && (
+              <div
+                class="tabs__panel"
+                role="tabpanel"
+                id="panel-topology"
+                data-panel="topology"
+                aria-labelledby="tab-topology"
+                tabindex="0"
+                hidden
+              >
+                <Topology
+                  devices={topology.devices}
+                  links={topology.links}
+                  title={`${lab.title} topology`}
+                />
+              </div>
+            )}
+
+            {tableRows.length > 0 && (
+              <div
+                class="tabs__panel"
+                role="tabpanel"
+                id="panel-ports"
+                data-panel="ports"
+                aria-labelledby="tab-ports"
+                tabindex="0"
+                hidden
+              >
+                <DataTable
+                  head={tableHead}
+                  rows={tableRows}
+                  caption="Expected port state for this lab"
+                />
+              </div>
+            )}
+
+            {labUi.renderConcepts && hasConcepts && (
+              <div
+                class="tabs__panel"
+                role="tabpanel"
+                id="panel-concepts"
+                data-panel="concepts"
+                aria-labelledby="tab-concepts"
+                tabindex="0"
+                hidden
+              >
+                <div class="stack">
+                  {lab.concepts.map((concept) => (
+                    <section class="concept">
+                      <h4>
+                        <Icon name="lightbulb" size={15} />
+                        <span>{concept.title}</span>
+                      </h4>
+                      <p>{concept.body}</p>
+                      {concept.code && <pre><code>{concept.code}</code></pre>}
+                    </section>
+                  ))}
+                </div>
+              </div>
+            )}
+          </>
+        )}
+      </div>
+<aside class="lesson-aside">
+        <section class="lesson-section">
+          <h2>
+            <Icon name="target" size={14} />
+            <span>Your progress</span>
+          </h2>
+          <ProgressIndicator
+            value={0}
+            max={lab.objectives.length}
+            label="Lab objectives"
+            showText
+          />
+          <div class="u-mt-4">
+            <Button className="btn--block" data-lab-complete data-lab-id={lessonId}>
+              <Icon name="check-circle" size={15} />
+              <span>Mark lab complete</span>
+            </Button>
+          </div>
+        </section>
+
+        <section class="lesson-section">
+          <h2>
+            <Icon name="info" size={14} />
+            <span>Before you start</span>
+          </h2>
+          <p class="u-dim" style="font-size:var(--fs-sm);line-height:1.6">
+            Objectives tick themselves off as you type the right command, in any order.
+            Nothing is saved until you mark the lab complete.
+          </p>
+        </section>
+
+        <section class="lesson-section">
+          <h2>
+            <Icon name="book" size={14} />
+            <span>Stage</span>
+          </h2>
+          <p class="u-muted" style="font-size:var(--fs-sm)">
+            {lab.stageName ?? 'General practice'}
+          </p>
+          <a class="section-head__action" href="/path/" style="margin-top:var(--sp-2)">
+            See the whole path
+            <Icon name="arrow-right" size={14} />
+          </a>
+        </section>
+      </aside>
+    </div>
+<RelatedResources related={lab.related} resources={lab.resources} />
+
+    <nav class="pager" aria-label="Lab navigation">
+      {prev ? (
+        <a class="pager__link" href={`/labs/${prev.id}/`} rel="prev">
+          <span class="pager__dir">
+            <Icon name="arrow-left" size={13} />
+            Previous lab
+          </span>
+          <span class="pager__title">{prev.data.title}</span>
+        </a>
+      ) : (
+        <span />
+      )}
+      {next ? (
+        <a class="pager__link pager__link--next" href={`/labs/${next.id}/`} rel="next">
+          <span class="pager__dir">
+            Next lab
+            <Icon name="arrow-right" size={13} />
+          </span>
+          <span class="pager__title">{next.data.title}</span>
+        </a>
+      ) : (
+        <span />
+      )}
+    </nav>
+
+    <CTABand
+      title="Finished this lab? Lock it in."
+      text="Mark it complete so it counts towards your stage progress, then carry on with the next one."
+    >
+      <Fragment slot="actions">
+        <Button href={next ? `/labs/${next.id}/` : '/labs/'} variant="primary">
+          <span>{next ? 'Next lab' : 'All labs'}</span>
+          <Icon name="arrow-right" size={16} />
+        </Button>
+        <Button href="/dashboard/">See my progress</Button>
+      </Fragment>
+    </CTABand>
+  </div>
+</BaseLayout>
+
+<script>
+  import '../../scripts/progress.js';
+
+  document.querySelectorAll('[data-lab-complete]').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const { markComplete } = await import('../../scripts/progress.js');
+      markComplete(btn.getAttribute('data-lab-id'));
+      btn.dataset.state = 'done';
+      btn.disabled = true;
+      btn.innerHTML = '✓ Completed';
+    });
+  });
+</script>

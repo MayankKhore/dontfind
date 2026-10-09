@@ -1,0 +1,111 @@
+{
+  "title": "Duplex & Speed",
+  "description": "Understand full vs half duplex and interface speed settings.",
+  "scenario": "Understand full vs half duplex and interface speed settings.",
+  "duration": "6 min",
+  "stage": 2,
+  "stageName": "Learn Foundation",
+  "category": "Learn Foundation",
+  "difficulty": "beginner",
+  "status": "published",
+  "icon": "🧪",
+  "order": 47,
+  "allowedCommands": [
+    "enable",
+    "show interfaces",
+    "show interfaces status",
+    "configure terminal",
+    "interface",
+    "speed",
+    "duplex",
+    "exit",
+    "end",
+    "help",
+    "?"
+  ],
+  "objectives": [
+    {
+      "text": "View interface details",
+      "cmd": "show interfaces"
+    },
+    {
+      "text": "Set speed to 100",
+      "cmd": "speed 100"
+    },
+    {
+      "text": "Set full duplex",
+      "cmd": "duplex full"
+    }
+  ],
+  "concepts": [
+    {
+      "title": "Duplex Modes",
+      "body": "Half-duplex: devices take turns transmitting (like a hub). Full-duplex: devices can send and receive simultaneously (like a switch).",
+      "code": "Half-duplex: 1 direction at a time\nFull-duplex:  both directions at once"
+    },
+    {
+      "title": "Speed",
+      "body": "Speed is the data rate: 10, 100, 1000 Mbps. Auto-negotiation is the default.",
+      "code": "SW1(config-if)# speed 100\nSW1(config-if)# duplex full"
+    },
+    {
+      "title": "Duplex Mismatch",
+      "body": "If one side is full and the other is half, you get late collisions and poor performance.",
+      "code": "Side A: full-duplex\nSide B: half-duplex → collisions!"
+    }
+  ],
+  "topology": {
+    "devices": [
+      {
+        "id": "pc-a",
+        "label": "PC-A",
+        "type": "pc",
+        "x": 60,
+        "y": 75
+      },
+      {
+        "id": "sw1",
+        "label": "SW1",
+        "type": "switch",
+        "x": 210,
+        "y": 75
+      },
+      {
+        "id": "pc-b",
+        "label": "PC-B",
+        "type": "pc",
+        "x": 360,
+        "y": 75
+      }
+    ],
+    "links": [
+      {
+        "from": "pc-a",
+        "to": "sw1",
+        "label": "Fa0/1"
+      },
+      {
+        "from": "pc-b",
+        "to": "sw1",
+        "label": "Fa0/2"
+      }
+    ],
+    "table": [
+      {
+        "port": "Fa0/1",
+        "mode": "access",
+        "vlan": "1",
+        "peer": "PC-A"
+      },
+      {
+        "port": "Fa0/2",
+        "mode": "access",
+        "vlan": "1",
+        "peer": "PC-B"
+      }
+    ]
+  },
+  "tags": [],
+  "related": [],
+  "resources": []
+}

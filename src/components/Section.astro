@@ -1,0 +1,52 @@
+---
+/**
+ * Section.astro — a titled block with an optional "view all" action.
+ *
+ * Used by every index page and by the homepage so the vertical rhythm
+ * and the heading scale never drift between templates.
+ *
+ * Props:
+ *   title     {string}
+ *   text      {string}   supporting sentence
+ *   eyebrow   {string}   small label above the title
+ *   icon      {string}   Icon name beside the title
+ *   href      {string}   "view all" destination
+ *   linkLabel {string}   defaults to "View all"
+ *   id        {string}   anchor id (deep-linking sections)
+ *   class     {string}
+ */
+import Icon from './Icon.astro';
+
+const {
+  title,
+  text,
+  eyebrow,
+  icon,
+  href,
+  linkLabel = 'View all',
+  id,
+  class: className = '',
+} = Astro.props;
+---
+
+<section class={['section-body', className].filter(Boolean).join(' ')} id={id}>
+  <div class="section-head">
+    <div class="section-head__copy">
+      {eyebrow && <span class="eyebrow">{eyebrow}</span>}
+      <h2 class="section-head__title">
+        {icon && <Icon name={icon} size={22} />}
+        <span>{title}</span>
+      </h2>
+      {text && <p class="section-head__text">{text}</p>}
+    </div>
+
+    {href && (
+      <a class="section-head__action" href={href}>
+        {linkLabel}
+        <Icon name="arrow-right" size={15} />
+      </a>
+    )}
+  </div>
+
+  <slot />
+</section>

@@ -1,0 +1,13 @@
+{
+  "title": "What is the difference between TCP and UDP?",
+  "question": "What is the difference between TCP and UDP?",
+  "answer": "TCP is a connection-oriented, reliable transport protocol: it performs a three-way handshake, acknowledges received segments, retransmits lost data and delivers bytes in order. UDP is connectionless and unreliable -- it sends datagrams with no handshake, acknowledgement or ordering guarantees, which makes it lower-latency and ideal for real-time traffic such as voice, video and DNS. TCP is used where integrity matters (web, email, file transfer); UDP is used where speed matters more than guaranteed delivery.",
+  "followUps": [
+    "When would you deliberately choose UDP over TCP?",
+    "How does TCP handle flow control and congestion?"
+  ],
+  "category": "Transport Layer",
+  "difficulty": "beginner",
+  "status": "published",
+  "tags": ["tcp", "udp", "transport"]
+}

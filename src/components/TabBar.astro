@@ -1,0 +1,49 @@
+---
+/**
+ * TabBar.astro — keyboard-accessible tab switcher (tablist only).
+ *
+ * Astro forbids dynamic slot names (`slot={`panel-${id}`}` throws at
+ * compile time), so panels are authored by the page and linked by id
+ * instead. That is actually more flexible: a panel can hold any
+ * component — an interactive CLI terminal, a topology diagram, prose.
+ *
+ * The page must render, for each tab:
+ *
+ *   <div role="tabpanel" id={`panel-${id}`} data-panel={id} tabindex="0">
+ *
+ * tabs.js wires the two together and implements the WAI-ARIA tabs
+ * pattern: arrow keys move, Home/End jump, roving tabindex.
+ *
+ * Props:
+ *   tabs  {Array<{ id, label, icon?, badge? }>}
+ *   label {string}  accessible group name
+ */
+import Icon from './Icon.astro';
+
+const { tabs = [], label = 'Sections', class: className = '' } = Astro.props;
+---
+
+<div class={['tabs', className].filter(Boolean).join(' ')} data-tabs>
+  <div class="tabs__list" role="tablist" aria-label={label}>
+    {tabs.map((tab, i) => (
+      <button
+        type="button"
+        class="tabs__tab"
+        role="tab"
+        id={`tab-${tab.id}`}
+        aria-controls={`panel-${tab.id}`}
+        aria-selected={i === 0 ? 'true' : 'false'}
+        tabindex={i === 0 ? 0 : -1}
+        data-tab={tab.id}
+      >
+        {tab.icon && <Icon name={tab.icon} size={15} />}
+        <span>{tab.label}</span>
+        {tab.badge && <span class="badge badge--count">{tab.badge}</span>}
+      </button>
+    ))}
+  </div>
+</div>
+
+<script>
+  import '../scripts/tabs.js';
+</script>

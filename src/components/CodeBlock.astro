@@ -1,0 +1,39 @@
+---
+/**
+ * CodeBlock.astro — presentation layer for Cisco CLI / config snippets.
+ *
+ * Renders the code statically (crawlable + readable without JS), then
+ * copy.js progressively adds the clipboard button behaviour.
+ *
+ * Props:
+ *   code    {string}  the code to display (required unless slotted)
+ *   title   {string}  window title, e.g. "switch-1#"
+ *   lang    {string}  small language tag, default 'ios'
+ *   dots    {boolean} show the traffic-light chrome (default true)
+ *   class   {string}
+ */
+import Icon from './Icon.astro';
+
+const { code, title, lang = 'ios', dots = true, class: className = '' } = Astro.props;
+---
+
+<div class={['code-block', className].filter(Boolean).join(' ')} data-code-block>
+  <div class="code-block__head">
+    {dots && (
+      <span class="code-block__dots" aria-hidden="true">
+        <i></i><i></i><i></i>
+      </span>
+    )}
+    <span class="code-block__title">{title || lang}</span>
+    <span class="code-block__lang" aria-hidden="true">{lang}</span>
+    <button type="button" class="code-block__copy" data-copy-code>
+      <Icon name="copy" size={13} />
+      <span data-copy-label>Copy</span>
+    </button>
+  </div>
+  <pre class="code-block__pre"><code>{code ?? ''}<slot /></code></pre>
+</div>
+
+<script>
+  import '../scripts/copy.js';
+</script>

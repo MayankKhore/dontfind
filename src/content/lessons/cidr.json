@@ -1,0 +1,83 @@
+{
+  "title": "CIDR",
+  "description": "Classless addressing: any mask length you want",
+  "tagline": "Classless addressing: any mask length you want",
+  "duration": "9 min",
+  "stage": 6,
+  "stageName": "Subnetting",
+  "category": "Subnetting",
+  "difficulty": "intermediate",
+  "status": "published",
+  "icon": "➗",
+  "order": 119,
+  "sections": [
+    {
+      "icon": "➗",
+      "title": "What CIDR Means",
+      "body": "CIDR (Classless Inter-Domain Routing) throws away fixed classes. Instead of \"Class B\" you write exactly how many bits are network: /22, /27 — anything. Format: IP/prefix, e.g. 10.1.1.0/22."
+    },
+    {
+      "icon": "📊",
+      "title": "Prefix Cheat Table",
+      "table": {
+        "head": [
+          "Prefix",
+          "Mask",
+          "Hosts"
+        ],
+        "rows": [
+          [
+            "/24",
+            "255.255.255.0",
+            "254"
+          ],
+          [
+            "/25",
+            "255.255.255.128",
+            "126"
+          ],
+          [
+            "/26",
+            "255.255.255.192",
+            "62"
+          ],
+          [
+            "/27",
+            "255.255.255.224",
+            "30"
+          ],
+          [
+            "/28",
+            "255.255.255.240",
+            "14"
+          ],
+          [
+            "/29",
+            "255.255.255.248",
+            "6"
+          ],
+          [
+            "/30",
+            "255.255.255.252",
+            "2"
+          ]
+        ]
+      }
+    },
+    {
+      "icon": "🎁",
+      "title": "Route Summarization Bonus",
+      "body": "CIDR also works upward: many small networks can be advertised as ONE bigger route — smaller routing tables, faster routers.",
+      "code": "172.16.0.0/24\n172.16.1.0/24\n172.16.2.0/24\n172.16.3.0/24\n= summarize as 172.16.0.0/22"
+    },
+    {
+      "icon": "🧮",
+      "title": "Reading Any Prefix Fast",
+      "body": "For /X: host bits = 32 − X, usable hosts = 2^(32−X) − 2. Every CIDR question is just this one formula.",
+      "tip": "💡 Exam tip: /27 → mask 255.255.255.224 → block size 256−224 = 32."
+    }
+  ],
+  "tags": [],
+  "related": [],
+  "resources": []
+}

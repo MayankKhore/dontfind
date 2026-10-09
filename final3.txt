@@ -1,0 +1,7 @@
+﻿lab data-lab-complete: True
+lab btn--block: True
+lab data-lab-id: True
+lesson data-lesson-read: True
+lesson btn--block: True
+lab button tag: <button class="btn btn--block" type="button" data-lab-complete="true" data-lab-id="lab:configure-access-vlans">
+lesson button tag: <button class="btn btn--block" type="button" data-lesson-read="true" data-lesson-id="lesson:subnetting">

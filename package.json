@@ -1,0 +1,25 @@
+{
+  "name": "ccna-path",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "description": "CCNA Path - a scalable networking education platform built with Astro (static site generation).",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "verify": "node scripts/verify-build.mjs",
+    "audit": "node scripts/audit-dist.mjs",
+    "test:net": "node scripts/test-netcalc.mjs",
+    "og": "node scripts/generate-og-image.mjs",
+    "test": "npm run test:net && npm run build && npm run verify && npm run audit",
+    "smoke": "node scripts/smoke-routes.mjs",
+    "migrate:content": "node scripts/migrate-content.mjs"
+  },
+  "dependencies": {
+    "astro": "^5.15.0",
+    "@astrojs/sitemap": "^3.6.0"
+  }
+}

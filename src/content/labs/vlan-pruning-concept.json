@@ -1,0 +1,112 @@
+{
+  "title": "VLAN Pruning Concept",
+  "description": "Understand why VLAN pruning matters and how to control which VLANs cross a trunk.",
+  "scenario": "Understand why VLAN pruning matters and how to control which VLANs cross a trunk.",
+  "duration": "7 min",
+  "stage": 3,
+  "stageName": "VLAN & Trunking",
+  "category": "VLAN & Trunking",
+  "difficulty": "beginner",
+  "status": "published",
+  "icon": "🧪",
+  "order": 56,
+  "allowedCommands": [
+    "enable",
+    "configure terminal",
+    "interface",
+    "switchport trunk allowed vlan",
+    "switchport trunk allowed vlan add",
+    "switchport trunk allowed vlan remove",
+    "show interfaces trunk",
+    "exit",
+    "end",
+    "help",
+    "?"
+  ],
+  "objectives": [
+    {
+      "text": "Allow only VLANs 10-20 on trunk",
+      "cmd": "switchport trunk allowed vlan 10-20"
+    },
+    {
+      "text": "Verify trunk allowed VLANs",
+      "cmd": "show interfaces trunk"
+    }
+  ],
+  "concepts": [
+    {
+      "title": "What is VLAN Pruning?",
+      "body": "VLAN pruning prevents unnecessary VLAN traffic from crossing trunk links. A trunk only forwards frames for VLANs that actually exist on the far end.",
+      "code": "Trunk Gi0/1: carries VLANs 1-4094 by default\nAfter pruning: only VLANs 10-20 cross"
+    },
+    {
+      "title": "Manual Pruning with Allowed VLANs",
+      "body": "On Cisco IOS, use \"switchport trunk allowed vlan\" to manually prune. Use \"add\" to keep existing allowed VLANs.",
+      "code": "SW1(config-if)# switchport trunk allowed vlan 10-20\nSW1(config-if)# switchport trunk allowed vlan add 30"
+    },
+    {
+      "title": "Restoring All VLANs",
+      "body": "Use the keyword \"all\" to restore the default of carrying every VLAN over the trunk.",
+      "code": "SW1(config-if)# switchport trunk allowed vlan all"
+    },
+    {
+      "title": "Why Prune?",
+      "body": "Pruning reduces unnecessary broadcasts, multicasts, and inefficiency over trunk links. It is especially useful on links to switches/distribution layers that do not need every VLAN.",
+      "code": "Less unnecessary traffic → better use of trunk bandwidth"
+    }
+  ],
+  "topology": {
+    "devices": [
+      {
+        "id": "pc-a",
+        "label": "PC-A",
+        "type": "pc",
+        "x": 60,
+        "y": 75
+      },
+      {
+        "id": "sw1",
+        "label": "SW1",
+        "type": "switch",
+        "x": 210,
+        "y": 75
+      },
+      {
+        "id": "pc-b",
+        "label": "PC-B",
+        "type": "pc",
+        "x": 360,
+        "y": 75
+      }
+    ],
+    "links": [
+      {
+        "from": "pc-a",
+        "to": "sw1",
+        "label": "Fa0/1"
+      },
+      {
+        "from": "pc-b",
+        "to": "sw1",
+        "label": "Fa0/2"
+      }
+    ],
+    "table": [
+      {
+        "port": "Fa0/1",
+        "mode": "access",
+        "vlan": "1",
+        "peer": "PC-A"
+      },
+      {
+        "port": "Fa0/2",
+        "mode": "access",
+        "vlan": "1",
+        "peer": "PC-B"
+      }
+    ]
+  },
+  "tags": [],
+  "related": [],
+  "resources": []
+}

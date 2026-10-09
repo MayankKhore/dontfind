@@ -1,0 +1,106 @@
+{
+  "title": "PortFast & BPDU Guard",
+  "description": "Configure PortFast and BPDU Guard on access ports for faster convergence and security.",
+  "scenario": "Configure PortFast and BPDU Guard on access ports for faster convergence and security.",
+  "duration": "8 min",
+  "stage": 4,
+  "stageName": "Spanning Tree",
+  "category": "Spanning Tree",
+  "difficulty": "beginner",
+  "status": "published",
+  "icon": "🧪",
+  "order": 16,
+  "allowedCommands": [
+    "enable",
+    "configure terminal",
+    "interface",
+    "spanning-tree portfast",
+    "spanning-tree bpduguard enable",
+    "show spanning-tree interface",
+    "exit",
+    "end",
+    "help",
+    "?"
+  ],
+  "objectives": [
+    {
+      "text": "Enable PortFast on Fa0/1",
+      "cmd": "spanning-tree portfast"
+    },
+    {
+      "text": "Enable BPDU Guard",
+      "cmd": "spanning-tree bpduguard enable"
+    }
+  ],
+  "concepts": [
+    {
+      "title": "PortFast",
+      "body": "PortFast puts an access port directly into Forwarding state, skipping STP delays. For end devices only.",
+      "code": "SW1(config-if)# spanning-tree portfast"
+    },
+    {
+      "title": "BPDU Guard",
+      "body": "BPDU Guard shuts down a port if it receives a BPDU. Prevents rogue switches from joining the network.",
+      "code": "SW1(config-if)# spanning-tree bpduguard enable\n%PM-4-ERR_DISABLE: bpduguard"
+    },
+    {
+      "title": "Best Practice",
+      "body": "Enable both PortFast and BPDU Guard on all access ports. Never on trunk ports.",
+      "code": "Access port: portfast + bpduguard\nTrunk port:  neither"
+    }
+  ],
+  "topology": {
+    "devices": [
+      {
+        "id": "pc-a",
+        "label": "PC-A",
+        "type": "pc",
+        "x": 60,
+        "y": 75
+      },
+      {
+        "id": "sw1",
+        "label": "SW1",
+        "type": "switch",
+        "x": 210,
+        "y": 75
+      },
+      {
+        "id": "pc-b",
+        "label": "PC-B",
+        "type": "pc",
+        "x": 360,
+        "y": 75
+      }
+    ],
+    "links": [
+      {
+        "from": "pc-a",
+        "to": "sw1",
+        "label": "Fa0/1"
+      },
+      {
+        "from": "pc-b",
+        "to": "sw1",
+        "label": "Fa0/2"
+      }
+    ],
+    "table": [
+      {
+        "port": "Fa0/1",
+        "mode": "access",
+        "vlan": "1",
+        "peer": "PC-A"
+      },
+      {
+        "port": "Fa0/2",
+        "mode": "access",
+        "vlan": "1",
+        "peer": "PC-B"
+      }
+    ]
+  },
+  "tags": [],
+  "related": [],
+  "resources": []
+}

@@ -1,0 +1,107 @@
+{
+  "title": "Native VLAN & Trunk Configuration",
+  "description": "Configure the native VLAN on a trunk and understand untagged traffic.",
+  "scenario": "Configure the native VLAN on a trunk and understand untagged traffic.",
+  "duration": "8 min",
+  "stage": 3,
+  "stageName": "VLAN & Trunking",
+  "category": "VLAN & Trunking",
+  "difficulty": "beginner",
+  "status": "published",
+  "icon": "🧪",
+  "order": 11,
+  "allowedCommands": [
+    "enable",
+    "configure terminal",
+    "interface",
+    "switchport mode trunk",
+    "switchport trunk native vlan",
+    "show interfaces trunk",
+    "show vlan brief",
+    "exit",
+    "end",
+    "help",
+    "?"
+  ],
+  "objectives": [
+    {
+      "text": "Set trunk native VLAN to 99",
+      "cmd": "switchport trunk native vlan 99"
+    },
+    {
+      "text": "Verify the trunk",
+      "cmd": "show interfaces trunk"
+    }
+  ],
+  "concepts": [
+    {
+      "title": "Native VLAN",
+      "body": "The native VLAN carries untagged traffic on a trunk. By default it is VLAN 1. Best practice is to change it to an unused VLAN.",
+      "code": "SW1(config-if)# switchport trunk native vlan 99"
+    },
+    {
+      "title": "Why Change Native VLAN?",
+      "body": "VLAN 1 is the default for everything. Changing the native VLAN prevents VLAN hopping attacks and accidental misconfigurations.",
+      "code": "Default native: VLAN 1 (avoid)\nSecure native:   VLAN 99"
+    },
+    {
+      "title": "Verifying Native VLAN",
+      "body": "\"show interfaces trunk\" displays the native VLAN for each trunk port.",
+      "code": "SW1# show interfaces trunk\nPort   Native VLAN\nGi0/1  99"
+    }
+  ],
+  "topology": {
+    "devices": [
+      {
+        "id": "pc-a",
+        "label": "PC-A",
+        "type": "pc",
+        "x": 60,
+        "y": 75
+      },
+      {
+        "id": "sw1",
+        "label": "SW1",
+        "type": "switch",
+        "x": 210,
+        "y": 75
+      },
+      {
+        "id": "pc-b",
+        "label": "PC-B",
+        "type": "pc",
+        "x": 360,
+        "y": 75
+      }
+    ],
+    "links": [
+      {
+        "from": "pc-a",
+        "to": "sw1",
+        "label": "Fa0/1"
+      },
+      {
+        "from": "pc-b",
+        "to": "sw1",
+        "label": "Fa0/2"
+      }
+    ],
+    "table": [
+      {
+        "port": "Fa0/1",
+        "mode": "access",
+        "vlan": "1",
+        "peer": "PC-A"
+      },
+      {
+        "port": "Fa0/2",
+        "mode": "access",
+        "vlan": "1",
+        "peer": "PC-B"
+      }
+    ]
+  },
+  "tags": [],
+  "related": [],
+  "resources": []
+}

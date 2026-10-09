@@ -1,0 +1,117 @@
+{
+  "title": "SSH Security",
+  "description": "Replace Telnet with encrypted SSH for secure remote management.",
+  "scenario": "Replace Telnet with encrypted SSH for secure remote management.",
+  "duration": "8 min",
+  "stage": 5,
+  "stageName": "Security",
+  "category": "Security",
+  "difficulty": "intermediate",
+  "status": "published",
+  "icon": "🧪",
+  "order": 74,
+  "allowedCommands": [
+    "enable",
+    "configure terminal",
+    "ip domain-name ccna.lab",
+    "crypto key generate rsa",
+    "username admin password cisco123",
+    "line vty 0 4",
+    "transport input ssh",
+    "login local",
+    "show running-config",
+    "exit",
+    "end",
+    "help",
+    "?"
+  ],
+  "objectives": [
+    {
+      "text": "Set domain name",
+      "cmd": "ip domain-name ccna.lab"
+    },
+    {
+      "text": "Generate RSA keys",
+      "cmd": "crypto key generate rsa"
+    },
+    {
+      "text": "Allow SSH only",
+      "cmd": "transport input ssh"
+    },
+    {
+      "text": "Require local login",
+      "cmd": "login local"
+    }
+  ],
+  "concepts": [
+    {
+      "title": "SSH vs Telnet",
+      "body": "Telnet sends everything — including passwords — in plaintext. SSH encrypts the entire session. Never manage devices over Telnet.",
+      "code": "Telnet: plaintext — sniffable\nSSH:    encrypted — secure"
+    },
+    {
+      "title": "RSA Keys",
+      "body": "SSH needs an RSA keypair. The hostname + domain name form the key name, so set those first. Use at least a 1024-bit modulus.",
+      "code": "SW1(config)# ip domain-name ccna.lab\nSW1(config)# crypto key generate rsa\n  modulus 1024"
+    },
+    {
+      "title": "Restrict VTY to SSH",
+      "body": "\"transport input ssh\" on the VTY lines blocks Telnet completely — only SSH sessions are accepted.",
+      "code": "SW1(config)# line vty 0 4\nSW1(config-line)# transport input ssh\nSW1(config-line)# login local"
+    }
+  ],
+  "topology": {
+    "devices": [
+      {
+        "id": "pc-a",
+        "label": "PC-A",
+        "type": "pc",
+        "x": 60,
+        "y": 75
+      },
+      {
+        "id": "sw1",
+        "label": "SW1",
+        "type": "switch",
+        "x": 210,
+        "y": 75
+      },
+      {
+        "id": "pc-b",
+        "label": "PC-B",
+        "type": "pc",
+        "x": 360,
+        "y": 75
+      }
+    ],
+    "links": [
+      {
+        "from": "pc-a",
+        "to": "sw1",
+        "label": "Fa0/1"
+      },
+      {
+        "from": "pc-b",
+        "to": "sw1",
+        "label": "Fa0/2"
+      }
+    ],
+    "table": [
+      {
+        "port": "Fa0/1",
+        "mode": "access",
+        "vlan": "1",
+        "peer": "PC-A"
+      },
+      {
+        "port": "Fa0/2",
+        "mode": "access",
+        "vlan": "1",
+        "peer": "PC-B"
+      }
+    ]
+  },
+  "tags": [],
+  "related": [],
+  "resources": []
+}

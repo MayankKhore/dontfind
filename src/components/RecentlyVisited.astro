@@ -1,0 +1,45 @@
+---
+/**
+ * RecentlyVisited.astro — "pick up where you left off".
+ *
+ * Renders the panel chrome (with a real, useful loading/empty state) and
+ * lets recent.js paint the entries from local storage. Kept server-safe:
+ * with JS disabled the empty state is what a reader sees, which is
+ * honest rather than broken.
+ *
+ * Props: title, limit, compact
+ */
+import Icon from './Icon.astro';
+
+const { title = 'Recently visited', limit = 6, compact = false } = Astro.props;
+---
+
+<div class="panel" data-recent-root data-recent-limit={limit}>
+  <div class="panel__head">
+    <p class="panel__title">
+      <Icon name="clock" size={16} />
+      <span>{title}</span>
+    </p>
+    <span class="badge badge--count" data-recent-count>0</span>
+  </div>
+
+  <p class="status-line" data-recent-loading>
+    <span class="spinner" aria-hidden="true"></span>
+    <span>Loading your history…</span>
+  </p>
+
+  <ul class="recent" data-recent-list hidden></ul>
+
+  <div class="empty" data-recent-empty hidden>
+    <span class="empty__icon" aria-hidden="true"><Icon name="clock" size={20} /></span>
+    <p class="empty__text">
+      Nothing yet. Open a lesson or a lab and it will appear here on your next visit.
+    </p>
+  </div>
+
+  {!compact && <slot />}
+</div>
+
+<script>
+  import '../scripts/recent.js';
+</script>

@@ -1,0 +1,104 @@
+{
+  "title": "Default Gateway",
+  "description": "Configure a default gateway so the switch can reach remote networks.",
+  "scenario": "Configure a default gateway so the switch can reach remote networks.",
+  "duration": "6 min",
+  "stage": 7,
+  "stageName": "Discovery & Management",
+  "category": "Discovery & Management",
+  "difficulty": "intermediate",
+  "status": "published",
+  "icon": "🧪",
+  "order": 23,
+  "allowedCommands": [
+    "enable",
+    "configure terminal",
+    "ip default-gateway",
+    "show running-config",
+    "exit",
+    "end",
+    "help",
+    "?"
+  ],
+  "objectives": [
+    {
+      "text": "Set default gateway",
+      "cmd": "ip default-gateway 192.168.1.1"
+    },
+    {
+      "text": "Verify the config",
+      "cmd": "show running-config"
+    }
+  ],
+  "concepts": [
+    {
+      "title": "Default Gateway",
+      "body": "Layer 2 switches need a default gateway to reach remote networks for management (ping, Telnet, SSH).",
+      "code": "SW1(config)# ip default-gateway 192.168.1.1"
+    },
+    {
+      "title": "Layer 2 vs Layer 3",
+      "body": "Layer 2 switches use \"ip default-gateway\". Layer 3 switches use \"ip route 0.0.0.0 0.0.0.0 <next-hop>\".",
+      "code": "L2 switch: ip default-gateway 192.168.1.1\nL3 switch: ip route 0.0.0.0 0.0.0.0 192.168.1.1"
+    },
+    {
+      "title": "Verifying",
+      "body": "Check \"show running-config\" or ping a remote address to verify the gateway works.",
+      "code": "SW1# ping 192.168.1.1\n!!!!!\nSuccess rate is 100 percent"
+    }
+  ],
+  "topology": {
+    "devices": [
+      {
+        "id": "pc-a",
+        "label": "PC-A",
+        "type": "pc",
+        "x": 60,
+        "y": 75
+      },
+      {
+        "id": "sw1",
+        "label": "SW1",
+        "type": "switch",
+        "x": 210,
+        "y": 75
+      },
+      {
+        "id": "pc-b",
+        "label": "PC-B",
+        "type": "pc",
+        "x": 360,
+        "y": 75
+      }
+    ],
+    "links": [
+      {
+        "from": "pc-a",
+        "to": "sw1",
+        "label": "Fa0/1"
+      },
+      {
+        "from": "pc-b",
+        "to": "sw1",
+        "label": "Fa0/2"
+      }
+    ],
+    "table": [
+      {
+        "port": "Fa0/1",
+        "mode": "access",
+        "vlan": "1",
+        "peer": "PC-A"
+      },
+      {
+        "port": "Fa0/2",
+        "mode": "access",
+        "vlan": "1",
+        "peer": "PC-B"
+      }
+    ]
+  },
+  "tags": [],
+  "related": [],
+  "resources": []
+}

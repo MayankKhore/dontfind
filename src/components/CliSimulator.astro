@@ -1,0 +1,154 @@
+---
+/**
+ * CliSimulator.astro — the browser-based Cisco IOS terminal.
+ *
+ * Renders accessible terminal markup and (only on pages that use it) loads
+ * the cli-simulation script. Pass `allowed` to create a restricted lab
+ * terminal, and `objectives` (array of command strings) to enable grading.
+ * The markup contract here is a hard API for cli-simulation.js:
+ *   [data-cli-sim]           container
+ *     [data-cli-lesson]      lesson id used for grading/progress
+ *     [data-cli-allowed]     JSON array of permitted commands (optional)
+ *     [data-cli-objectives]  JSON array of commands that satisfy objectives
+ *     [data-cli-device]      one per device tab
+ *     [data-cli-output]      role=log, aria-live, the transcript
+ *     [data-cli-prompt]      prompt prefix
+ *     [data-cli-input]       command input
+ *
+ * Props:
+ *   tabs {string[]}  device ids offered as terminal tabs; when a single
+ *                    device is given the tablist is hidden (nothing to
+ *                    choose between) instead of showing a one-item control.
+ *   focus {boolean}  focus-mode styling: a taller transcript so the
+ *                    terminal commands the lesson's attention.
+ *   initialMode      CLI mode the terminal boots into ('user' default).
+ *   setup            silent, ungraded seed commands applied per device
+ *                    before the session starts (pre-filled config).
+ *
+ * Markup contract additions:
+ *   [data-cli-initial-mode]  boot mode for the session
+ *   [data-cli-setup]         JSON seed steps [{ device?, commands[] }]
+ *
+ * Accessibility: a proper tablist for devices, a log role for output that
+ * announces new lines, and a real <label> for the input.
+ */
+import Icon from './Icon.astro';
+
+const {
+  allowed = null,
+  objectives = [],
+  objectiveItems = [],
+  lessonId = '',
+  tabs = ['sw1', 'sw2', 'pc-a', 'pc-b'],
+  title = 'CLI simulator',
+  inputId = 'cli-input',
+  focus = false,
+  initialMode = 'user',
+  setup = [],
+} = Astro.props;
+
+const KNOWN_LABELS = { sw1: 'SW1', sw2: 'SW2', 'pc-a': 'PC-A', 'pc-b': 'PC-B' };
+const labels = { ...KNOWN_LABELS };
+for (const id of tabs) {
+  if (!labels[id]) labels[id] = String(id).toUpperCase();
+}
+/* A lone device needs no tablist — rendering one would be a dead control. */
+const showDeviceTabs = tabs.length > 1;
+---
+
+<section
+  class:list={['terminal', focus && 'terminal--focus']}
+  data-cli-sim
+  data-cli-lesson={lessonId}
+  data-cli-allowed={allowed ? JSON.stringify(allowed) : undefined}
+  data-cli-objectives={JSON.stringify(objectives)}
+  data-cli-initial-mode={initialMode}
+  data-cli-setup={setup?.length ? JSON.stringify(setup) : undefined}
+  aria-label={title}
+>
+  <div class="terminal__chrome">
+    <span class="code-block__dots" aria-hidden="true">
+      <i></i><i></i><i></i>
+    </span>
+    <span class="terminal__title">{title}</span>
+    <span class="terminal__badge" aria-hidden="true">Simulated</span>
+  </div>
+
+  {showDeviceTabs ? (
+    <div class="terminal__tabs" role="tablist" aria-label="Devices">
+      {tabs.map((id, i) => (
+        <button
+          type="button"
+          class="terminal__tab"
+          role="tab"
+          data-cli-device={id}
+          aria-selected={i === 0 ? 'true' : 'false'}
+          tabindex={i === 0 ? 0 : -1}
+        >
+          <Icon name={id.startsWith('pc') ? 'cpu' : 'network'} size={13} />
+          {labels[id] || id}
+        </button>
+      ))}
+    </div>
+  ) : (
+    <span data-cli-device={tabs[0] || 'sw1'} hidden aria-hidden="true"></span>
+  )}
+
+  <div
+    class="terminal__body"
+    data-cli-output
+    role="log"
+    aria-live="polite"
+    aria-label="Terminal output"
+    tabindex="0"
+  ></div>
+
+  <div class="terminal__input-line">
+    <label class="sr-only" for={inputId}>Command input</label>
+    <span class="terminal__prompt" data-cli-prompt aria-hidden="true">Switch&gt;</span>
+    <input
+      id={inputId}
+      class="terminal__input"
+      data-cli-input
+      type="text"
+      autocomplete="off"
+      autocapitalize="off"
+      spellcheck="false"
+      placeholder="Type a command and press Enter…"
+    />
+  </div>
+
+  <!--
+    The objective checklist MUST live inside [data-cli-sim]: the grading
+    code looks it up with root.querySelector('[data-objective="i"]'), so
+    rendering it in a sibling aside silently disables grading.
+  -->
+  {objectiveItems.length > 0 && (
+    <div class="terminal__objectives">
+      <p class="terminal__objectives-title">
+        Objectives · <span data-cli-progress>0 / {objectiveItems.length}</span>
+      </p>
+      <ul class="objective-list" style="--fs-xs">
+        {objectiveItems.map((item, i) => (
+          <li class="objective" data-objective={i} data-done="false">
+            <span class="objective__mark" aria-hidden="true">○</span>
+            <span>
+              {item.text} <code>{item.cmd}</code>
+            </span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )}
+
+  <div class="terminal__footer">
+    <span>Tab: complete</span>
+    <span>↑↓: history</span>
+    <span>? : help</span>
+    <span>Ctrl+L: clear</span>
+  </div>
+</section>
+
+<script>
+  import '../scripts/cli-simulation.js';
+</script>

@@ -1,0 +1,10 @@
+{
+  "title": "Subnet Mask to CIDR Converter",
+  "description": "Convert between a dotted-decimal subnet mask (e.g. 255.255.255.0) and its CIDR prefix length (e.g. /24).",
+  "category": "IP Tools",
+  "difficulty": "beginner",
+  "status": "published",
+  "icon": "🔁",
+  "toolType": "mask",
+  "tags": ["subnetting", "cidr", "calculator"]
+}

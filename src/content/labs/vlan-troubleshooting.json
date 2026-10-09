@@ -1,0 +1,109 @@
+{
+  "title": "VLAN Troubleshooting",
+  "description": "Troubleshoot common VLAN and trunk issues.",
+  "scenario": "Troubleshoot common VLAN and trunk issues.",
+  "duration": "8 min",
+  "stage": 10,
+  "stageName": "Troubleshooting",
+  "category": "Troubleshooting",
+  "difficulty": "advanced",
+  "status": "published",
+  "icon": "🧪",
+  "order": 34,
+  "allowedCommands": [
+    "enable",
+    "show vlan brief",
+    "show interfaces trunk",
+    "show interfaces status",
+    "show running-config",
+    "exit",
+    "end",
+    "help",
+    "?"
+  ],
+  "objectives": [
+    {
+      "text": "Check VLANs",
+      "cmd": "show vlan brief"
+    },
+    {
+      "text": "Check trunks",
+      "cmd": "show interfaces trunk"
+    },
+    {
+      "text": "Check port status",
+      "cmd": "show interfaces status"
+    }
+  ],
+  "concepts": [
+    {
+      "title": "Common VLAN Issues",
+      "body": "Port in wrong VLAN, trunk not configured, native VLAN mismatch, or VLAN not created.",
+      "code": "Check: show vlan brief\nCheck: show interfaces trunk\nCheck: show interfaces status"
+    },
+    {
+      "title": "Trunk Mismatch",
+      "body": "If one side is access and the other is trunk, traffic fails. Both sides must agree on trunk mode.",
+      "code": "SW1: trunk\nSW2: access → mismatch!"
+    },
+    {
+      "title": "Native VLAN Mismatch",
+      "body": "Native VLAN mismatch causes BPDU errors and untagged traffic issues. Both sides must match.",
+      "code": "SW1 native: 99\nSW2 native: 1 → mismatch!"
+    }
+  ],
+  "topology": {
+    "devices": [
+      {
+        "id": "pc-a",
+        "label": "PC-A",
+        "type": "pc",
+        "x": 60,
+        "y": 75
+      },
+      {
+        "id": "sw1",
+        "label": "SW1",
+        "type": "switch",
+        "x": 210,
+        "y": 75
+      },
+      {
+        "id": "pc-b",
+        "label": "PC-B",
+        "type": "pc",
+        "x": 360,
+        "y": 75
+      }
+    ],
+    "links": [
+      {
+        "from": "pc-a",
+        "to": "sw1",
+        "label": "Fa0/1"
+      },
+      {
+        "from": "pc-b",
+        "to": "sw1",
+        "label": "Fa0/2"
+      }
+    ],
+    "table": [
+      {
+        "port": "Fa0/1",
+        "mode": "access",
+        "vlan": "1",
+        "peer": "PC-A"
+      },
+      {
+        "port": "Fa0/2",
+        "mode": "access",
+        "vlan": "1",
+        "peer": "PC-B"
+      }
+    ]
+  },
+  "tags": [],
+  "related": [],
+  "resources": []
+}

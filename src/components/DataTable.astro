@@ -1,0 +1,27 @@
+---
+/**
+ * DataTable.astro — accessible table wrapper.
+ * Props: caption, head (string[]), rows (Array<Array<string>>) OR default slot.
+ */
+const { caption, head = [], rows = [] } = Astro.props;
+const hasRows = rows && rows.length > 0;
+---
+<div class="table-wrap">
+  <table class="data-table">
+    {caption && <caption>{caption}</caption>}
+    {head.length > 0 && (
+      <thead>
+        <tr>{head.map((h) => <th scope="col">{h}</th>)}</tr>
+      </thead>
+    )}
+    <tbody>
+      {hasRows ? (
+        rows.map((row) => (
+          <tr>{row.map((cell) => <td>{cell}</td>)}</tr>
+        ))
+      ) : (
+        <slot />
+      )}
+    </tbody>
+  </table>
+</div>

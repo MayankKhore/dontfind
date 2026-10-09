@@ -1,0 +1,33 @@
+---
+/**
+ * Sidebar.astro — contextual section navigation.
+ * Props: title, groups = [{ title, items: [{ href, label, badge? }] }]
+ * Highlights the current page using aria-current="page".
+ */
+import { isActive } from '../lib/url.js';
+const { title = 'On this site', groups = [] } = Astro.props;
+const path = Astro.url.pathname;
+---
+<aside class="sidebar" aria-label={title}>
+  <p class="sidebar__title">{title}</p>
+  {groups.map((group) => (
+    <div class="sidebar__group">
+      {group.title && <p class="sidebar__title">{group.title}</p>}
+      <ul class="sidebar__list">
+        {group.items.map((item) => (
+          <li>
+            <a
+              class="sidebar__link"
+              href={item.href}
+              aria-current={isActive(path, item.href.replace(/\/$/, '')) ? 'page' : undefined}
+            >
+              <span>{item.label}</span>
+              {item.badge && <span class="badge">{item.badge}</span>}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  ))}
+  <slot />
+</aside>

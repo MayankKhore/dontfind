@@ -1,0 +1,119 @@
+{
+  "title": "Voice VLAN",
+  "description": "Configure a voice VLAN so IP phones and PCs share one port without conflict.",
+  "scenario": "Configure a voice VLAN so IP phones and PCs share one port without conflict.",
+  "duration": "8 min",
+  "stage": 3,
+  "stageName": "VLAN & Trunking",
+  "category": "VLAN & Trunking",
+  "difficulty": "beginner",
+  "status": "published",
+  "icon": "🧪",
+  "order": 55,
+  "allowedCommands": [
+    "enable",
+    "configure terminal",
+    "interface",
+    "vlan",
+    "name",
+    "switchport voice vlan",
+    "switchport access vlan",
+    "switchport mode access",
+    "show vlan brief",
+    "show interfaces status",
+    "exit",
+    "end",
+    "help",
+    "?"
+  ],
+  "objectives": [
+    {
+      "text": "Create voice VLAN 50",
+      "cmd": "vlan 50"
+    },
+    {
+      "text": "Set port to access mode",
+      "cmd": "switchport mode access"
+    },
+    {
+      "text": "Assign voice VLAN 50",
+      "cmd": "switchport voice vlan 50"
+    }
+  ],
+  "concepts": [
+    {
+      "title": "What is a Voice VLAN?",
+      "body": "A voice VLAN (auxiliary VLAN) carries VoIP telephone traffic. The phone tags its traffic with the voice VLAN, while the PC behind the phone stays in the data VLAN.",
+      "code": "IP Phone → Voice VLAN 50\nPC via phone → Data VLAN 20"
+    },
+    {
+      "title": "Configuring Voice VLAN",
+      "body": "Create the voice VLAN, set the port to access mode, then assign the voice VLAN with \"switchport voice vlan\".",
+      "code": "SW1(config)# vlan 50\nSW1(config-vlan)# name VOICE\nSW1(config-if)# switchport mode access\nSW1(config-if)# switchport voice vlan 50"
+    },
+    {
+      "title": "Verifying Voice VLAN",
+      "body": "\"show interfaces status\" shows only the Vlan column for ports. Use \"show run interface\" to see both data and voice VLANs.",
+      "code": "SW1# show running-config interface Fa0/1\nswitchport access vlan 20\nswitchport voice vlan 50"
+    },
+    {
+      "title": "Data + Voice on One Port",
+      "body": "When both are configured, untagged PC traffic goes to the access VLAN and tagged phone traffic goes to the voice VLAN.",
+      "code": "Fa0/1: data VLAN 20 + voice VLAN 50"
+    }
+  ],
+  "topology": {
+    "devices": [
+      {
+        "id": "pc-a",
+        "label": "PC-A",
+        "type": "pc",
+        "x": 60,
+        "y": 75
+      },
+      {
+        "id": "sw1",
+        "label": "SW1",
+        "type": "switch",
+        "x": 210,
+        "y": 75
+      },
+      {
+        "id": "pc-b",
+        "label": "PC-B",
+        "type": "pc",
+        "x": 360,
+        "y": 75
+      }
+    ],
+    "links": [
+      {
+        "from": "pc-a",
+        "to": "sw1",
+        "label": "Fa0/1"
+      },
+      {
+        "from": "pc-b",
+        "to": "sw1",
+        "label": "Fa0/2"
+      }
+    ],
+    "table": [
+      {
+        "port": "Fa0/1",
+        "mode": "access",
+        "vlan": "20 (voice 50)",
+        "peer": "PC-A"
+      },
+      {
+        "port": "Fa0/2",
+        "mode": "access",
+        "vlan": "1",
+        "peer": "PC-B"
+      }
+    ]
+  },
+  "tags": [],
+  "related": [],
+  "resources": []
+}

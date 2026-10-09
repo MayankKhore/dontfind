@@ -1,0 +1,270 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import Badge from '../../components/Badge.astro';
+import Button from '../../components/Button.astro';
+import Icon from '../../components/Icon.astro';
+import Alert from '../../components/Alert.astro';
+import RelatedResources from '../../components/RelatedResources.astro';
+import CTABand from '../../components/CTABand.astro';
+import { getCollection } from 'astro:content';
+import { published } from '../../lib/content.js';
+import { softwareSchema } from '../../lib/seo.js';
+
+export async function getStaticPaths() {
+  const tools = published(await getCollection('tools'));
+  return tools.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const tool = entry.data;
+const path = `/tools/${entry.id}/`;
+
+const breadcrumbs = [
+  { href: '/', label: 'Home' },
+  { href: '/tools/', label: 'Tools' },
+  { label: tool.title },
+];
+
+const prefixes = Array.from({ length: 33 }, (_, i) => i);
+
+/** Short "what this is for" blurb, chosen per tool type. */
+const EXPLAINERS = {
+  subnet:
+    'Every IPv4 address sits in a subnet. The prefix length decides how many bits are network bits — and therefore how many hosts you have, and where the network and broadcast addresses live.',
+  mask:
+    'A subnet mask is just a prefix length written out in dotted-quad form. Convert between the two and check that a mask is actually valid (a run of 1s followed by a run of 0s).',
+  none: '',
+};
+---
+
+<BaseLayout
+  title={tool.title}
+  description={tool.description}
+  path={path}
+  breadcrumbs={breadcrumbs}
+  pageType="tool"
+  collection="tools"
+  schema={softwareSchema({
+    title: tool.title,
+    description: tool.description,
+    path,
+    keywords: tool.tags,
+  })}
+>
+  <div class="container">
+    <PageHeader
+      kicker={tool.category}
+      icon="sliders"
+      title={tool.title}
+      lead={tool.description}
+    >
+      <div slot="meta" class="page-header__meta">
+        <Badge variant={tool.difficulty} label={tool.difficulty} />
+        <span class="badge">
+          <Icon name="zap" size={13} />
+          Runs offline
+        </span>
+      </div>
+    </PageHeader>
+
+    <div class="grid grid--sidebar u-mt-5">
+      <div>
+        {tool.toolType === 'subnet' && (
+          <form class="tool" data-calculator="subnet" onsubmit="return false">
+            <div class="tool__row">
+              <div class="field">
+                <label for="subnet-ip">
+                  <Icon name="network" size={13} />
+                  <span>IPv4 address</span>
+                </label>
+                <input
+                  id="subnet-ip"
+                  name="address"
+                  type="text"
+                  value="192.168.1.10"
+                  inputmode="decimal"
+                  spellcheck="false"
+                  autocomplete="off"
+                  placeholder="192.168.1.10 or 192.168.1.10/24"
+                />
+                <p class="field__hint">
+                  You can type the prefix here too, e.g. <code>10.0.0.1/22</code>.
+                </p>
+              </div>
+
+              <div class="field">
+                <label for="subnet-cidr">
+                  <Icon name="sliders" size={13} />
+                  <span>Prefix length (CIDR)</span>
+                </label>
+                <select id="subnet-cidr" name="prefix">
+                  {prefixes.map((n) => (
+                    <option value={n} selected={n === 24}>/{n}</option>
+                  ))}
+                </select>
+                <p class="field__hint">
+                  Higher number = more networks, fewer hosts per network.
+                </p>
+              </div>
+            </div>
+
+            <Alert variant="danger" data-subnet-error hidden role="alert">
+              Enter a valid IPv4 address and a prefix between 0 and 32.
+            </Alert>
+<dl class="tool__output">
+              <div class="tool__result tool__result--accent">
+                <dt>Network address</dt>
+                <dd data-subnet-out="network">—</dd>
+              </div>
+              <div class="tool__result">
+                <dt>Usable hosts</dt>
+                <dd data-subnet-out="hosts">—</dd>
+              </div>
+              <div class="tool__result">
+                <dt>First host</dt>
+                <dd data-subnet-out="firstHost">—</dd>
+              </div>
+              <div class="tool__result">
+                <dt>Last host</dt>
+                <dd data-subnet-out="lastHost">—</dd>
+              </div>
+              <div class="tool__result">
+                <dt>Broadcast</dt>
+                <dd data-subnet-out="broadcast">—</dd>
+              </div>
+              <div class="tool__result">
+                <dt>Subnet mask</dt>
+                <dd data-subnet-out="mask">—</dd>
+              </div>
+              <div class="tool__result">
+                <dt>Wildcard mask</dt>
+                <dd data-subnet-out="wildcard">—</dd>
+              </div>
+              <div class="tool__result">
+                <dt>Address class</dt>
+                <dd data-subnet-out="class">—</dd>
+              </div>
+              <div class="tool__result">
+                <dt>Usable range</dt>
+                <dd data-subnet-out="range">—</dd>
+              </div>
+              <div class="tool__result tool__result--wide">
+                <dt>Mask in binary</dt>
+                <dd data-subnet-out="binary">—</dd>
+              </div>
+            </dl>
+
+            <p class="tool__foot">
+              <Icon name="info" size={14} />
+              <span>Everything is computed in your browser — nothing is uploaded or stored.</span>
+            </p>
+          </form>
+        )}
+{tool.toolType === 'mask' && (
+          <form class="tool" data-calculator="mask" onsubmit="return false">
+            <div class="field">
+              <label for="mask-input">
+                <Icon name="swap" size={13} />
+                <span>Subnet mask or prefix length</span>
+              </label>
+              <input
+                id="mask-input"
+                name="mask"
+                type="text"
+                value="255.255.255.0"
+                spellcheck="false"
+                autocomplete="off"
+                placeholder="255.255.255.0 or 24"
+              />
+              <p class="field__hint">
+                Accepts a dotted-quad mask (<code>255.255.255.0</code>) or a bare prefix
+                (<code>/24</code>).
+              </p>
+            </div>
+
+            <dl class="tool__output">
+              <div class="tool__result tool__result--accent">
+                <dt>CIDR prefix</dt>
+                <dd data-mask-out>—</dd>
+              </div>
+            </dl>
+
+            <p class="tool__foot">
+              <Icon name="info" size={14} />
+              <span>Converts locally. An invalid mask shows a dash.</span>
+            </p>
+          </form>
+        )}
+
+        {tool.toolType === 'none' && (
+          <Alert variant="info" title="Coming soon">
+            This tool is documented here but its interactive widget is not built yet. In the
+            meantime, the <a href="/tools/">other tools</a> cover the common calculations.
+          </Alert>
+        )}
+      </div>
+<aside class="tool-explainer" aria-label="About this tool">
+        <div class="panel">
+          <p class="panel__title">
+            <Icon name="lightbulb" size={16} />
+            <span>What this does</span>
+          </p>
+          <p class="section-head__text" style="margin-top:var(--sp-3)">
+            {EXPLAINERS[tool.toolType] || tool.description}
+          </p>
+        </div>
+
+        {tool.toolType === 'subnet' && (
+          <div class="panel">
+            <p class="panel__title">
+              <Icon name="alert-circle" size={16} />
+              <span>Two addresses you cannot use</span>
+            </p>
+            <p class="section-head__text" style="margin-top:var(--sp-3)">
+              The <strong>network address</strong> identifies the subnet itself, and the{' '}
+              <strong>broadcast address</strong> is reserved for the subnet's broadcast. A
+              /31 or /32 has no usable hosts at all — which is why /30 is the normal choice
+              for a point-to-point router link.
+            </p>
+          </div>
+        )}
+
+        <div class="panel">
+          <p class="panel__title">
+            <Icon name="book" size={16} />
+            <span>Learn the theory</span>
+          </p>
+          <p class="section-head__text" style="margin-top:var(--sp-3)">
+            Calculators check your arithmetic; they do not replace understanding why.
+          </p>
+          <a class="section-head__action" href="/lessons/subnetting/" style="margin-top:var(--sp-3)">
+            Read the subnetting lesson
+            <Icon name="arrow-right" size={14} />
+          </a>
+        </div>
+      </aside>
+    </div>
+
+    <RelatedResources related={tool.related} resources={tool.resources} />
+
+    <CTABand
+      title="Numbers make more sense with practice"
+      text="Subnetting is the most examined maths topic on the CCNA. Work through the labs, then check yourself with the quiz."
+    >
+      <Fragment slot="actions">
+        <Button href="/lessons/subnetting/" variant="primary">
+          <Icon name="book" size={16} />
+          <span>Subnetting lesson</span>
+        </Button>
+        <Button href="/quizzes/ipv4-addressing-basics/">Take the quiz</Button>
+      </Fragment>
+    </CTABand>
+  </div>
+</BaseLayout>
+
+{tool.toolType !== 'none' && (
+  <script>
+    import '../../scripts/calculators.js';
+  </script>
+)}

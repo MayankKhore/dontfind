@@ -1,0 +1,77 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import CollectionBrowser from '../../components/CollectionBrowser.astro';
+import Button from '../../components/Button.astro';
+import Icon from '../../components/Icon.astro';
+import { getCollection } from 'astro:content';
+import { published, uniqueValues } from '../../lib/content.js';
+
+const labs = published(await getCollection('labs'));
+const categories = uniqueValues(labs, 'category');
+
+const items = labs.map((lab) => ({
+  href: `/labs/${lab.id}/`,
+  title: lab.data.title,
+  kicker: lab.data.stageName || `Stage ${lab.data.stage ?? '—'}`,
+  description: lab.data.description || lab.data.scenario,
+  icon: 'flask',
+  difficulty: lab.data.difficulty,
+  meta: [lab.data.duration, `${lab.data.objectives.length} objectives`].filter(Boolean),
+  category: lab.data.category,
+  level: lab.data.difficulty,
+  searchText: [
+    lab.data.title,
+    lab.data.description || lab.data.scenario,
+    lab.data.stageName,
+    ...(lab.data.objectives || []).map((o) => o.cmd),
+  ]
+    .filter(Boolean)
+    .join(' '),
+}));
+
+const breadcrumbs = [
+  { href: '/', label: 'Home' },
+  { label: 'Labs' },
+];
+---
+
+<BaseLayout
+  title="Hands-on CCNA Labs"
+  description="Guided, browser-based Cisco IOS labs with clear objectives and instant grading. Practise real switch configuration without any hardware."
+  path="/labs/"
+  breadcrumbs={breadcrumbs}
+>
+  <div class="container container--wide">
+    <PageHeader
+      kicker={`${labs.length} guided labs`}
+      icon="flask"
+      title="Hands-on labs"
+      lead="Every lab runs a simulated switch or router in your browser. Type the commands, hit the objectives, and the sandbox checks your work as you go."
+    >
+      <div slot="actions" class="cluster">
+        <Button href="/path/" variant="primary">
+          <Icon name="route" size={16} />
+          <span>Follow the path</span>
+        </Button>
+        <Button href="/lessons/">
+          <Icon name="book" size={16} />
+          <span>Read theory first</span>
+        </Button>
+      </div>
+    </PageHeader>
+
+    <CollectionBrowser
+      items={items}
+      noun="labs"
+      label="Search labs"
+      placeholder="Search labs — try “VLAN”, “STP” or “hostname”…"
+      emptyTitle="No labs match"
+      emptyText="Nothing matched that search. Try a command, a protocol or a topic."
+      filters={[
+        { key: 'difficulty', label: 'Difficulty', options: ['beginner', 'intermediate', 'advanced'] },
+        { key: 'category', label: 'Stage', options: categories },
+      ]}
+    />
+  </div>
+</BaseLayout>

@@ -1,0 +1,13 @@
+{
+  "title": "How does a switch learn MAC addresses?",
+  "question": "How does a switch learn MAC addresses?",
+  "answer": "A switch learns MAC addresses dynamically. When a frame arrives, the switch records the frame's source MAC address and the port it arrived on in its MAC address table (also called the CAM table), with a timestamp. For forwarding, it looks up the destination MAC: if the address is known, the frame is sent only out of the matching port; if it is unknown, or the destination is a broadcast/multicast address, the frame is flooded out of all ports in the same VLAN except the ingress port. Table entries age out after a default of 300 seconds.",
+  "followUps": [
+    "What is unknown-unicast flooding and when does it occur?",
+    "How does the MAC address table differ per VLAN?"
+  ],
+  "category": "Switching",
+  "difficulty": "intermediate",
+  "status": "published",
+  "tags": ["switching", "mac", "cam"]
+}

@@ -1,0 +1,114 @@
+{
+  "title": "Help & Tab Completion",
+  "description": "Use the ? help system and Tab completion to discover commands without memorizing everything.",
+  "scenario": "Use the ? help system and Tab completion to discover commands without memorizing everything.",
+  "duration": "6 min",
+  "stage": 1,
+  "stageName": "Meet the CLI",
+  "category": "Meet the CLI",
+  "difficulty": "beginner",
+  "status": "published",
+  "icon": "🧪",
+  "order": 3,
+  "allowedCommands": [
+    "enable",
+    "show",
+    "configure terminal",
+    "help",
+    "?",
+    "exit",
+    "end"
+  ],
+  "ui": {
+    "showTopology": false,
+    "showPortMap": false,
+    "showTerminal": true,
+    "requiredDevices": ["sw1"],
+    "focus": true
+  },
+  "objectives": [
+    {
+      "text": "View available commands with ?",
+      "cmd": "?"
+    },
+    {
+      "text": "View show subcommands",
+      "cmd": "show ?"
+    },
+    {
+      "text": "Use Tab to complete \"conf\"",
+      "cmd": "conf"
+    }
+  ],
+  "concepts": [
+    {
+      "title": "The ? Help System",
+      "body": "Type ? at any prompt to list available commands. Type \"show ?\" to see what you can show.",
+      "code": "Switch> ?\nSwitch> show ?"
+    },
+    {
+      "title": "Tab Completion",
+      "body": "Type the first few letters and press Tab. The switch completes the command for you.",
+      "code": "Switch# conf<Tab>\nSwitch# configure"
+    },
+    {
+      "title": "Abbreviations",
+      "body": "Cisco IOS accepts abbreviations as long as they are unambiguous. \"conf t\" = \"configure terminal\".",
+      "code": "Switch# conf t\nSwitch(config)#"
+    }
+  ],
+  "topology": {
+    "devices": [
+      {
+        "id": "pc-a",
+        "label": "PC-A",
+        "type": "pc",
+        "x": 60,
+        "y": 75
+      },
+      {
+        "id": "sw1",
+        "label": "SW1",
+        "type": "switch",
+        "x": 210,
+        "y": 75
+      },
+      {
+        "id": "pc-b",
+        "label": "PC-B",
+        "type": "pc",
+        "x": 360,
+        "y": 75
+      }
+    ],
+    "links": [
+      {
+        "from": "pc-a",
+        "to": "sw1",
+        "label": "Fa0/1"
+      },
+      {
+        "from": "pc-b",
+        "to": "sw1",
+        "label": "Fa0/2"
+      }
+    ],
+    "table": [
+      {
+        "port": "Fa0/1",
+        "mode": "access",
+        "vlan": "1",
+        "peer": "PC-A"
+      },
+      {
+        "port": "Fa0/2",
+        "mode": "access",
+        "vlan": "1",
+        "peer": "PC-B"
+      }
+    ]
+  },
+  "tags": [],
+  "related": [],
+  "resources": []
+}

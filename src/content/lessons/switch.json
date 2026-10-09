@@ -1,0 +1,67 @@
+{
+  "title": "Switch",
+  "description": "The smart traffic cop of your LAN",
+  "tagline": "The smart traffic cop of your LAN",
+  "duration": "8 min",
+  "stage": 2,
+  "stageName": "Network Component",
+  "category": "Network Component",
+  "difficulty": "beginner",
+  "status": "published",
+  "icon": "🔀",
+  "order": 104,
+  "sections": [
+    {
+      "icon": "🔀",
+      "title": "What a Switch Does",
+      "body": "A switch connects many devices inside one LAN. It is smart: instead of shouting every message to everyone, it delivers each frame only to the port of the device it is meant for. Every port gets its own private lane, so many devices can talk at the same time with no collisions."
+    },
+    {
+      "icon": "📖",
+      "title": "How It Learns Who Lives Where",
+      "body": "The switch keeps a little notebook called the MAC address table. When a frame arrives it: (1) writes down the sender MAC + which port it came in, (2) checks the destination MAC.",
+      "points": [
+        "Destination known → forward out just that ONE port.",
+        "Destination unknown or broadcast → flood out all other ports."
+      ],
+      "code": "MAC Address Table\n---------------------------\nFa0/1   aaaa.bbbb.cccc   PC-A\nFa0/2   dddd.eeee.ffff   PC-B\n# show mac address-table"
+    },
+    {
+      "icon": "🚪",
+      "title": "Two Important Domains",
+      "table": {
+        "head": [
+          "Domain",
+          "Meaning",
+          "Switch behavior"
+        ],
+        "rows": [
+          [
+            "Collision domain",
+            "Area where two sends crash",
+            "ONE PER PORT ✔"
+          ],
+          [
+            "Broadcast domain",
+            "Area that hears broadcasts",
+            "All ports = still ONE ✘"
+          ]
+        ]
+      },
+      "tip": "💡 VLANs (later topic) are how we split that single broadcast domain."
+    },
+    {
+      "icon": "⭐",
+      "title": "Quick Facts",
+      "points": [
+        "Works at Layer 2 (Data Link).",
+        "Uses MAC addresses (burned into network cards).",
+        "Full duplex: send + receive simultaneously.",
+        "Modern ports run 1 Gbps / 10 Gbps."
+      ]
+    }
+  ],
+  "tags": [],
+  "related": [],
+  "resources": []
+}

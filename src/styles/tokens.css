@@ -1,0 +1,332 @@
+/* ============================================================
+   tokens.css — the design system (single source of truth)
+
+   Two first-class themes are defined here. Dark is the default
+   brand theme; light is a fully designed alternative rather than
+   an inversion. Every component in the platform reads *semantic*
+   tokens only, so a theme swap costs nothing at runtime and the
+   thousands of pages generated from shared templates stay
+   visually consistent for free.
+
+   Naming contract (kept stable for backwards compatibility):
+     surfaces ....... --bg, --bg-panel, --bg-elevated, --bg-input,
+                      --bg-terminal, --surface, --surface-raised
+     text ........... --text, --text-secondary, --text-dim
+     lines .......... --border, --border-strong
+     accents ........ --accent, --accent-strong, --green, --yellow,
+                      --red, --cyan, --purple
+     spacing ........ --sp-1 … --sp-10
+     type ........... --fs-xs … --fs-3xl, --font-sans, --font-mono
+     radius ......... --radius-xs … --radius-pill
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   1. Primitives — raw hues. Components never reference these
+      directly; they exist so both themes can compose the same
+      semantic tokens from one palette.
+   ------------------------------------------------------------ */
+:root {
+  /* Blue — the primary brand family (kept from the original UI) */
+  --c-blue-200: #a9ccff;
+  --c-blue-300: #7fb4ff;
+  --c-blue-400: #5aa2ff;
+  --c-blue-500: #3d8bfd;
+  --c-blue-600: #2f7ae5;
+  --c-blue-700: #1f6feb;
+  --c-blue-800: #1158c7;
+  --c-blue-900: #0b3f92;
+
+  /* Cyan / teal — the secondary accent used for data + terminals */
+  --c-cyan-300: #6ee7f0;
+  --c-cyan-400: #35c9d8;
+  --c-cyan-500: #14b8c6;
+
+  /* Status hues */
+  --c-green-400: #56d364;
+  --c-green-500: #3fb950;
+  --c-green-600: #2ea043;
+  --c-green-700: #1a7f37;
+  --c-amber-400: #f0b429;
+  --c-amber-500: #d29922;
+  --c-amber-600: #bb8009;
+  --c-red-400: #f87171;
+  --c-red-500: #f85149;
+  --c-red-600: #da3633;
+  --c-purple-400: #b392f0;
+  --c-purple-500: #bc8cff;
+  --c-purple-600: #8250df;
+
+  /* Neutrals — a cool slate ramp shared by both themes */
+  --c-slate-25: #f8fafc;
+  --c-slate-50: #f1f5f9;
+  --c-slate-100: #e6ecf3;
+  --c-slate-200: #d3dce6;
+  --c-slate-300: #b6c2d1;
+  --c-slate-400: #94a3b8;
+  --c-slate-500: #6f7e8f;
+  --c-slate-600: #55637a;
+  --c-slate-700: #3b465e;
+  --c-slate-800: #26303f;
+  --c-slate-850: #1c2433;
+  --c-slate-900: #141b27;
+  --c-slate-950: #0d131c;
+  --c-slate-975: #090e15;
+  --c-slate-1000: #060a10;
+
+  /* Terminal — deliberately dark in BOTH themes: an accurate
+     IOS console is part of the product's credibility. */
+  --c-term-bg: #05090f;
+  --c-term-bg-raised: #0b1220;
+  --c-term-text: #cfdae8;
+  --c-term-green: #3ff0a5;
+  --c-term-cyan: #6ee7f0;
+  --c-term-amber: #f0b429;
+  --c-term-red: #ff7b72;
+  --c-term-dim: #5d6b7d;
+}
+/* ------------------------------------------------------------
+   2. Dark theme — the default. Deep, low-glare slate with layered
+      surfaces so panels read as distinct without heavy borders.
+   ------------------------------------------------------------ */
+:root,
+[data-theme='dark'] {
+  color-scheme: dark;
+
+  /* Surfaces (back → front) */
+  --bg: var(--c-slate-975);
+  --bg-subtle: var(--c-slate-950);
+  --bg-panel: #101724;
+  --bg-elevated: #16202e;
+  --bg-input: #131b28;
+  --bg-inset: #0b1119;
+  --bg-hover: rgba(255, 255, 255, 0.045);
+  --bg-active: rgba(255, 255, 255, 0.075);
+  --bg-overlay: rgba(4, 8, 14, 0.72);
+  --bg-terminal: var(--c-term-bg);
+
+  /* Hairlines */
+  --border: #1e2836;
+  --border-strong: #2c3849;
+  --border-subtle: rgba(255, 255, 255, 0.06);
+
+  /* Type */
+  --text: #e9eff7;
+  --text-secondary: #9dabbe;
+  --text-dim: #74849a;
+  --text-inverse: #0a0f16;
+
+  /* Accents */
+  --accent: var(--c-blue-400);
+  --accent-strong: var(--c-blue-600);
+  --accent-hover: var(--c-blue-300);
+  --accent-contrast: #05192f;
+  --accent-soft: rgba(90, 162, 255, 0.13);
+  --accent-softer: rgba(90, 162, 255, 0.07);
+  --accent-border: rgba(90, 162, 255, 0.34);
+  --accent-glow: 0 0 0 3px rgba(90, 162, 255, 0.16);
+
+  --accent-2: var(--c-cyan-400);
+  --accent-2-soft: rgba(53, 201, 216, 0.12);
+
+  /* Status */
+  --green: var(--c-green-500);
+  --green-soft: rgba(63, 185, 80, 0.12);
+  --green-border: rgba(63, 185, 80, 0.36);
+  --yellow: var(--c-amber-500);
+  --yellow-soft: rgba(210, 153, 34, 0.12);
+  --yellow-border: rgba(210, 153, 34, 0.36);
+  --red: var(--c-red-500);
+  --red-soft: rgba(248, 81, 73, 0.12);
+  --red-border: rgba(248, 81, 73, 0.36);
+  --cyan: var(--c-cyan-400);
+  --purple: var(--c-purple-500);
+
+  /* Gradient washes used sparingly (hero, progress rings) */
+  --gradient-brand: linear-gradient(135deg, var(--c-blue-400) 0%, var(--c-cyan-400) 100%);
+  --gradient-text: linear-gradient(96deg, var(--c-blue-300) 0%, var(--c-cyan-300) 58%, var(--c-blue-400) 100%);
+  --gradient-surface: linear-gradient(180deg, rgba(90, 162, 255, 0.08) 0%, rgba(90, 162, 255, 0) 100%);
+  --grid-line: rgba(255, 255, 255, 0.035);
+
+  /* Elevation */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.36);
+  --shadow: 0 12px 32px rgba(0, 0, 0, 0.46);
+  --shadow-lg: 0 24px 64px rgba(0, 0, 0, 0.55);
+
+  /* Semantic aliases kept for backwards compatibility */
+  --surface: var(--bg-panel);
+  --surface-raised: var(--bg-elevated);
+  --link: var(--accent);
+  --focus-ring: var(--c-blue-400);
+  --selection-bg: rgba(90, 162, 255, 0.28);
+}
+/* ------------------------------------------------------------
+   3. Light theme — a genuine alternative, not an inversion.
+      Paper-white surfaces, softened hairlines and slightly deeper
+      accents to hold contrast on light backgrounds.
+   ------------------------------------------------------------ */
+[data-theme='light'] {
+  color-scheme: light;
+
+  --bg: var(--c-slate-25);
+  --bg-subtle: var(--c-slate-50);
+  --bg-panel: #ffffff;
+  --bg-elevated: #ffffff;
+  --bg-input: #ffffff;
+  --bg-inset: var(--c-slate-50);
+  --bg-hover: rgba(15, 23, 42, 0.04);
+  --bg-active: rgba(15, 23, 42, 0.07);
+  --bg-overlay: rgba(15, 23, 42, 0.42);
+  --bg-terminal: var(--c-term-bg);
+
+  --border: #e3e9f0;
+  --border-strong: #c7d2de;
+  --border-subtle: rgba(15, 23, 42, 0.06);
+
+  --text: #101828;
+  --text-secondary: #4d5b70;
+  --text-dim: #6b7a8d;
+  --text-inverse: #ffffff;
+
+  --accent: var(--c-blue-700);
+  --accent-strong: var(--c-blue-800);
+  --accent-hover: var(--c-blue-600);
+  --accent-contrast: #ffffff;
+  --accent-soft: rgba(31, 111, 235, 0.09);
+  --accent-softer: rgba(31, 111, 235, 0.05);
+  --accent-border: rgba(31, 111, 235, 0.28);
+  --accent-glow: 0 0 0 3px rgba(31, 111, 235, 0.15);
+
+  --accent-2: #0e93a3;
+  --accent-2-soft: rgba(14, 147, 163, 0.1);
+
+  --green: var(--c-green-700);
+  --green-soft: rgba(26, 127, 55, 0.09);
+  --green-border: rgba(26, 127, 55, 0.28);
+  --yellow: var(--c-amber-600);
+  --yellow-soft: rgba(187, 128, 9, 0.1);
+  --yellow-border: rgba(187, 128, 9, 0.3);
+  --red: var(--c-red-600);
+  --red-soft: rgba(218, 54, 51, 0.09);
+  --red-border: rgba(218, 54, 51, 0.28);
+  --cyan: #0e93a3;
+  --purple: var(--c-purple-600);
+
+  --gradient-brand: linear-gradient(135deg, var(--c-blue-700) 0%, #0e93a3 100%);
+  --gradient-text: linear-gradient(96deg, var(--c-blue-700) 0%, #0e93a3 100%);
+  --gradient-surface: linear-gradient(180deg, rgba(31, 111, 235, 0.06) 0%, rgba(31, 111, 235, 0) 100%);
+  --grid-line: rgba(15, 23, 42, 0.045);
+
+  --shadow-xs: 0 1px 2px rgba(16, 24, 40, 0.06);
+  --shadow-sm: 0 2px 6px rgba(16, 24, 40, 0.07);
+  --shadow: 0 10px 28px rgba(16, 24, 40, 0.1);
+  --shadow-lg: 0 22px 56px rgba(16, 24, 40, 0.15);
+
+  --surface: var(--bg-panel);
+  --surface-raised: var(--bg-elevated);
+  --link: var(--accent);
+  --focus-ring: var(--c-blue-700);
+  --selection-bg: rgba(31, 111, 235, 0.18);
+}
+
+/* ------------------------------------------------------------
+   4. Scales — theme-independent type, space, radius, motion.
+      These are the numbers designers reach for when composing a
+      new page, so they live in exactly one place.
+   ------------------------------------------------------------ */
+:root {
+  /* Type families. A system stack keeps the platform fast and
+     offline-friendly while still feeling deliberate. */
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI Variable Text', 'Segoe UI',
+    Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Cascadia Code', 'SFMono-Regular', Consolas,
+    'Liberation Mono', Menlo, monospace;
+
+  /* Type scale — fluid on headings, fixed on body text so tables
+     and terminals never reflow unpredictably. */
+  --fs-2xs: 0.6875rem; /* 11px — terminal chrome, table footnotes */
+  --fs-xs: 0.75rem;    /* 12px */
+  --fs-sm: 0.85rem;    /* 13.6px */
+  --fs-base: 0.95rem;  /* 15.2px */
+  --fs-md: 1.06rem;
+  --fs-lg: clamp(1.16rem, 0.34vw + 1.06rem, 1.36rem);
+  --fs-xl: clamp(1.42rem, 0.9vw + 1.14rem, 1.9rem);
+  --fs-2xl: clamp(1.78rem, 1.9vw + 1.24rem, 2.55rem);
+  --fs-3xl: clamp(2.15rem, 3vw + 1.3rem, 3.35rem);
+
+  --lh-tight: 1.16;
+  --lh-heading: 1.28;
+  --lh: 1.62;
+  --lh-loose: 1.75;
+
+  --tracking-tight: -0.021em;
+  --tracking-heading: -0.012em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.04em;
+  --tracking-caps: 0.085em;
+
+  /* Spacing — 4px base grid. */
+  --sp-0: 0;
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 24px;
+  --sp-6: 32px;
+  --sp-7: 48px;
+  --sp-8: 64px;
+  --sp-9: 80px;
+  --sp-10: 104px;
+
+  /* Rhythm helpers so long templates share one vertical cadence. */
+  --section-gap: clamp(2.5rem, 4vw, 4.5rem);
+  --block-gap: clamp(1.25rem, 2vw, 2rem);
+
+  /* Radii */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --radius-pill: 999px;
+
+  /* Motion — short and purposeful. Nothing decorative. */
+  --ease-standard: cubic-bezier(0.2, 0, 0.2, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --dur-instant: 90ms;
+  --dur-fast: 140ms;
+  --dur: 200ms;
+  --dur-slow: 320ms;
+  --transition: var(--dur-fast) var(--ease-standard);
+  --transition-slow: var(--dur) var(--ease-out);
+
+  /* Layered z-index scale — no more guessing. */
+  --z-base: 1;
+  --z-sticky: 40;
+  --z-header: 100;
+  --z-dropdown: 200;
+  --z-overlay: 300;
+  --z-modal: 400;
+  --z-toast: 500;
+
+  /* Layout */
+  --container-narrow: 760px;
+  --container: 1200px;
+  --container-wide: 1440px;
+  --gutter: clamp(1rem, 3vw, 2rem);
+  --header-h: 64px;
+  --header-h-sm: 56px;
+  --sidebar-w: 292px;
+
+  /* Difficulty accents shared by badges and progress meters */
+  --level-beginner: var(--green);
+  --level-intermediate: var(--yellow);
+  --level-advanced: var(--red);
+
+  /* Terminal palette (theme-independent — see note above) */
+  --term-green: var(--c-term-green);
+  --term-text: var(--c-term-text);
+}
+

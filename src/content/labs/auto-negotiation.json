@@ -1,0 +1,107 @@
+{
+  "title": "Auto-Negotiation",
+  "description": "Understand how auto-negotiation works and how to configure speed/duplex manually.",
+  "scenario": "Understand how auto-negotiation works and how to configure speed/duplex manually.",
+  "duration": "6 min",
+  "stage": 2,
+  "stageName": "Learn Foundation",
+  "category": "Learn Foundation",
+  "difficulty": "beginner",
+  "status": "published",
+  "icon": "🧪",
+  "order": 48,
+  "allowedCommands": [
+    "enable",
+    "show interfaces",
+    "show interfaces status",
+    "configure terminal",
+    "interface",
+    "speed",
+    "duplex",
+    "exit",
+    "end",
+    "help",
+    "?"
+  ],
+  "objectives": [
+    {
+      "text": "View interface status",
+      "cmd": "show interfaces status"
+    },
+    {
+      "text": "Disable auto-negotiation",
+      "cmd": "speed 100"
+    }
+  ],
+  "concepts": [
+    {
+      "title": "Auto-Negotiation",
+      "body": "Auto-negotiation is an IEEE 802.3z standard. Devices exchange capabilities and choose the highest common speed/duplex.",
+      "code": "SW1(config-if)# speed auto\nSW1(config-if)# duplex auto"
+    },
+    {
+      "title": "Manual Configuration",
+      "body": "If you set speed manually, duplex must also be set manually. Setting only speed disables auto-negotiation.",
+      "code": "SW1(config-if)# speed 100\nSW1(config-if)# duplex full"
+    },
+    {
+      "title": "Best Practice",
+      "body": "Leave auto-negotiation enabled unless troubleshooting. Manual settings can cause mismatches.",
+      "code": "Default: speed auto, duplex auto\nManual: speed 100, duplex full"
+    }
+  ],
+  "topology": {
+    "devices": [
+      {
+        "id": "pc-a",
+        "label": "PC-A",
+        "type": "pc",
+        "x": 60,
+        "y": 75
+      },
+      {
+        "id": "sw1",
+        "label": "SW1",
+        "type": "switch",
+        "x": 210,
+        "y": 75
+      },
+      {
+        "id": "pc-b",
+        "label": "PC-B",
+        "type": "pc",
+        "x": 360,
+        "y": 75
+      }
+    ],
+    "links": [
+      {
+        "from": "pc-a",
+        "to": "sw1",
+        "label": "Fa0/1"
+      },
+      {
+        "from": "pc-b",
+        "to": "sw1",
+        "label": "Fa0/2"
+      }
+    ],
+    "table": [
+      {
+        "port": "Fa0/1",
+        "mode": "access",
+        "vlan": "1",
+        "peer": "PC-A"
+      },
+      {
+        "port": "Fa0/2",
+        "mode": "access",
+        "vlan": "1",
+        "peer": "PC-B"
+      }
+    ]
+  },
+  "tags": [],
+  "related": [],
+  "resources": []
+}

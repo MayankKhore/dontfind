@@ -1,0 +1,175 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/Button.astro';
+import Icon from '../components/Icon.astro';
+import Section from '../components/Section.astro';
+import Stat from '../components/Stat.astro';
+import ProgressRing from '../components/ProgressRing.astro';
+import AchievementGrid from '../components/AchievementGrid.astro';
+import RecentlyVisited from '../components/RecentlyVisited.astro';
+import EmptyState from '../components/EmptyState.astro';
+import { buildCurriculum, curriculumIsland } from '../lib/curriculum.js';
+
+const curriculum = await buildCurriculum();
+const { stages, totals } = curriculum;
+
+const breadcrumbs = [
+  { href: '/', label: 'Home' },
+  { label: 'Dashboard' },
+];
+
+/** Ship the curriculum so the client can compute progress with no request. */
+const island = curriculumIsland(curriculum);
+---
+
+<BaseLayout
+  title="Your Dashboard"
+  description="Track your CCNA Path progress: stages completed, labs finished, quizzes taken, current streak and the next best thing to study."
+  path="/dashboard/"
+  breadcrumbs={breadcrumbs}
+  pageType="dashboard"
+>
+  <div class="container container--wide" data-dashboard>
+    <script type="application/json" data-curriculum set:html={island} is:inline />
+
+    <section class="dash-hero">
+      <div>
+        <p class="dash-hero__greeting">
+          <Icon name="gauge" size={13} />
+          <span>Your learning dashboard</span>
+        </p>
+        <h1 class="dash-hero__title">Pick up where you left off</h1>
+        <p class="dash-hero__text">
+          Progress is stored in this browser only — no account, no sync. Mark lessons
+          read, complete labs and finish quizzes to build your streak.
+        </p>
+        <div class="dash-hero__actions">
+          <Button href="/path/" variant="primary">
+            <Icon name="route" size={16} />
+            <span>View learning path</span>
+          </Button>
+          <Button href="/labs/">
+            <Icon name="terminal" size={16} />
+            <span>Open a lab</span>
+          </Button>
+        </div>
+      </div>
+
+      <ProgressRing
+        value={0}
+        max={totals.all}
+        caption="Complete"
+        size={148}
+        thickness={11}
+        attrs={{ 'data-dash-ring': true }}
+      />
+    </section>
+
+    <section class="grid grid--stats" aria-label="Progress summary">
+      <Stat label="Completed" icon="check-circle" tone="accent" value="—" attrs={{ 'data-dash-stat': 'completed' }} />
+      <Stat label="Out of" value={String(totals.all)} hint="trackable items" />
+      <Stat label="Current streak" icon="flame" value="—" attrs={{ 'data-dash-stat': 'streak' }} />
+      <Stat label="Badges earned" icon="award" value="— of 8" />
+      <Stat label="Overall" icon="trending-up" tone="success" value="0%" attrs={{ 'data-dash-stat': 'percent' }} />
+    </section>
+
+    <div class="dash-grid u-mt-6">
+      <div class="dash-main">
+        <section class="continue-card" data-next-unit aria-live="polite">
+          <div>
+            <p class="eyebrow">
+              <Icon name="play" size={12} />
+              <span>Continue learning</span>
+            </p>
+            <p class="card__kicker" data-next-kicker>Up next</p>
+            <h2 class="dash-hero__title" style="font-size:var(--fs-xl)" data-next-title>
+              Loading your next step…
+            </h2>
+            <p class="detail-row" style="margin-top:var(--sp-3)">
+              <span class="badge badge--neutral" data-next-type>—</span>
+              <a class="section-head__action" data-next-href href="/path/">
+                Start
+                <Icon name="arrow-right" size={14} />
+              </a>
+            </p>
+          </div>
+          <Icon name="route" size={72} stroke={1} />
+        </section>
+
+        <EmptyState
+          data-dash-empty
+          hidden
+          icon="sparkles"
+          title="Nothing started yet"
+          text="Open your first lesson or lab and it will show up here with a progress ring, a streak and a clear next step."
+        >
+          <Fragment slot="actions">
+            <Button href="/path/" variant="primary" size="sm">Start the path</Button>
+            <Button href="/labs/" size="sm">Browse labs</Button>
+          </Fragment>
+        </EmptyState>
+<Section
+          eyebrow="Learning path"
+          title="Progress by stage"
+          text="Each stage unlocks the next. Finish a stage completely to earn the Stage Cleared badge."
+          href="/path/"
+          linkLabel="Full path"
+        >
+          <div class="panel">
+            <ol class="steps" style="gap:var(--sp-4)">
+              {stages.map((stage) => (
+                <li class="step" data-stage-row={stage.number} data-complete="false">
+                  <span class="step__mark" aria-hidden="true" />
+                  <div>
+                    <p class="step__title">
+                      Stage {stage.number} · {stage.name}
+                      <span class="badge badge--count" style="margin-left:8px" data-stage-count>
+                        0 / {stage.total}
+                      </span>
+                    </p>
+                    <div class="progress progress--sm" style="margin-top:var(--sp-2)">
+                      <span class="progress__fill" data-stage-fill style="width:0%"></span>
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </Section>
+
+        <AchievementGrid
+          title="Achievements"
+          text="Badges unlock automatically as you study. Locked ones stay visible so you know what is left."
+        />
+      </div>
+
+      <aside class="dash-aside" aria-label="Your activity">
+        <RecentlyVisited limit={6} />
+        <div class="panel">
+          <p class="panel__title">
+            <Icon name="info" size={16} />
+            <span>How progress is stored</span>
+          </p>
+          <p class="section-head__text" style="margin-top:var(--sp-2)">
+            Everything lives in this browser's local storage under
+            <code>ccna_path_progress</code>. Clearing site data resets it, and it never
+            leaves your device.
+          </p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .dash-hero__greeting {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .step__title {
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    color: var(--text);
+  }
+</style>

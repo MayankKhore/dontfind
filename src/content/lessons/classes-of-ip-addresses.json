@@ -1,0 +1,84 @@
+{
+  "title": "Classes of IP Addresses",
+  "description": "A, B, C, D, E — the old sorting system",
+  "tagline": "A, B, C, D, E — the old sorting system",
+  "duration": "8 min",
+  "stage": 5,
+  "stageName": "IPv4 Addressing",
+  "category": "IPv4 Addressing",
+  "difficulty": "intermediate",
+  "status": "published",
+  "icon": "🏛️",
+  "order": 117,
+  "sections": [
+    {
+      "icon": "🏛️",
+      "title": "The Class Table",
+      "body": "Before CIDR existed, the FIRST octet decided everything. You still need this for the exam:",
+      "table": {
+        "head": [
+          "Class",
+          "First octet",
+          "Default mask",
+          "Use"
+        ],
+        "rows": [
+          [
+            "A",
+            "1 – 126",
+            "255.0.0.0 (/8)",
+            "Huge networks"
+          ],
+          [
+            "B",
+            "128 – 191",
+            "255.255.0.0 (/16)",
+            "Medium networks"
+          ],
+          [
+            "C",
+            "192 – 223",
+            "255.255.255.0 (/24)",
+            "Small networks"
+          ],
+          [
+            "D",
+            "224 – 239",
+            "—",
+            "Multicast"
+          ],
+          [
+            "E",
+            "240 – 255",
+            "—",
+            "Experimental"
+          ]
+        ]
+      }
+    },
+    {
+      "icon": "🔍",
+      "title": "Spot the Class Instantly",
+      "points": [
+        "Starts 1–126 → Class A (10.x.x.x is private-A).",
+        "127 → not a class at all — loopback!",
+        "Starts 128–191 → Class B (172.16–31.x.x private-B).",
+        "Starts 192–223 → Class C (192.168.x.x private-C)."
+      ]
+    },
+    {
+      "icon": "📉",
+      "title": "Why Classes Died",
+      "body": "A Class A gave away 16 million addresses to one company — massive waste. The world switched to CIDR (/prefix), where the mask can be ANY length."
+    },
+    {
+      "icon": "⭐",
+      "title": "Memory Hook",
+      "body": "A = Awesome big, B = Balanced medium, C = Cute small, D = Distribution (multicast), E = Experiments.",
+      "tip": "💡 Exam tip: first-octet questions are free marks. See 172.20.x.x? Instantly think \"Class B\"."
+    }
+  ],
+  "tags": [],
+  "related": [],
+  "resources": []
+}

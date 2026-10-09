@@ -1,0 +1,118 @@
+{
+  "title": "MSTP (Multiple Spanning Tree)",
+  "description": "Understand MSTP regions and configure Multiple Spanning Tree instances.",
+  "scenario": "Understand MSTP regions and configure Multiple Spanning Tree instances.",
+  "duration": "11 min",
+  "stage": 4,
+  "stageName": "Spanning Tree",
+  "category": "Spanning Tree",
+  "difficulty": "beginner",
+  "status": "published",
+  "icon": "🧪",
+  "order": 63,
+  "allowedCommands": [
+    "enable",
+    "configure terminal",
+    "spanning-tree mode mst",
+    "spanning-tree mst configuration",
+    "instance",
+    "name",
+    "revision",
+    "spanning-tree mst 0 root primary",
+    "show spanning-tree mst",
+    "exit",
+    "end",
+    "help",
+    "?"
+  ],
+  "objectives": [
+    {
+      "text": "Enable MST mode",
+      "cmd": "spanning-tree mode mst"
+    },
+    {
+      "text": "Enter MST config",
+      "cmd": "spanning-tree mst configuration"
+    },
+    {
+      "text": "Map VLANs to instance",
+      "cmd": "instance 1 vlan 10-20"
+    }
+  ],
+  "concepts": [
+    {
+      "title": "What is MSTP?",
+      "body": "MSTP (802.1s) is a spanning tree that can create multiple \"instances\". Each instance runs its own STP, grouping several VLANs together for better realistic control.",
+      "code": "Instance 0 → default (all VLANs)\nInstance 1 → VLAN 10-20\nInstance 2 → VLAN 30-40"
+    },
+    {
+      "title": "MST Regions",
+      "body": "Switches belong to a region if they share the same name, revision number, and instance-to-VLAN mapping. MSTP only sends BPDUs once per region.",
+      "code": "SW1(config)# spanning-tree mode mst\nSW1(config)# spanning-tree mst configuration\nSW1(config-mst)# name CCNA\nSW1(config-mst)# revision 1"
+    },
+    {
+      "title": "Instance Mapping",
+      "body": "Map VLANs to instances inside MST config. Instance 0 is the default and handles all unmapped VLANs.",
+      "code": "SW1(config-mst)# instance 1 vlan 10-20\nSW1(config-mst)# instance 2 vlan 30-40"
+    },
+    {
+      "title": "Root per Instance",
+      "body": "Each instance elects its own root bridge on every switch in the region.",
+      "code": "SW1(config)# spanning-tree mst 1 root primary"
+    }
+  ],
+  "topology": {
+    "devices": [
+      {
+        "id": "pc-a",
+        "label": "PC-A",
+        "type": "pc",
+        "x": 60,
+        "y": 75
+      },
+      {
+        "id": "sw1",
+        "label": "SW1",
+        "type": "switch",
+        "x": 210,
+        "y": 75
+      },
+      {
+        "id": "pc-b",
+        "label": "PC-B",
+        "type": "pc",
+        "x": 360,
+        "y": 75
+      }
+    ],
+    "links": [
+      {
+        "from": "pc-a",
+        "to": "sw1",
+        "label": "Fa0/1"
+      },
+      {
+        "from": "pc-b",
+        "to": "sw1",
+        "label": "Fa0/2"
+      }
+    ],
+    "table": [
+      {
+        "port": "Fa0/1",
+        "mode": "access",
+        "vlan": "1",
+        "peer": "PC-A"
+      },
+      {
+        "port": "Fa0/2",
+        "mode": "access",
+        "vlan": "1",
+        "peer": "PC-B"
+      }
+    ]
+  },
+  "tags": [],
+  "related": [],
+  "resources": []
+}

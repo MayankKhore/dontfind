@@ -1,0 +1,155 @@
+---
+/**
+ * Header.astro — global navigation.
+ *
+ * Desktop: a short bar of grouped dropdown menus plus search, theme and
+ * a primary CTA. Mobile: the same information in a drawer, because
+ * cramming eight sections into a narrow bar is never readable.
+ *
+ * Accessibility: dropdowns are real <button aria-expanded> triggers, so
+ * they work with Enter/Space, close on Escape, and stay open while
+ * focus is inside the panel. The drawer is a plain disclosure, not a
+ * focus trap, so the reader can still reach the skip link.
+ */
+import Icon from './Icon.astro';
+import Kbd from './Kbd.astro';
+import ThemeToggle from './ThemeToggle.astro';
+import SearchOverlay from './SearchOverlay.astro';
+import { SITE, NAV_GROUPS, SECTIONS } from '../lib/site.js';
+import { isActive } from '../lib/url.js';
+
+const path = Astro.url.pathname;
+const groupIsActive = (group) => group.items.some((item) => isActive(path, item.href.replace(/\/$/, '')));
+---
+
+<header class="site-header" data-site-header>
+  <div class="container site-header__inner">
+    <a class="brand" href="/" aria-label={`${SITE.name} — home`}>
+      <span class="brand__mark" aria-hidden="true">
+        <Icon name="network" size={19} />
+      </span>
+      <span class="brand__text">
+        <span class="brand__name">{SITE.name}</span>
+        <span class="brand__tagline">{SITE.tagline}</span>
+      </span>
+    </a>
+
+    <nav class="nav" id="primary-nav" aria-label="Primary">
+      <ul class="nav__list">
+        {NAV_GROUPS.map((group) => (
+          <li class="nav__item" data-nav-item data-open="false" data-active={String(groupIsActive(group))}>
+            <button
+              type="button"
+              class="nav__trigger"
+              aria-expanded="false"
+              aria-controls={`nav-panel-${group.id}`}
+              data-nav-trigger
+            >
+              <span>{group.label}</span>
+              <Icon name="chevron-down" size={14} />
+            </button>
+
+            <div class="nav__panel" id={`nav-panel-${group.id}`}>
+              <ul class="nav__panel-list">
+                {group.items.map((item) => (
+                  <li>
+                    <a
+                      class="nav__panel-link"
+                      href={item.href}
+                      aria-current={isActive(path, item.href.replace(/\/$/, '')) ? 'page' : undefined}
+                    >
+                      <span class="nav__panel-icon" aria-hidden="true">
+                        <Icon name={item.icon} size={16} />
+                      </span>
+                      <span>
+                        <span class="nav__panel-label">{item.label}</span>
+                        <span class="nav__panel-desc">{item.desc}</span>
+                      </span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+              <p class="nav__panel-foot">
+                {group.id === 'learn'
+                  ? 'New to networking? Start at stage one.'
+                  : group.id === 'practice'
+                    ? 'Everything runs locally — no account needed.'
+                    : 'Looking for a definition? The glossary covers it.'}
+              </p>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <div class="header-actions">
+      <button type="button" class="search-trigger" data-search-open aria-label="Search (Ctrl K)">
+        <Icon name="search" size={16} />
+        <span class="search-trigger__label">Search</span>
+        <Kbd keys={['Ctrl', 'K']} />
+      </button>
+
+      <a
+        class="icon-btn"
+        href="/dashboard/"
+        aria-current={isActive(path, '/dashboard') ? 'page' : undefined}
+        aria-label="Dashboard"
+        title="Dashboard"
+      >
+        <Icon name="gauge" size={18} />
+      </a>
+
+      <ThemeToggle />
+
+      <a class="btn btn--primary btn--sm" href="/path/">
+        Start learning
+      </a>
+
+      <button
+        type="button"
+        class="nav-toggle"
+        data-nav-toggle
+        aria-expanded="false"
+        aria-controls="mobile-nav"
+      >
+        <Icon name="menu" size={19} />
+        <span class="sr-only">Toggle navigation</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile drawer: same links, stacked, no hover dependence. -->
+  <div class="mobile-nav" id="mobile-nav" data-mobile-nav data-open="false">
+    <div class="container mobile-nav__inner">
+      {NAV_GROUPS.map((group) => (
+        <nav class="mobile-nav__group" aria-label={group.label}>
+          <p class="mobile-nav__title">{group.label}</p>
+          {group.items.map((item) => (
+            <a
+              class="mobile-nav__link"
+              href={item.href}
+              aria-current={isActive(path, item.href.replace(/\/$/, '')) ? 'page' : undefined}
+            >
+              <Icon name={item.icon} size={17} />
+              <span>{item.label}</span>
+            </a>
+          ))}
+        </nav>
+      ))}
+
+      <div class="mobile-nav__actions">
+        <a class="btn btn--primary btn--block" href="/path/">Start learning</a>
+        <a class="btn btn--block" href="/dashboard/">Open dashboard</a>
+        <a class="btn btn--ghost btn--block" href="/search/">
+          Browse all {SECTIONS.length} sections
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<SearchOverlay />
+
+<script>
+  import '../scripts/navigation.js';
+</script>

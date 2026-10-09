@@ -1,0 +1,96 @@
+{
+  "title": "PoE & IEEE Standards",
+  "description": "Power over Ethernet + the standards that rule them all",
+  "tagline": "Power over Ethernet + the standards that rule them all",
+  "duration": "9 min",
+  "stage": 8,
+  "stageName": "Physical Layer",
+  "category": "Physical Layer",
+  "difficulty": "advanced",
+  "status": "published",
+  "icon": "⚡",
+  "order": 125,
+  "sections": [
+    {
+      "icon": "⚡",
+      "title": "What Is PoE?",
+      "body": "PoE (Power over Ethernet) sends ELECTRICITY through the same UTP cable that carries data. One cable powers AND connects cameras, Wi-Fi access points and IP phones — no power socket needed near the ceiling."
+    },
+    {
+      "icon": "📋",
+      "title": "PoE Standards Compared",
+      "table": {
+        "head": [
+          "Standard",
+          "IEEE name",
+          "Power at device"
+        ],
+        "rows": [
+          [
+            "PoE",
+            "802.3af",
+            "Up to 15.4 W"
+          ],
+          [
+            "PoE+",
+            "802.3at",
+            "Up to 30 W"
+          ],
+          [
+            "PoE++ Type 3",
+            "802.3bt",
+            "Up to 60 W"
+          ],
+          [
+            "PoE++ Type 4",
+            "802.3bt",
+            "Up to 100 W"
+          ]
+        ]
+      }
+    },
+    {
+      "icon": "🏠",
+      "title": "Where PoE Shines",
+      "points": [
+        "IP cameras — mount anywhere a cable reaches.",
+        "Wi-Fi access points — usually need PoE+ or higher.",
+        "VoIP phones — classic PoE is plenty.",
+        "One UPS on the PoE switch protects everything it powers."
+      ]
+    },
+    {
+      "icon": "📜",
+      "title": "IEEE — The Rulebook Writer",
+      "body": "The IEEE publishes the standards everyone follows so gear from different vendors works together.",
+      "table": {
+        "head": [
+          "IEEE standard",
+          "Defines"
+        ],
+        "rows": [
+          [
+            "802.3",
+            "Ethernet (wired LAN)"
+          ],
+          [
+            "802.11",
+            "Wi-Fi (wireless LAN)"
+          ],
+          [
+            "802.1Q",
+            "VLAN tagging"
+          ],
+          [
+            "802.1X",
+            "Port-based authentication"
+          ]
+        ]
+      },
+      "tip": "💡 Exam tip: af=15W, at=30W (\"t\" comes after \"f\"... later letter, more power!). Ethernet=802.3, Wi-Fi=802.11."
+    }
+  ],
+  "tags": [],
+  "related": [],
+  "resources": []
+}

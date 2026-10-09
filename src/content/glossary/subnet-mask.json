@@ -1,0 +1,9 @@
+{
+  "title": "Subnet Mask",
+  "term": "Subnet mask",
+  "definition": "A 32-bit number that defines which part of an IPv4 address is the network and which is the host. A mask of 255.255.255.0 (= /24) means the first 24 bits identify the network. Hosts use the mask to decide whether a destination is local or must be reached through a router.",
+  "category": "IPv4 Addressing",
+  "difficulty": "beginner",
+  "status": "published",
+  "tags": ["subnetting", "ipv4"]
+}

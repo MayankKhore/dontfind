@@ -1,0 +1,68 @@
+{
+  "title": "Subnet Mask",
+  "description": "The line that splits network from host",
+  "tagline": "The line that splits network from host",
+  "duration": "9 min",
+  "stage": 5,
+  "stageName": "IPv4 Addressing",
+  "category": "IPv4 Addressing",
+  "difficulty": "intermediate",
+  "status": "published",
+  "icon": "🎭",
+  "order": 116,
+  "sections": [
+    {
+      "icon": "🎭",
+      "title": "What It Really Does",
+      "body": "The mask MARKS where the network part ends and the host part begins: 1-bits = network, 0-bits = host. Your PC ANDs its IP with the mask to learn which network it belongs to.",
+      "code": "IP    192.168.1.50 -> 11000000.10101000.00000001.00110010\nMask  255.255.255.0 -> 11111111.11111111.11111111.00000000\nAND               -> 11000000.10101000.00000001.00000000\n                  = 192.168.1.0  <- \"my network\""
+    },
+    {
+      "icon": "📏",
+      "title": "Common Masks",
+      "table": {
+        "head": [
+          "CIDR",
+          "Dotted mask",
+          "Usable hosts"
+        ],
+        "rows": [
+          [
+            "/8",
+            "255.0.0.0",
+            "16,777,214"
+          ],
+          [
+            "/16",
+            "255.255.0.0",
+            "65,534"
+          ],
+          [
+            "/24",
+            "255.255.255.0",
+            "254"
+          ],
+          [
+            "/30",
+            "255.255.255.252",
+            "2"
+          ]
+        ]
+      }
+    },
+    {
+      "icon": "🏠",
+      "title": "Same Network or No Direct Talk",
+      "body": "Two devices talk directly ONLY if their network parts match. If not, traffic goes through the default gateway (router). A wrong mask breaks communication even when IPs look fine — a favorite exam trap."
+    },
+    {
+      "icon": "🧠",
+      "title": "Shortcut Trick",
+      "body": "Mask octet values always step like this: 128, 192, 224, 240, 248, 252, 254, 255 — each step adds ONE more network bit.",
+      "tip": "💡 Exam tip: /24 simply means 24 one-bits in the mask. Count CIDR bits!"
+    }
+  ],
+  "tags": [],
+  "related": [],
+  "resources": []
+}

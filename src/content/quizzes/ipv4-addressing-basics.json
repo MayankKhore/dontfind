@@ -1,0 +1,59 @@
+{
+  "title": "IPv4 Addressing Basics Quiz",
+  "description": "Check your understanding of IPv4 addresses, subnet masks, classes and private ranges.",
+  "category": "IPv4 Addressing",
+  "difficulty": "beginner",
+  "status": "published",
+  "icon": "❓",
+  "tags": ["ipv4", "addressing", "subnetting"],
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "Which of these is a valid private IPv4 address?",
+      "options": [
+        { "value": "a", "text": "8.8.8.8" },
+        { "value": "b", "text": "172.16.5.10" },
+        { "value": "c", "text": "200.100.50.25" },
+        { "value": "d", "text": "224.0.0.1" }
+      ],
+      "answer": "b",
+      "explanation": "172.16.0.0 – 172.31.255.255 is one of the three RFC 1918 private ranges (along with 10.0.0.0/8 and 192.168.0.0/16)."
+    },
+    {
+      "id": "q2",
+      "prompt": "What is the default subnet mask for a Class C address?",
+      "options": [
+        { "value": "a", "text": "255.0.0.0" },
+        { "value": "b", "text": "255.255.0.0" },
+        { "value": "c", "text": "255.255.255.0" },
+        { "value": "d", "text": "255.255.255.255" }
+      ],
+      "answer": "c",
+      "explanation": "Class C uses the first three octets for the network, so the default mask is 255.255.255.0 (/24)."
+    },
+    {
+      "id": "q3",
+      "prompt": "How many usable host addresses are there in a /28 subnet?",
+      "options": [
+        { "value": "a", "text": "16" },
+        { "value": "b", "text": "14" },
+        { "value": "c", "text": "30" },
+        { "value": "d", "text": "62" }
+      ],
+      "answer": "b",
+      "explanation": "A /28 has 2^4 = 16 addresses; subtracting the network and broadcast addresses leaves 14 usable hosts."
+    },
+    {
+      "id": "q4",
+      "prompt": "Which address is the broadcast address of 192.168.10.0/24?",
+      "options": [
+        { "value": "a", "text": "192.168.10.0" },
+        { "value": "b", "text": "192.168.10.1" },
+        { "value": "c", "text": "192.168.10.254" },
+        { "value": "d", "text": "192.168.10.255" }
+      ],
+      "answer": "d",
+      "explanation": "The broadcast address has all host bits set to 1, making it the last address in the subnet: 192.168.10.255."
+    }
+  ]
+}

@@ -1,0 +1,112 @@
+{
+  "title": "SSH Configuration",
+  "description": "Configure SSH for secure remote management instead of Telnet.",
+  "scenario": "Configure SSH for secure remote management instead of Telnet.",
+  "duration": "10 min",
+  "stage": 7,
+  "stageName": "Discovery & Management",
+  "category": "Discovery & Management",
+  "difficulty": "intermediate",
+  "status": "published",
+  "icon": "🧪",
+  "order": 24,
+  "allowedCommands": [
+    "enable",
+    "configure terminal",
+    "hostname",
+    "ip domain-name",
+    "crypto key generate rsa",
+    "username",
+    "line vty",
+    "transport input ssh",
+    "exit",
+    "end",
+    "help",
+    "?"
+  ],
+  "objectives": [
+    {
+      "text": "Set domain name",
+      "cmd": "ip domain-name ccna.local"
+    },
+    {
+      "text": "Create a user",
+      "cmd": "username admin secret cisco"
+    },
+    {
+      "text": "Enable SSH on VTY lines",
+      "cmd": "transport input ssh"
+    }
+  ],
+  "concepts": [
+    {
+      "title": "SSH vs Telnet",
+      "body": "Telnet sends passwords in plaintext. SSH encrypts everything. Always use SSH for remote management.",
+      "code": "Telnet: plaintext (port 23)\nSSH:    encrypted (port 22)"
+    },
+    {
+      "title": "SSH Requirements",
+      "body": "Hostname, domain name, RSA key, local user, and VTY lines configured for SSH.",
+      "code": "SW1(config)# hostname SW1\nSW1(config)# ip domain-name ccna.local\nSW1(config)# crypto key generate rsa"
+    },
+    {
+      "title": "VTY Configuration",
+      "body": "VTY lines are virtual terminal lines for remote access. Restrict them to SSH only.",
+      "code": "SW1(config)# line vty 0 4\nSW1(config-line)# transport input ssh\nSW1(config-line)# login local"
+    }
+  ],
+  "topology": {
+    "devices": [
+      {
+        "id": "pc-a",
+        "label": "PC-A",
+        "type": "pc",
+        "x": 60,
+        "y": 75
+      },
+      {
+        "id": "sw1",
+        "label": "SW1",
+        "type": "switch",
+        "x": 210,
+        "y": 75
+      },
+      {
+        "id": "pc-b",
+        "label": "PC-B",
+        "type": "pc",
+        "x": 360,
+        "y": 75
+      }
+    ],
+    "links": [
+      {
+        "from": "pc-a",
+        "to": "sw1",
+        "label": "Fa0/1"
+      },
+      {
+        "from": "pc-b",
+        "to": "sw1",
+        "label": "Fa0/2"
+      }
+    ],
+    "table": [
+      {
+        "port": "Fa0/1",
+        "mode": "access",
+        "vlan": "1",
+        "peer": "PC-A"
+      },
+      {
+        "port": "Fa0/2",
+        "mode": "access",
+        "vlan": "1",
+        "peer": "PC-B"
+      }
+    ]
+  },
+  "tags": [],
+  "related": [],
+  "resources": []
+}

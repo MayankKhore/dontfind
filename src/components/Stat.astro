@@ -1,0 +1,29 @@
+---
+/**
+ * Stat.astro — a single metric tile (dashboard, lab summary, profile).
+ * Props: label, value, hint, icon, tone ('default'|'accent'|'success'), attrs
+ */
+import Icon from './Icon.astro';
+
+const {
+  label,
+  value = '—',
+  hint,
+  icon,
+  tone = 'default',
+  attrs = {},
+  class: className = '',
+} = Astro.props;
+---
+
+<div class={['stat', tone !== 'default' && `stat--${tone}`, className].filter(Boolean).join(' ')} {...attrs}>
+  {label && (
+    <p class="stat__label">
+      {icon && <Icon name={icon} size={14} />}
+      <span>{label}</span>
+    </p>
+  )}
+  <p class="stat__value">{value}</p>
+  {hint && <p class="stat__hint">{hint}</p>}
+  <slot />
+</div>

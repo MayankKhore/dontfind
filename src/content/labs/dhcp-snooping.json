@@ -1,0 +1,115 @@
+{
+  "title": "DHCP Snooping",
+  "description": "Protect the network from rogue DHCP servers with DHCP snooping.",
+  "scenario": "Protect the network from rogue DHCP servers with DHCP snooping.",
+  "duration": "8 min",
+  "stage": 5,
+  "stageName": "Security",
+  "category": "Security",
+  "difficulty": "intermediate",
+  "status": "published",
+  "icon": "🧪",
+  "order": 28,
+  "allowedCommands": [
+    "enable",
+    "configure terminal",
+    "ip dhcp snooping",
+    "ip dhcp snooping vlan",
+    "interface",
+    "ip dhcp snooping trust",
+    "show ip dhcp snooping",
+    "exit",
+    "end",
+    "help",
+    "?"
+  ],
+  "objectives": [
+    {
+      "text": "Enable DHCP snooping",
+      "cmd": "ip dhcp snooping"
+    },
+    {
+      "text": "Enable for VLAN 1",
+      "cmd": "ip dhcp snooping vlan 1"
+    },
+    {
+      "text": "Trust the uplink port",
+      "cmd": "ip dhcp snooping trust"
+    },
+    {
+      "text": "Verify DHCP snooping",
+      "cmd": "show ip dhcp snooping"
+    }
+  ],
+  "concepts": [
+    {
+      "title": "DHCP Snooping",
+      "body": "DHCP snooping filters DHCP messages. Only trusted ports (uplinks) can send DHCP offers. Rogue DHCP servers are blocked.",
+      "code": "SW1(config)# ip dhcp snooping\nSW1(config)# ip dhcp snooping vlan 1"
+    },
+    {
+      "title": "Trusted vs Untrusted",
+      "body": "Trusted ports connect to legitimate DHCP servers (uplinks). Untrusted ports (access) cannot send DHCP offers.",
+      "code": "SW1(config)# interface GigabitEthernet0/1\nSW1(config-if)# ip dhcp snooping trust"
+    },
+    {
+      "title": "Verifying",
+      "body": "\"show ip dhcp snooping\" shows snooping status, VLANs, and trusted ports.",
+      "code": "SW1# show ip dhcp snooping\nDHCP snooping is enabled\nVLAN 1: enabled\nGi0/1: trusted"
+    }
+  ],
+  "topology": {
+    "devices": [
+      {
+        "id": "pc-a",
+        "label": "PC-A",
+        "type": "pc",
+        "x": 60,
+        "y": 75
+      },
+      {
+        "id": "sw1",
+        "label": "SW1",
+        "type": "switch",
+        "x": 210,
+        "y": 75
+      },
+      {
+        "id": "pc-b",
+        "label": "PC-B",
+        "type": "pc",
+        "x": 360,
+        "y": 75
+      }
+    ],
+    "links": [
+      {
+        "from": "pc-a",
+        "to": "sw1",
+        "label": "Fa0/1"
+      },
+      {
+        "from": "pc-b",
+        "to": "sw1",
+        "label": "Fa0/2"
+      }
+    ],
+    "table": [
+      {
+        "port": "Fa0/1",
+        "mode": "access",
+        "vlan": "1",
+        "peer": "PC-A"
+      },
+      {
+        "port": "Fa0/2",
+        "mode": "access",
+        "vlan": "1",
+        "peer": "PC-B"
+      }
+    ]
+  },
+  "tags": [],
+  "related": [],
+  "resources": []
+}

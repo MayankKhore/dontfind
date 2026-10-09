@@ -1,0 +1,109 @@
+---
+/**
+ * BaseLayout.astro — the HTML document shell shared by every page, and the
+ * single choke point for technical SEO.
+ *
+ * Props:
+ *   title       {string}
+ *   description {string}
+ *   path        {string}   canonical path (defaults to Astro.url.pathname)
+ *   image       {string}   social share image
+ *   imageAlt    {string}
+ *   noindex     {boolean}  force noindex on top of the policy
+ *   schema      {object|object[]}  extra JSON-LD nodes
+ *   breadcrumbs {Array<{href?,label}>}
+ *   pageType    {string}    content type ('lesson', 'lab', …). Recorded so
+ *                           recent.js can build "recently visited" with no
+ *                           per-template wiring.
+ *   collection  {string}    collection key, used to pick the right
+ *                           og:site_name and schema type.
+ *   ogType      {string}    'website' or 'article'
+ *   publishedTime / modifiedTime {string}
+ *
+ * Breadcrumbs are rendered AND turned into BreadcrumbList markup here, so a
+ * page cannot ship a visible trail with no structured data behind it.
+ */
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { buildMeta, pageGraph } from '../lib/seo.js';
+
+import '../styles/tokens.css';
+import '../styles/base.css';
+import '../styles/layout.css';
+import '../styles/components.css';
+import '../styles/pages.css';
+
+const {
+  title,
+  description,
+  path,
+  image,
+  imageAlt,
+  noindex,
+  schema,
+  breadcrumbs = [],
+  pageType = 'page',
+  collection,
+  ogType,
+  publishedTime,
+  modifiedTime,
+} = Astro.props;
+
+const canonicalPath = path || Astro.url.pathname;
+
+const meta = buildMeta({
+  title,
+  description,
+  path: canonicalPath,
+  image,
+  imageAlt,
+  ogType,
+  publishedTime,
+  modifiedTime,
+  collection,
+});
+
+// One @graph for the whole document: site entities, the WebPage, whatever the
+// page contributes, and the breadcrumb trail.
+const graph = pageGraph({
+  meta,
+  breadcrumbs,
+  nodes: Array.isArray(schema) ? schema : schema ? [schema] : [],
+});
+---
+
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <BaseHead
+      title={title}
+      description={description}
+      path={path}
+      image={image}
+      imageAlt={imageAlt}
+      noindex={noindex}
+      ogType={ogType}
+      publishedTime={publishedTime}
+      modifiedTime={modifiedTime}
+      collection={collection}
+    />
+    <script type="application/ld+json" set:html={JSON.stringify(graph)} />
+  </head>
+
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <Header />
+    {breadcrumbs.length > 0 && <Breadcrumbs items={breadcrumbs} />}
+    <main
+      id="main"
+      data-page-title={title}
+      data-page-type={pageType}
+      data-page-url={meta.canonical}
+    >
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

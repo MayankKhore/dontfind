@@ -1,0 +1,107 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Icon from '../components/Icon.astro';
+import Button from '../components/Button.astro';
+import Stat from '../components/Stat.astro';
+import AchievementGrid from '../components/AchievementGrid.astro';
+import RecentlyVisited from '../components/RecentlyVisited.astro';
+import { buildCurriculum, curriculumIsland } from '../lib/curriculum.js';
+
+const curriculum = await buildCurriculum();
+const { totals } = curriculum;
+
+const breadcrumbs = [
+  { href: '/', label: 'Home' },
+  { label: 'Profile' },
+];
+
+const island = curriculumIsland(curriculum);
+---
+
+<BaseLayout
+  title="Your Profile & Achievements"
+  description="See your CCNA Path learning stats, streak, completed work and every achievement you can unlock."
+  path="/profile/"
+  breadcrumbs={breadcrumbs}
+  pageType="page"
+>
+  <div class="container container--narrow" data-dashboard>
+    <script type="application/json" data-curriculum set:html={island} is:inline />
+
+    <PageHeader
+      kicker="Local profile"
+      icon="user"
+      title="Your profile"
+      lead="Everything here is derived from your progress in this browser. There is no account, so nothing is uploaded anywhere."
+    />
+
+    <!-- Identity card -->
+    <section class="profile-head" aria-label="Profile summary">
+      <p class="profile-avatar" aria-hidden="true">CC</p>
+      <div>
+        <h2 style="font-size:var(--fs-lg)">CCNA Path learner</h2>
+        <p class="u-muted" style="font-size:var(--fs-sm)">
+          Working towards the Cisco Certified Network Associate.
+        </p>
+        <p class="profile-meta">
+          <span class="icon-inline">
+            <Icon name="check-circle" size={14} />
+            <span><b data-dash-stat="completed">0</b> of {totals.all} items complete</span>
+          </span>
+          <span class="icon-inline">
+            <Icon name="flame" size={14} />
+            <span data-dash-stat="streak">0 days</span> streak
+          </span>
+          <span class="icon-inline">
+            <Icon name="award" size={14} />
+            <span><b data-dash-stat="achievements">0</b> of 8 badges</span>
+          </span>
+        </p>
+      </div>
+    </section>
+
+    <section class="grid grid--stats u-mt-5" aria-label="Learning breakdown">
+      <Stat label="Lessons read" icon="book" value="—" attrs={{ 'data-dash-stat': 'lessons' }} />
+      <Stat label="Labs completed" icon="flask" tone="accent" value="—" attrs={{ 'data-dash-stat': 'labs' }} />
+      <Stat label="Quizzes finished" icon="help-circle" value="—" attrs={{ 'data-dash-stat': 'quizzes' }} />
+      <Stat label="Overall" icon="trending-up" tone="success" value="0%" attrs={{ 'data-dash-stat': 'percent' }} />
+    </section>
+
+    <div class="u-mt-6">
+      <AchievementGrid
+        title="Every achievement"
+        text="Badges are awarded automatically the moment the condition is met. Nothing to claim, nothing to enter."
+      />
+    </div>
+
+    <div class="u-mt-6">
+      <RecentlyVisited title="Recently visited" limit={10} />
+    </div>
+
+    <aside class="cta">
+      <div class="cta__inner">
+        <div class="cta__copy">
+          <h2 class="cta__title">
+            <Icon name="shield" size={20} />
+            <span>Your data never leaves this device</span>
+          </h2>
+          <p class="cta__text">
+            Progress, streaks and history live in local storage. There is no server, no
+            account and no analytics on this page.
+          </p>
+        </div>
+        <div class="cta__actions">
+          <Button href="/dashboard/" variant="primary" size="lg">
+            <Icon name="gauge" size={17} />
+            <span>Back to dashboard</span>
+          </Button>
+        </div>
+      </div>
+    </aside>
+  </div>
+</BaseLayout>
+
+<script>
+  import '../scripts/dashboard.js';
+</script>

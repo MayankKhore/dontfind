@@ -1,0 +1,116 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Section from '../components/Section.astro';
+import Button from '../components/Button.astro';
+import Icon from '../components/Icon.astro';
+import Alert from '../components/Alert.astro';
+import Accordion from '../components/Accordion.astro';
+import { SITE, SECTIONS } from '../lib/site.js';
+
+const faqs = [
+  {
+    title: 'Do I need to install anything?',
+    text: 'No. Every lab runs in your browser. There is nothing to download, no account to create, and no hardware to buy.',
+  },
+  {
+    title: 'Is this affiliated with Cisco?',
+    text: 'No. CCNA Path is an independent study platform and is not affiliated with, endorsed by, or sponsored by Cisco Systems. It uses the vocabulary and exam objectives so you can prepare for the real certification.',
+  },
+  {
+    title: 'Where is my progress stored?',
+    text: 'In your own browser, under the local storage keys ccna_path_progress and ccna_path_streak. It is never uploaded. Clearing your browser data resets it, which is why the dashboard has no login.',
+  },
+  {
+    title: 'How accurate is the CLI simulator?',
+    text: 'It models the Cisco IOS command set closely enough to practise configuration and verification, and it tells you when a command is invalid or unsupported. It is a study aid, not a replacement for real hardware.',
+  },
+  {
+    title: 'Can I use this offline?',
+    text: 'Once a page has loaded, the interactive parts keep working offline. Mark lessons read, run labs and use the calculators with no connection.',
+  },
+];
+---
+
+<BaseLayout
+  title="About CCNA Path"
+  description="CCNA Path is an independent, browser-based networking education platform: guided CLI labs, lessons, quizzes, interview prep and troubleshooting scenarios."
+  path="/about/"
+  breadcrumbs={[
+    { href: '/', label: 'Home' },
+    { label: 'About' },
+  ]}
+>
+  <div class="container container--narrow">
+    <PageHeader
+      kicker="About"
+      icon="users"
+      title="About CCNA Path"
+      lead="An independent study platform for people learning computer networking and preparing for the Cisco Certified Network Associate exam."
+    >
+      <div slot="actions" class="cluster">
+        <Button href="/path/" variant="primary">
+          <Icon name="route" size={16} />
+          <span>Start the learning path</span>
+        </Button>
+        <Button href="/labs/">Browse labs</Button>
+      </div>
+    </PageHeader>
+
+    <article class="prose">
+      <p>
+        Most networking courses stop at slides. {SITE.name} is built the other way round:
+        every idea is followed by something to type, verify, or answer. If a topic is
+        covered here, you will have configured it before you have read about it twice.
+      </p>
+
+      <h2>What you will find here</h2>
+      <div class="grid grid--2">
+        {SECTIONS.map((section) => (
+          <a class="card card--row card--link" href={`${section.href}/`}>
+            <span class="card__icon" aria-hidden="true">
+              <Icon name={section.icon} size={17} />
+            </span>
+            <span>
+              <span class="card__title" style="display:block">{section.label}</span>
+              <span class="u-dim" style="font-size:var(--fs-xs)">{section.description}</span>
+            </span>
+          </a>
+        ))}
+      </div>
+
+      <h2>How it works</h2>
+      <p>
+        Every page is pre-rendered to fast, crawlable HTML. The interactive parts — the CLI
+        simulator, the quizzes, the calculators and your progress — run entirely in your
+        browser. There is no account, no server-side progress and no analytics.
+      </p>
+
+      <div class="u-mt-5">
+        <Alert variant="info" title="Your data stays yours">
+          Progress and streaks are written to this browser's local storage only. Nothing is
+          uploaded, and clearing site data resets it.
+        </Alert>
+      </div>
+
+      <h2>Not affiliated with Cisco</h2>
+      <p>
+        {SITE.name} is an independent educational project. Cisco, CCNA and Cisco Certified
+        Network Associate are trademarks of Cisco Systems, which has no involvement in or
+        endorsement of this site.
+      </p>
+
+      <h2>Classic app</h2>
+      <p>
+        The original single-page version of {SITE.name} is preserved and still available at
+        <a href="/legacy/">/legacy/</a>, if you want the original experience.
+      </p>
+    </article>
+
+    <div class="u-mt-6">
+      <Section eyebrow="FAQ" title="Common questions">
+        <Accordion items={faqs} open={[0]} label="About CCNA Path" />
+      </Section>
+    </div>
+  </div>
+</BaseLayout>

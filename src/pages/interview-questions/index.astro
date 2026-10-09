@@ -1,0 +1,67 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import CollectionBrowser from '../../components/CollectionBrowser.astro';
+import Button from '../../components/Button.astro';
+import Icon from '../../components/Icon.astro';
+import { getCollection } from 'astro:content';
+import { published, uniqueValues } from '../../lib/content.js';
+
+const questions = published(await getCollection('interview'));
+const categories = uniqueValues(questions, 'category');
+
+const items = questions.map((q) => ({
+  href: `/interview-questions/${q.id}/`,
+  title: q.data.question,
+  kicker: q.data.category,
+  description: q.data.answer.length > 180 ? `${q.data.answer.slice(0, 180)}…` : q.data.answer,
+  icon: 'mic',
+  difficulty: q.data.difficulty,
+  meta: q.data.followUps.length ? [`${q.data.followUps.length} follow-ups`] : [],
+  category: q.data.category,
+  level: q.data.difficulty,
+  searchText: [q.data.question, q.data.category, q.data.answer].filter(Boolean).join(' '),
+}));
+
+const breadcrumbs = [
+  { href: '/', label: 'Home' },
+  { label: 'Interview Questions' },
+];
+---
+
+<BaseLayout
+  title="Networking Interview Questions"
+  description="CCNA-style and network engineering interview questions with model answers, the follow-ups interviewers actually ask, and the reasoning behind each."
+  path="/interview-questions/"
+  breadcrumbs={breadcrumbs}
+>
+  <div class="container container--wide">
+    <PageHeader
+      kicker={`${questions.length} questions`}
+      icon="mic"
+      title="Interview questions"
+      lead="The questions that come up in networking interviews, with the model answer and the follow-ups a good interviewer will push you on."
+    >
+      <div slot="actions" class="cluster">
+        <Button href="/incidents/" variant="primary">
+          <Icon name="alert-triangle" size={16} />
+          <span>Practise troubleshooting</span>
+        </Button>
+        <Button href="/lessons/">
+          <Icon name="book" size={16} />
+          <span>Brush up on theory</span>
+        </Button>
+      </div>
+    </PageHeader>
+
+    <CollectionBrowser
+      items={items}
+      noun="questions"
+      label="Search interview questions"
+      placeholder="Search questions — try “subnet mask”, “TCP” or “switching”…"
+      emptyTitle="No questions match"
+      emptyText="Nothing matched that search. Try a protocol or a concept."
+      filters={[{ key: 'category', label: 'Topic', options: categories }]}
+    />
+  </div>
+</BaseLayout>

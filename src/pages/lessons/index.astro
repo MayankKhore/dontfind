@@ -1,0 +1,77 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import CollectionBrowser from '../../components/CollectionBrowser.astro';
+import Button from '../../components/Button.astro';
+import Icon from '../../components/Icon.astro';
+import { getCollection } from 'astro:content';
+import { published, uniqueValues } from '../../lib/content.js';
+
+const lessons = published(await getCollection('lessons'));
+const categories = uniqueValues(lessons, 'category');
+
+const items = lessons.map((lesson) => ({
+  href: `/lessons/${lesson.id}/`,
+  title: lesson.data.title,
+  kicker: lesson.data.stageName || lesson.data.category,
+  description: lesson.data.description || lesson.data.tagline,
+  icon: 'book',
+  difficulty: lesson.data.difficulty,
+  meta: [lesson.data.duration, `${lesson.data.sections.length} sections`].filter(Boolean),
+  category: lesson.data.category,
+  level: lesson.data.difficulty,
+  searchText: [
+    lesson.data.title,
+    lesson.data.description || lesson.data.tagline,
+    lesson.data.stageName,
+    ...(lesson.data.sections || []).map((s) => `${s.title} ${s.body || ''}`),
+  ]
+    .filter(Boolean)
+    .join(' '),
+}));
+
+const breadcrumbs = [
+  { href: '/', label: 'Home' },
+  { label: 'Lessons' },
+];
+---
+
+<BaseLayout
+  title="CCNA Lessons"
+  description="In-depth CCNA theory lessons covering the OSI model, TCP/IP, addressing, switching, routing, security and more — structured so each idea builds on the last."
+  path="/lessons/"
+  breadcrumbs={breadcrumbs}
+>
+  <div class="container container--wide">
+    <PageHeader
+      kicker={`${lessons.length} lessons`}
+      icon="book"
+      title="CCNA lessons"
+      lead="Build a complete mental model of networking — physical layer up to routing, security and wireless — before you practise it in the labs."
+    >
+      <div slot="actions" class="cluster">
+        <Button href="/path/" variant="primary">
+          <Icon name="route" size={16} />
+          <span>See the recommended order</span>
+        </Button>
+        <Button href="/labs/">
+          <Icon name="terminal" size={16} />
+          <span>Practise in a lab</span>
+        </Button>
+      </div>
+    </PageHeader>
+
+    <CollectionBrowser
+      items={items}
+      noun="lessons"
+      label="Search lessons"
+      placeholder="Search lessons — try “subnetting”, “TCP” or “OSI”…"
+      emptyTitle="No lessons match"
+      emptyText="Nothing matched that search. Try a protocol name or a layer."
+      filters={[
+        { key: 'difficulty', label: 'Difficulty', options: ['beginner', 'intermediate', 'advanced'] },
+        { key: 'category', label: 'Category', options: categories },
+      ]}
+    />
+  </div>
+</BaseLayout>

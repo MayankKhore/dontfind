@@ -1,0 +1,117 @@
+{
+  "title": "VLAN Database - VLAN Creation & Deletion",
+  "description": "Use the VLAN database mode to create, name, and delete VLANs on the switch.",
+  "scenario": "Use the VLAN database mode to create, name, and delete VLANs on the switch.",
+  "duration": "9 min",
+  "stage": 3,
+  "stageName": "VLAN & Trunking",
+  "category": "VLAN & Trunking",
+  "difficulty": "beginner",
+  "status": "published",
+  "icon": "🧪",
+  "order": 54,
+  "allowedCommands": [
+    "enable",
+    "vlan database",
+    "vlan",
+    "name",
+    "no vlan",
+    "delete",
+    "show vlan brief",
+    "show running-config",
+    "exit",
+    "end",
+    "help",
+    "?"
+  ],
+  "objectives": [
+    {
+      "text": "Enter VLAN database mode",
+      "cmd": "vlan database"
+    },
+    {
+      "text": "Create VLAN 30",
+      "cmd": "vlan 30"
+    },
+    {
+      "text": "Name the VLAN SALES",
+      "cmd": "name SALES"
+    }
+  ],
+  "concepts": [
+    {
+      "title": "VLAN Database Mode",
+      "body": "The VLAN database is an alternative way to manage VLANs. Type \"vlan database\" to enter it. The prompt becomes \"(vlan)#\".",
+      "code": "SW1# vlan database\nSW1(vlan)#"
+    },
+    {
+      "title": "Creating a VLAN via Database",
+      "body": "In VLAN database mode, use \"vlan <id>\" to create a new VLAN. Then give it a meaningful name.",
+      "code": "SW1(vlan)# vlan 30\nVLAN 30 added:\n    Name: VLAN0030\nSW1(vlan)# name SALES"
+    },
+    {
+      "title": "Deleting a VLAN",
+      "body": "Use \"no vlan <id>\" to delete. Deleting a VLAN removes it from all ports — those ports return to the default VLAN.",
+      "code": "SW1(vlan)# no vlan 30\nDeleting VLAN 30...\nVLAN 30 deleted"
+    },
+    {
+      "title": "Verifying VLAN Database",
+      "body": "After exiting, use \"show vlan brief\" to confirm the VLAN was created or deleted correctly.",
+      "code": "SW1(vlan)# exit\nAPPLY completed.\nSW1# show vlan brief"
+    }
+  ],
+  "topology": {
+    "devices": [
+      {
+        "id": "pc-a",
+        "label": "PC-A",
+        "type": "pc",
+        "x": 60,
+        "y": 75
+      },
+      {
+        "id": "sw1",
+        "label": "SW1",
+        "type": "switch",
+        "x": 210,
+        "y": 75
+      },
+      {
+        "id": "pc-b",
+        "label": "PC-B",
+        "type": "pc",
+        "x": 360,
+        "y": 75
+      }
+    ],
+    "links": [
+      {
+        "from": "pc-a",
+        "to": "sw1",
+        "label": "Fa0/1"
+      },
+      {
+        "from": "pc-b",
+        "to": "sw1",
+        "label": "Fa0/2"
+      }
+    ],
+    "table": [
+      {
+        "port": "Fa0/1",
+        "mode": "access",
+        "vlan": "30",
+        "peer": "PC-A"
+      },
+      {
+        "port": "Fa0/2",
+        "mode": "access",
+        "vlan": "1",
+        "peer": "PC-B"
+      }
+    ]
+  },
+  "tags": [],
+  "related": [],
+  "resources": []
+}

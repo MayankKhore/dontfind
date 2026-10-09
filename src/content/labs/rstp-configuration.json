@@ -1,0 +1,117 @@
+{
+  "title": "RSTP Configuration",
+  "description": "Enable Rapid PVST+ and configure edge ports for fast convergence.",
+  "scenario": "Enable Rapid PVST+ and configure edge ports for fast convergence.",
+  "duration": "8 min",
+  "stage": 4,
+  "stageName": "Spanning Tree",
+  "category": "Spanning Tree",
+  "difficulty": "beginner",
+  "status": "published",
+  "icon": "🧪",
+  "order": 62,
+  "allowedCommands": [
+    "enable",
+    "configure terminal",
+    "spanning-tree mode rapid-pvst",
+    "interface",
+    "spanning-tree portfast",
+    "spanning-tree link-type point-to-point",
+    "show spanning-tree",
+    "show spanning-tree vlan 1",
+    "exit",
+    "end",
+    "help",
+    "?"
+  ],
+  "objectives": [
+    {
+      "text": "Enable Rapid PVST+",
+      "cmd": "spanning-tree mode rapid-pvst"
+    },
+    {
+      "text": "Enable PortFast on edge",
+      "cmd": "spanning-tree portfast"
+    },
+    {
+      "text": "Verify RSTP mode",
+      "cmd": "show spanning-tree"
+    }
+  ],
+  "concepts": [
+    {
+      "title": "Enabling Rapid PVST+",
+      "body": "Use \"spanning-tree mode rapid-pvst\" globally on all switches to run RSTP per VLAN.",
+      "code": "SW1(config)# spanning-tree mode rapid-pvst"
+    },
+    {
+      "title": "Edge Ports",
+      "body": "PortFast marks a port as edge. RSTP uses edge ports to skip the listening/learning states and converge instantly.",
+      "code": "SW1(config)# interface FastEthernet0/1\nSW1(config-if)# spanning-tree portfast"
+    },
+    {
+      "title": "Point-to-Point Links",
+      "body": "RSTP works best on full-duplex point-to-point links. Auto-detected; can force with \"spanning-tree link-type point-to-point\".",
+      "code": "SW1(config-if)# spanning-tree link-type point-to-point"
+    },
+    {
+      "title": "Verifying RSTP",
+      "body": "\"show spanning-tree\" displays the mode and port roles. RSTP shows alternate/backup roles instead of big blocks.",
+      "code": "SW1# show spanning-tree\nSpanning tree enabled protocol rstp\nRole: ROOT, Altn, Desg, Bcku"
+    }
+  ],
+  "topology": {
+    "devices": [
+      {
+        "id": "pc-a",
+        "label": "PC-A",
+        "type": "pc",
+        "x": 60,
+        "y": 75
+      },
+      {
+        "id": "sw1",
+        "label": "SW1",
+        "type": "switch",
+        "x": 210,
+        "y": 75
+      },
+      {
+        "id": "pc-b",
+        "label": "PC-B",
+        "type": "pc",
+        "x": 360,
+        "y": 75
+      }
+    ],
+    "links": [
+      {
+        "from": "pc-a",
+        "to": "sw1",
+        "label": "Fa0/1"
+      },
+      {
+        "from": "pc-b",
+        "to": "sw1",
+        "label": "Fa0/2"
+      }
+    ],
+    "table": [
+      {
+        "port": "Fa0/1",
+        "mode": "access",
+        "vlan": "1",
+        "peer": "PC-A"
+      },
+      {
+        "port": "Fa0/2",
+        "mode": "access",
+        "vlan": "1",
+        "peer": "PC-B"
+      }
+    ]
+  },
+  "tags": [],
+  "related": [],
+  "resources": []
+}

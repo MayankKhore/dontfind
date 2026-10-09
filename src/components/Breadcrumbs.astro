@@ -1,0 +1,23 @@
+---
+/**
+ * Breadcrumbs.astro — accessible breadcrumb trail.
+ * Props: items = [{ href?, label }]  (last item is the current page)
+ */
+const { items = [] } = Astro.props;
+if (!items.length) return null;
+---
+<nav class="breadcrumbs" aria-label="Breadcrumb">
+  <div class="container container--wide">
+    <ol>
+      {items.map((item, i) => (
+        <li>
+          {i === items.length - 1 || !item.href ? (
+            <span aria-current="page">{item.label}</span>
+          ) : (
+            <a href={item.href}>{item.label}</a>
+          )}
+        </li>
+      ))}
+    </ol>
+  </div>
+</nav>

@@ -1,0 +1,104 @@
+{
+  "title": "UDP",
+  "description": "Fast, simple, send-and-forget",
+  "tagline": "Fast, simple, send-and-forget",
+  "duration": "7 min",
+  "stage": 3,
+  "stageName": "Transport Layer",
+  "category": "Transport Layer",
+  "difficulty": "beginner",
+  "status": "published",
+  "icon": "⚡",
+  "order": 111,
+  "sections": [
+    {
+      "icon": "⚡",
+      "title": "UDP in One Line",
+      "body": "UDP (User Datagram Protocol) just sends. No handshake, no resending, no order guarantee. That sounds bad, but for live voice and video it is PERFECT: nobody cares about one lost millisecond of audio, but everyone hates waiting for a resend."
+    },
+    {
+      "icon": "🧊",
+      "title": "Why UDP Is So Fast",
+      "points": [
+        "No 3-way handshake — data leaves immediately.",
+        "Tiny header: only 8 bytes (TCP needs 20+).",
+        "No acknowledgements, no retransmissions, no flow control.",
+        "Very low delay (latency)."
+      ]
+    },
+    {
+      "icon": "📡",
+      "title": "Where UDP Wins",
+      "table": {
+        "head": [
+          "Use case",
+          "Why UDP fits"
+        ],
+        "rows": [
+          [
+            "Live calls (RTP)",
+            "New audio beats old audio"
+          ],
+          [
+            "Video streaming",
+            "Skip a frame rather than freeze"
+          ],
+          [
+            "Online gaming",
+            "Position updates expire fast"
+          ],
+          [
+            "DNS (53)",
+            "One tiny query, quick answer"
+          ],
+          [
+            "DHCP (67/68)",
+            "Simple broadcast request"
+          ]
+        ]
+      }
+    },
+    {
+      "icon": "⚔️",
+      "title": "TCP vs UDP Final Round",
+      "table": {
+        "head": [
+          "",
+          "TCP 🔗",
+          "UDP ⚡"
+        ],
+        "rows": [
+          [
+            "Setup",
+            "3-way handshake",
+            "None"
+          ],
+          [
+            "Guarantees",
+            "Ordered, complete",
+            "None"
+          ],
+          [
+            "Header size",
+            "20 bytes",
+            "8 bytes"
+          ],
+          [
+            "Speed",
+            "Slower",
+            "Fastest"
+          ],
+          [
+            "Remember as",
+            "Phone call 📞",
+            "Postcard ✉️"
+          ]
+        ]
+      },
+      "tip": "💡 Exam tip: DNS uses UDP port 53 by default. Voice/video/gaming = UDP. Web/email/file transfer = TCP."
+    }
+  ],
+  "tags": [],
+  "related": [],
+  "resources": []
+}

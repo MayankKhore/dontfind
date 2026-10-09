@@ -1,0 +1,83 @@
+{
+  "title": "MAC Address vs IP Address",
+  "description": "Physical identity vs logical location",
+  "tagline": "Physical identity vs logical location",
+  "duration": "8 min",
+  "stage": 7,
+  "stageName": "Data Link Layer",
+  "category": "Data Link Layer",
+  "difficulty": "intermediate",
+  "status": "published",
+  "icon": "🏷️",
+  "order": 123,
+  "sections": [
+    {
+      "icon": "🏷️",
+      "title": "Two Names, Two Jobs",
+      "body": "Every device carries BOTH addresses. The MAC identifies the physical network card; the IP identifies where the device lives in network logic.",
+      "code": "MAC: a4:5e:60:1f:22:9b   (48-bit, burned into NIC)\nIP : 192.168.1.50        (32-bit, from DHCP or manual)"
+    },
+    {
+      "icon": "⚔️",
+      "title": "Head to Head",
+      "table": {
+        "head": [
+          "",
+          "MAC",
+          "IP"
+        ],
+        "rows": [
+          [
+            "Layer",
+            "Layer 2 (Data Link)",
+            "Layer 3 (Network)"
+          ],
+          [
+            "Format",
+            "Hex, 48 bits",
+            "Dotted decimal, 32 bits"
+          ],
+          [
+            "Assigned",
+            "Factory burned-in",
+            "DHCP or manual"
+          ],
+          [
+            "Changes?",
+            "Stays with the card",
+            "Changes per network"
+          ],
+          [
+            "Scope",
+            "Local link only",
+            "Across networks"
+          ],
+          [
+            "Used by",
+            "Switches",
+            "Routers"
+          ]
+        ]
+      }
+    },
+    {
+      "icon": "📮",
+      "title": "Post Office Analogy",
+      "body": "IP is like a postal ADDRESS on an envelope (changes when you move house). MAC is like the persons NAME inside (stays forever). ARP finds which MAC owns which IP on your LAN."
+    },
+    {
+      "icon": "🔄",
+      "title": "Working Together",
+      "code": "PC-A -> PC-B same LAN:\n[dst MAC B | src MAC A][dst IP B | src IP A]\nSwitch reads the MAC layer.\nRouter reads the IP layer and\nrewrites MACs at every hop."
+    },
+    {
+      "icon": "💡",
+      "title": "Exam One-Liner",
+      "body": "MAC = who you physically are on this cable. IP = where you logically live in the world.",
+      "tip": "💡 Exam tip: MAC stays constant across networks; IP changes as the device moves."
+    }
+  ],
+  "tags": [],
+  "related": [],
+  "resources": []
+}

@@ -1,0 +1,10 @@
+{
+  "title": "Address Resolution Protocol (ARP)",
+  "term": "Address Resolution Protocol",
+  "acronymFor": "ARP",
+  "definition": "ARP maps an IPv4 address to a MAC address on the local network. When a host needs to send a frame to an IP on the same subnet, it broadcasts an ARP request ('who has 192.168.1.1?') and the owner replies with its MAC address, which the sender caches in its ARP table.",
+  "category": "Layer 2",
+  "difficulty": "beginner",
+  "status": "published",
+  "tags": ["arp", "layer2", "ipv4"]
+}

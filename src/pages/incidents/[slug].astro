@@ -1,0 +1,143 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import CliSimulator from '../../components/CliSimulator.astro';
+import Alert from '../../components/Alert.astro';
+import Badge from '../../components/Badge.astro';
+import Button from '../../components/Button.astro';
+import Icon from '../../components/Icon.astro';
+import RelatedResources from '../../components/RelatedResources.astro';
+import CTABand from '../../components/CTABand.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+import { getCollection } from 'astro:content';
+import { published } from '../../lib/content.js';
+import { articleSchema } from '../../lib/seo.js';
+
+export async function getStaticPaths() {
+  const incidents = published(await getCollection('incidents'));
+  return incidents.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const incident = entry.data;
+const path = `/incidents/${entry.id}/`;
+
+const breadcrumbs = [
+  { href: '/', label: 'Home' },
+  { href: '/incidents/', label: 'Incident Scenarios' },
+  { label: incident.title },
+];
+---
+
+<BaseLayout
+  title={incident.title}
+  description={incident.symptom}
+  path={path}
+  breadcrumbs={breadcrumbs}
+  pageType="incident"
+  collection="incidents"
+  ogType="article"
+  publishedTime={incident.updated}
+  modifiedTime={incident.updated}
+  schema={articleSchema({
+    title: incident.title,
+    description: incident.symptom,
+    path,
+    datePublished: incident.updated,
+    dateModified: incident.updated,
+    difficulty: incident.difficulty,
+    keywords: incident.tags,
+  })}
+>
+  <div class="container container--wide">
+    <PageHeader
+      kicker={incident.category}
+      icon="alert-triangle"
+      title={incident.title}
+      lead="Read the symptom, form a hypothesis, prove it with the CLI, then fix the root cause — not just the symptom."
+    >
+      <div slot="meta" class="page-header__meta">
+        <Badge variant={incident.difficulty} label={incident.difficulty} />
+        <span class="badge badge--count">{incident.diagnosis.length} checks</span>
+      </div>
+    </PageHeader>
+
+    <!-- ===================== Symptom ===================== -->
+    <section class="symptom" aria-labelledby="symptom-heading">
+      <strong id="symptom-heading">
+        <Icon name="alert-circle" size={14} />
+        <span>Reported symptom</span>
+      </strong>
+      <p>{incident.symptom}</p>
+    </section>
+
+    <div class="grid grid--sidebar">
+      <div class="stack">
+        <!-- ================= Diagnosis ================= -->
+        <section class="panel">
+          <p class="panel__title">
+            <Icon name="search" size={16} />
+            <span>Diagnosis — work these in order</span>
+          </p>
+
+          <ol class="incident-flow u-mt-4">
+            {incident.diagnosis.map((step) => (
+              <li class="incident-step">
+                <span class="incident-step__mark" aria-hidden="true" />
+                <p class="incident-step__body">{step}</p>
+              </li>
+            ))}
+          </ol>
+
+          <div class="u-mt-5">
+            <Alert variant="warning" title="Work it yourself first">
+              Try the steps before reading the resolution. Comparing your method against the
+              reference one is where the learning actually happens.
+            </Alert>
+          </div>
+        </section>
+
+        <!-- ================= Resolution ================= -->
+        <section class="resolution" aria-labelledby="resolution-heading">
+          <strong id="resolution-heading">
+            <Icon name="check-circle" size={14} />
+            <span>Resolution</span>
+          </strong>
+          <p>{incident.resolution}</p>
+        </section>
+
+        {incident.commands.length > 0 && (
+          <CodeBlock
+            title="commands used"
+            lang="cisco ios"
+            code={incident.commands.join('\n')}
+          />
+        )}
+      </div>
+
+      <!-- ===================== Sandbox ===================== -->
+      <aside class="stack" aria-label="Practice sandbox">
+        <CliSimulator title="Troubleshooting sandbox" />
+        <Alert variant="info" title="Free practice">
+          Change ports, VLANs and interfaces here to reproduce the fault and test your fix.
+          Nothing you type leaves this page.
+        </Alert>
+      </aside>
+    </div>
+
+    <RelatedResources related={incident.related} resources={incident.resources} />
+
+    <CTABand
+      title="Troubleshooting is the job"
+      text="Incidents are how networks actually fail. Work through the labs that cover this topic and prove the commands under time pressure."
+    >
+      <Fragment slot="actions">
+        <Button href="/incidents/" variant="primary">
+          <span>Next scenario</span>
+          <Icon name="arrow-right" size={16} />
+        </Button>
+        <Button href="/interview-questions/">Interview scenarios</Button>
+      </Fragment>
+    </CTABand>
+  </div>
+</BaseLayout>

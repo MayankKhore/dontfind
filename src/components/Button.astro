@@ -1,0 +1,63 @@
+---
+/**
+ * Button.astro — renders an <a> when `href` is set, otherwise a <button>.
+ *
+ * Props:
+ *   href, variant ('primary'|'ghost'|'outline'|'subtle'|'danger'|'success'),
+ *   size ('sm'|'lg'), block, iconOnly, type, disabled, busy, done,
+ *   ariaLabel, class (alias: className)
+ *
+ * Any remaining props (`data-*` hooks, `aria-*`, …) are spread onto the root
+ * element. Astro does NOT forward unknown attributes automatically, so this
+ * rest-spread is what keeps client scripts able to find their elements —
+ * it is what makes "Mark lab complete" work.
+ */
+const {
+  href,
+  variant = '',
+  size = '',
+  type = 'button',
+  block = false,
+  iconOnly = false,
+  disabled = false,
+  busy = false,
+  ariaLabel,
+  class: className = '',
+  className: classNameAlias = '',
+  ...rest
+} = Astro.props;
+
+const cls = [
+  'btn',
+  variant && `btn--${variant}`,
+  size && `btn--${size}`,
+  block && 'btn--block',
+  iconOnly && 'btn--icon',
+  className || classNameAlias,
+]
+  .filter(Boolean)
+  .join(' ');
+---
+
+{href ? (
+  <a
+    class={cls}
+    href={href}
+    aria-label={ariaLabel}
+    aria-disabled={disabled || undefined}
+    {...rest}
+  >
+    <slot />
+  </a>
+) : (
+  <button
+    class={cls}
+    type={type}
+    aria-label={ariaLabel}
+    disabled={disabled || undefined}
+    aria-busy={busy || undefined}
+    {...rest}
+  >
+    <slot />
+  </button>
+)}

@@ -1,0 +1,82 @@
+---
+/**
+ * Card.astro — the content card used by every index page and grid.
+ *
+ * When `href` is set the whole card becomes one click target by
+ * stretching the title link over the card surface (`.card--stretch`).
+ * That avoids nesting interactive elements and keeps a single tab stop.
+ *
+ * Props:
+ *   title, href, kicker, description, icon (Icon name), difficulty,
+ *   meta (string[]), action (label for the footer link),
+ *   variant ('feature'|'compact'|'row'|'muted'), stretch,
+ *   attrs (object spread onto the root — used for search data-* hooks),
+ *   class (alias: className)
+ */
+import Icon from './Icon.astro';
+import Badge from './Badge.astro';
+
+const {
+  href,
+  title,
+  kicker,
+  description,
+  icon,
+  difficulty,
+  meta = [],
+  action,
+  variant = '',
+  stretch,
+  attrs = {},
+  class: className = '',
+} = Astro.props;
+
+const isLink = Boolean(href);
+const useStretch = stretch ?? isLink;
+const cls = [
+  'card',
+  isLink && 'card--link',
+  useStretch && 'card--stretch',
+  variant && `card--${variant}`,
+  className,
+]
+  .filter(Boolean)
+  .join(' ');
+---
+
+<article class={cls} {...attrs}>
+  {(icon || kicker || difficulty) && (
+    <div class="card__top">
+      {icon && (
+        <span class="card__icon" aria-hidden="true">
+          <Icon name={icon} size={17} />
+        </span>
+      )}
+      {kicker && <span class="card__kicker">{kicker}</span>}
+      {difficulty && <Badge variant={difficulty} label={difficulty} />}
+    </div>
+  )}
+
+  <h3 class="card__title">
+    {isLink ? <a href={href}>{title}</a> : title}
+  </h3>
+
+  {description && <p class="card__body">{description}</p>}
+
+  {meta.length > 0 && (
+    <div class="card__meta">
+      {meta.map((item) => (
+        <span>{item}</span>
+      ))}
+    </div>
+  )}
+
+  {isLink && action && (
+    <p class="card__go">
+      <span>{action}</span>
+      <Icon name="arrow-right" size={14} />
+    </p>
+  )}
+
+  <slot />
+</article>

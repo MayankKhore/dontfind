@@ -1,0 +1,103 @@
+{
+  "title": "What is a Network?",
+  "description": "How devices connect and share things",
+  "tagline": "How devices connect and share things",
+  "duration": "8 min",
+  "stage": 1,
+  "stageName": "Network Intro",
+  "category": "Network Intro",
+  "difficulty": "beginner",
+  "status": "published",
+  "icon": "🌐",
+  "order": 101,
+  "sections": [
+    {
+      "icon": "🤝",
+      "title": "The Simple Idea",
+      "body": "A network is just two or more devices connected so they can share things with each other — files, a printer, or the internet. Think of it like a WhatsApp group: everyone is connected, and anyone can send a message to anyone else.",
+      "points": [
+        "Each device on a network is called a host or end device.",
+        "Every host needs a unique address (like your home address) so data knows exactly where to go.",
+        "Connections can be wires (cables) or wireless (Wi-Fi)."
+      ]
+    },
+    {
+      "icon": "🧩",
+      "title": "The 4 Basic Building Blocks",
+      "body": "Almost every network you will ever see is made of these same four pieces:",
+      "table": {
+        "head": [
+          "Piece",
+          "Job",
+          "Think of it as..."
+        ],
+        "rows": [
+          [
+            "End device (PC, phone)",
+            "Sends / receives data",
+            "The houses"
+          ],
+          [
+            "Cable / Wi-Fi",
+            "Carries the data",
+            "The roads"
+          ],
+          [
+            "Switch",
+            "Connects devices inside one place",
+            "Local traffic police"
+          ],
+          [
+            "Router",
+            "Connects your network to other networks",
+            "The city gate"
+          ]
+        ]
+      }
+    },
+    {
+      "icon": "💬",
+      "title": "Client and Server",
+      "body": "When you open a website, your computer (the client) asks for a page, and a big computer somewhere (the server) sends it back. One asks, one answers — that is the client/server model.",
+      "code": "You (client):     \"Give me google.com\"\nServer:           \"Here is the page\" ✔"
+    },
+    {
+      "icon": "🌍",
+      "title": "From Tiny to Giant",
+      "body": "Two laptops at home = a small network. A company connects hundreds of devices across buildings. Connect all the networks of the world together and you get the Internet — literally \"a network of networks\"."
+    },
+    {
+      "icon": "⭐",
+      "title": "Why Networks Matter",
+      "body": "Networks exist because sharing beats copying:",
+      "table": {
+        "head": [
+          "Benefit",
+          "Real example"
+        ],
+        "rows": [
+          [
+            "Share files",
+            "Send a document to a coworker instantly"
+          ],
+          [
+            "Share hardware",
+            "One printer used by 20 people"
+          ],
+          [
+            "Share internet",
+            "One connection serves the whole house"
+          ],
+          [
+            "Central storage",
+            "Backups kept on a server, not lost PCs"
+          ]
+        ]
+      },
+      "tip": "💡 Exam tip: know the words host, end device, client, server and \"network of networks\" — CCNA loves basic definitions."
+    }
+  ],
+  "tags": [],
+  "related": [],
+  "resources": []
+}

@@ -1,0 +1,190 @@
+---
+/**
+ * Topology.astro — the lab topology visualizer.
+ *
+ * Renders a real SVG diagram (crisp at any zoom, theme-aware, and fully
+ * present in the static HTML so it is crawlable and works without JS).
+ * Every node is a focusable `role="button"` with `aria-pressed`, so the
+ * diagram is operable with a keyboard; topology.js adds the inspector.
+ *
+ * Props:
+ *   devices {Array<{id, label, type?, ip?, model?}>}  optional
+ *   links   {Array<{ from, to, label? }>}             optional
+ *   title   {string}
+ *   layout  {'grid'|'ring'}
+ *
+ * With no `devices`, falls back to the four-device lab sandbox so the
+ * component is useful on any lab page.
+ */
+import Icon from './Icon.astro';
+
+const {
+  devices = [
+    { id: 'sw1', label: 'SW1', type: 'switch', model: '2960' },
+    { id: 'sw2', label: 'SW2', type: 'switch', model: '2960' },
+    { id: 'pc-a', label: 'PC-A', type: 'pc', model: 'Client' },
+    { id: 'pc-b', label: 'PC-B', type: 'pc', model: 'Client' },
+  ],
+  links = [
+    { from: 'sw1', to: 'sw2', label: 'Fa0/1' },
+    { from: 'sw1', to: 'pc-a', label: 'Fa0/2' },
+    { from: 'sw2', to: 'pc-b', label: 'Fa0/2' },
+  ],
+  title = 'Lab topology',
+} = Astro.props;
+
+/* ---- Layout ----------------------------------------------------------
+   If the content supplies x/y coordinates (labs do) we honour them
+   exactly; otherwise we fall back to a tidy grid so the component is
+   still useful on any page. */
+const hasCoords =
+  devices.length > 0 && devices.every((d) => typeof d.x === 'number' && typeof d.y === 'number');
+
+const NODE_W = hasCoords ? 128 : 152;
+const NODE_H = hasCoords ? 48 : 64;
+const GAP_X = 52;
+const GAP_Y = 48;
+const COLS = Math.min(3, Math.max(2, devices.length));
+const PAD = 16;
+
+const gridPosition = (index) => ({
+  x: (index % COLS) * (NODE_W + GAP_X) + NODE_W / 2 + PAD,
+  y: Math.floor(index / COLS) * (NODE_H + GAP_Y) + NODE_H / 2 + PAD,
+});
+
+const nodes = devices.map((device, i) => ({
+  ...device,
+  ...(hasCoords ? { x: device.x + PAD, y: device.y + PAD } : gridPosition(i)),
+  index: i,
+}));
+
+const rows = Math.ceil(devices.length / COLS);
+const svgW = hasCoords
+  ? Math.max(...nodes.map((n) => n.x)) + NODE_W / 2 + PAD
+  : COLS * NODE_W + (COLS - 1) * GAP_X + PAD * 2;
+const svgH = hasCoords
+  ? Math.max(...nodes.map((n) => n.y)) + NODE_H / 2 + PAD
+  : rows * NODE_H + (rows - 1) * GAP_Y + PAD * 2;
+
+const byId = new Map(nodes.map((n) => [n.id, n]));
+
+/**
+ * Where a straight line leaving the centre of `node` toward `to` meets
+ * the node's border, so links never run underneath the box.
+ */
+function edgePoint(node, to) {
+  const dx = to.x - node.x;
+  const dy = to.y - node.y;
+  if (dx === 0 && dy === 0) return { x: node.x, y: node.y };
+  const pad = 6;
+  const tx = dx === 0 ? Infinity : (NODE_W / 2 + pad) / Math.abs(dx);
+  const ty = dy === 0 ? Infinity : (NODE_H / 2 + pad) / Math.abs(dy);
+  const t = Math.min(tx, ty);
+  return { x: node.x + dx * t, y: node.y + dy * t };
+}
+
+const iconGlyphs = {
+  switch:
+    '<rect x="-9" y="-7" width="18" height="12" rx="2"/><path d="M-5 -7v-3M0 -7v-3M5 -7v-3"/>',
+  router: '<rect x="-10" y="-7" width="20" height="13" rx="3"/><path d="M-6 -11 6 -11M-3 -11l4-3M3 -11l-4-3"/>',
+  pc: '<rect x="-9" y="-8" width="18" height="12" rx="2"/><path d="M-4 8h8"/>',
+  server: '<rect x="-8" y="-8" width="16" height="6" rx="1.5"/><rect x="-8" y="2" width="16" height="6" rx="1.5"/>',
+  cloud: '<path d="M-8 5a5 5 0 0 1 1-9 6 6 0 0 1 11 2 3.5 3.5 0 0 1-1 7Z"/>',
+};
+
+const glyphFor = (type) => iconGlyphs[type] || iconGlyphs.switch;
+
+const escapeXml = (value) =>
+  String(value).replace(
+    /[&<>"']/g,
+    (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c],
+  );
+
+/* ---- Build the SVG as a string: it is static, themed by CSS and far
+   simpler to lay out this way than with 100+ template attributes. ---- */
+const linkMarkup = links
+  .map((link) => {
+    const from = byId.get(link.from);
+    const to = byId.get(link.to);
+    if (!from || !to) return '';
+    const a = edgePoint(from, to);
+    const b = edgePoint(to, from);
+    const mx = (a.x + b.x) / 2;
+    const my = (a.y + b.y) / 2;
+    const label = link.label
+      ? `<text class="topology__link-label" x="${mx}" y="${my - 5}" text-anchor="middle">${escapeXml(
+          link.label,
+        )}</text>`
+      : '';
+    return `<line class="topology__link" data-link-from="${escapeXml(from.id)}" data-link-to="${escapeXml(
+      to.id,
+    )}" x1="${a.x.toFixed(1)}" y1="${a.y.toFixed(1)}" x2="${b.x.toFixed(1)}" y2="${b.y.toFixed(1)}"/>${label}`;
+  })
+  .join('');
+
+const nodeMarkup = nodes
+  .map((node) => {
+    const x = node.x - NODE_W / 2;
+    const y = node.y - NODE_H / 2;
+    // Icon sits inside the left edge of the box so the layout works at
+    // both the compact (48px) and roomy (64px) node heights.
+    const iconX = x + 22;
+    const labelX = node.x + 12;
+    const subY = node.y + NODE_H / 2 - 8;
+    return `<g class="topology__node" role="button" tabindex="0" aria-pressed="false" data-node="${escapeXml(
+      node.id,
+    )}" aria-label="${escapeXml(node.label)}">
+      <rect class="topology__node-box" x="${x}" y="${y}" width="${NODE_W}" height="${NODE_H}" rx="12"/>
+      <g class="topology__node-icon" transform="translate(${iconX} ${node.y})">${glyphFor(
+      node.type,
+    )}</g>
+      <text class="topology__node-label" x="${labelX}" y="${node.y + 3}" text-anchor="middle">${escapeXml(
+        node.label,
+      )}</text>
+      <text class="topology__node-sub" x="${labelX}" y="${subY}" text-anchor="middle">${escapeXml(
+        node.model || node.type || 'device',
+      )}</text>
+    </g>`;
+  })
+  .join('');
+
+const svgMarkup = `<svg class="topology__svg" viewBox="0 0 ${svgW} ${svgH}" role="img" aria-label="${escapeXml(
+  title,
+)}"><g class="topology__links">${linkMarkup}</g><g class="topology__nodes">${nodeMarkup}</g></svg>`;
+---
+
+<div class="topology" data-topology data-devices={JSON.stringify(nodes.map((n) => ({
+  id: n.id,
+  label: n.label,
+  type: n.type || 'switch',
+  model: n.model || '',
+  ip: n.ip || '',
+  links: links.filter((l) => l.from === n.id || l.to === n.id).map((l) => l.label || l.to),
+})))}>
+  <div class="topology__head">
+    <p class="topology__title">
+      <Icon name="network" size={16} />
+      <span>{title}</span>
+    </p>
+    <p class="topology__legend">
+      <span><i></i> Select a device to inspect it</span>
+    </p>
+  </div>
+
+  <div class="topology__canvas" set:html={svgMarkup} />
+
+  <div class="topology__detail" data-topology-detail role="status" aria-live="polite">
+    <p class="topology__detail-name">No device selected</p>
+    <p class="u-dim" style="font-size:var(--fs-sm)">
+      Choose a node in the diagram to see its role and addressing.
+    </p>
+  </div>
+
+  <p class="sr-only" data-topology-help>
+    Use Tab to move between devices and Enter or Space to inspect one.
+  </p>
+</div>
+
+<script>
+  import '../scripts/topology.js';
+</script>

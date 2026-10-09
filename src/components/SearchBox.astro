@@ -1,0 +1,50 @@
+---
+/**
+ * SearchBox.astro — in-page search + filters.
+ *
+ * Must live inside a [data-search-root] container (see search.js).
+ * Every card on the page is filtered in place, so results stay
+ * crawlable and there is no second copy of the content.
+ *
+ * Props:
+ *   placeholder, label, id, filters = [{ key, label, options: string[] }]
+ */
+import Icon from './Icon.astro';
+
+const { placeholder = 'Search…', label = 'Search', filters = [] } = Astro.props;
+const inputId =
+  (Astro.id && String(Astro.id).replace(/[^a-zA-Z0-9]/g, '')) || 'search';
+---
+
+<div class="search" role="search">
+  <div class="search__field">
+    <span class="search__icon" aria-hidden="true">
+      <Icon name="search" size={17} />
+    </span>
+    <label class="sr-only" for={inputId}>{label}</label>
+    <input
+      id={inputId}
+      type="search"
+      data-search-input
+      placeholder={placeholder}
+      autocomplete="off"
+      spellcheck="false"
+    />
+    <button type="button" class="search__clear" data-search-clear hidden aria-label="Clear search">
+      <Icon name="x" size={14} />
+    </button>
+  </div>
+
+  {filters.map((f, i) => (
+    <select
+      data-search-filter={f.key}
+      id={`${inputId}-filter-${i}`}
+      aria-label={`${f.label} filter`}
+    >
+      <option value="all">All {f.label.toLowerCase()}</option>
+      {f.options.map((o) => <option value={o}>{o}</option>)}
+    </select>
+  ))}
+
+  <span class="search__status" data-search-status aria-live="polite"></span>
+</div>

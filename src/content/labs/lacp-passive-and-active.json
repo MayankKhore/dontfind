@@ -1,0 +1,116 @@
+{
+  "title": "LACP Passive & Active",
+  "description": "Configure LACP active and passive modes and learn which combinations form a channel.",
+  "scenario": "Configure LACP active and passive modes and learn which combinations form a channel.",
+  "duration": "8 min",
+  "stage": 6,
+  "stageName": "Link Aggregation",
+  "category": "Link Aggregation",
+  "difficulty": "intermediate",
+  "status": "published",
+  "icon": "🧪",
+  "order": 77,
+  "allowedCommands": [
+    "enable",
+    "configure terminal",
+    "interface range",
+    "channel-group 1 mode active",
+    "channel-group 1 mode passive",
+    "show etherchannel summary",
+    "show lacp neighbor",
+    "exit",
+    "end",
+    "help",
+    "?"
+  ],
+  "objectives": [
+    {
+      "text": "Set LACP active",
+      "cmd": "channel-group 1 mode active"
+    },
+    {
+      "text": "Set LACP passive",
+      "cmd": "channel-group 1 mode passive"
+    },
+    {
+      "text": "Verify the channel",
+      "cmd": "show etherchannel summary"
+    }
+  ],
+  "concepts": [
+    {
+      "title": "LACP Active vs Passive",
+      "body": "active sends LACP packets to initiate a channel. passive only responds to LACP packets — it never initiates.",
+      "code": "active:  initiates negotiation\npassive: responds only\non:      static, no LACP"
+    },
+    {
+      "title": "Mode Combinations",
+      "body": "active + active = channel forms. active + passive = channel forms. passive + passive = NEVER forms (nobody initiates).",
+      "code": "active  + active  → channel\nactive  + passive → channel\npassive + passive → no channel!"
+    },
+    {
+      "title": "LACP System Priority",
+      "body": "Each switch has an LACP system priority. The lower priority switch decides which ports actively participate in the channel.",
+      "code": "SW1(config)# lacp system-priority 100"
+    },
+    {
+      "title": "Verifying LACP",
+      "body": "\"show etherchannel summary\" shows the protocol as LACP. \"show lacp neighbor\" lists the LACP partner details.",
+      "code": "SW1# show etherchannel summary\nGroup  Port-channel  Protocol  Ports\n1      Po1(SU)      LACP      Fa0/1(P) Fa0/2(P)"
+    }
+  ],
+  "topology": {
+    "devices": [
+      {
+        "id": "pc-a",
+        "label": "PC-A",
+        "type": "pc",
+        "x": 60,
+        "y": 75
+      },
+      {
+        "id": "sw1",
+        "label": "SW1",
+        "type": "switch",
+        "x": 210,
+        "y": 75
+      },
+      {
+        "id": "pc-b",
+        "label": "PC-B",
+        "type": "pc",
+        "x": 360,
+        "y": 75
+      }
+    ],
+    "links": [
+      {
+        "from": "pc-a",
+        "to": "sw1",
+        "label": "Fa0/1"
+      },
+      {
+        "from": "pc-b",
+        "to": "sw1",
+        "label": "Fa0/2"
+      }
+    ],
+    "table": [
+      {
+        "port": "Fa0/1",
+        "mode": "access",
+        "vlan": "1",
+        "peer": "PC-A"
+      },
+      {
+        "port": "Fa0/2",
+        "mode": "access",
+        "vlan": "1",
+        "peer": "PC-B"
+      }
+    ]
+  },
+  "tags": [],
+  "related": [],
+  "resources": []
+}

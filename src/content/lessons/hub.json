@@ -1,0 +1,77 @@
+{
+  "title": "Hub",
+  "description": "The loudspeaker that switches replaced",
+  "tagline": "The loudspeaker that switches replaced",
+  "duration": "5 min",
+  "stage": 2,
+  "stageName": "Network Component",
+  "category": "Network Component",
+  "difficulty": "beginner",
+  "status": "published",
+  "icon": "📣",
+  "order": 105,
+  "sections": [
+    {
+      "icon": "📣",
+      "title": "A Hub Is a Loudspeaker",
+      "body": "A hub is an old, dumb box with several ports. Whatever bits arrive on one port get repeated out of EVERY other port — even if only one device cares. Imagine shouting in a room: everyone hears everything."
+    },
+    {
+      "icon": "💥",
+      "title": "Why That Is a Problem",
+      "points": [
+        "All ports share ONE collision domain — two devices sending together = crash (collision).",
+        "Devices needed CSMA/CD: listen first, send, detect crash, wait random time, retry.",
+        "More devices = more crashes = painfully slow.",
+        "Half duplex only: cannot talk and listen at once."
+      ]
+    },
+    {
+      "icon": "⚔️",
+      "title": "Hub vs Switch",
+      "table": {
+        "head": [
+          "Feature",
+          "Hub",
+          "Switch"
+        ],
+        "rows": [
+          [
+            "OSI layer",
+            "Layer 1 (Physical)",
+            "Layer 2 (Data Link)"
+          ],
+          [
+            "Understands",
+            "Nothing — just repeats",
+            "MAC addresses"
+          ],
+          [
+            "Delivery",
+            "To everyone",
+            "Only to the right port"
+          ],
+          [
+            "Collision domains",
+            "One big one",
+            "One per port"
+          ],
+          [
+            "Duplex",
+            "Half",
+            "Full"
+          ],
+          [
+            "Today?",
+            "Obsolete 🪦",
+            "Everywhere ✔"
+          ]
+        ]
+      },
+      "tip": "💡 Exam tip: hubs are gone from real networks, but CCNA still asks you to explain WHY switches replaced them. This table is the answer."
+    }
+  ],
+  "tags": [],
+  "related": [],
+  "resources": []
+}

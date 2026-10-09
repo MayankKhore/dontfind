@@ -1,0 +1,25 @@
+{
+  "title": "VLAN mismatch between two switches",
+  "description": "Hosts on the same IP subnet cannot ping each other after moving a patch cable between switches.",
+  "symptom": "PCs in the same IP subnet (192.168.10.0/24) can reach their access switch but cannot ping each other after one PC was moved to a different switch. The trunk link between the two switches is up.",
+  "diagnosis": [
+    "Confirm the PCs have correct and matching IP addresses, masks and gateways.",
+    "Run 'show vlan brief' on both switches to check the access ports' VLAN assignment.",
+    "Run 'show interfaces trunk' to confirm the trunk is operational and allowing the required VLAN.",
+    "Run 'show mac address-table' to see whether the switch is learning MACs in the expected VLAN."
+  ],
+  "resolution": "The access port on switch 2 was left in VLAN 1 instead of VLAN 10. Reconfigure the port with 'switchport access vlan 10' and verify the VLAN is allowed across the trunk with 'switchport trunk allowed vlan add 10'.",
+  "commands": [
+    "show vlan brief",
+    "show interfaces trunk",
+    "show mac address-table",
+    "configure terminal",
+    "interface fa0/5",
+    "switchport mode access",
+    "switchport access vlan 10"
+  ],
+  "category": "VLAN",
+  "difficulty": "intermediate",
+  "status": "published",
+  "tags": ["vlan", "trunk", "troubleshooting"]
+}

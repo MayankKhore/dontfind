@@ -1,0 +1,139 @@
+{
+  "title": "OSI Model & TCP/IP Suite",
+  "description": "The 7 layers every network question hides in",
+  "tagline": "The 7 layers every network question hides in",
+  "duration": "12 min",
+  "stage": 1,
+  "stageName": "Network Intro",
+  "category": "Network Intro",
+  "difficulty": "beginner",
+  "status": "published",
+  "icon": "🧱",
+  "order": 103,
+  "sections": [
+    {
+      "icon": "📦",
+      "title": "Why Do We Use Layers?",
+      "body": "Sending data across the world is too big a job for one step, so we split it into small jobs — layers. Think of mailing a parcel: you write the letter (content), put it in an envelope (wrapping), write the address (label), and the truck carries it (transport). Each layer does ONE job well.",
+      "points": [
+        "Each layer has its own job.",
+        "Each layer serves the layer above and below it.",
+        "Different companies can build products that still work together.",
+        "Troubleshooting becomes easy: \"which layer broke?\""
+      ]
+    },
+    {
+      "icon": "📚",
+      "title": "The OSI Model — 7 Floors of a Building",
+      "body": "OSI is a teaching model with 7 layers. Learn what each floor does and which device lives there:",
+      "table": {
+        "head": [
+          "#",
+          "Layer",
+          "Its job",
+          "Device",
+          "Data unit"
+        ],
+        "rows": [
+          [
+            "7",
+            "Application",
+            "Apps talking (web, email)",
+            "—",
+            "Data"
+          ],
+          [
+            "6",
+            "Presentation",
+            "Formats + encryption",
+            "—",
+            "Data"
+          ],
+          [
+            "5",
+            "Session",
+            "Starts/stops conversations",
+            "—",
+            "Data"
+          ],
+          [
+            "4",
+            "Transport",
+            "Delivery + port numbers",
+            "Firewall",
+            "Segment"
+          ],
+          [
+            "3",
+            "Network",
+            "IP addresses, best path",
+            "Router",
+            "Packet"
+          ],
+          [
+            "2",
+            "Data Link",
+            "MAC addresses, frames",
+            "Switch",
+            "Frame"
+          ],
+          [
+            "1",
+            "Physical",
+            "Bits on wire/radio",
+            "Hub, cables",
+            "Bits"
+          ]
+        ]
+      }
+    },
+    {
+      "icon": "🎁",
+      "title": "Encapsulation — Packing the Parcel",
+      "body": "When data travels DOWN the layers, each floor adds its own label (header). Going UP at the other side, labels are removed one by one:",
+      "code": "Your words          = Data\n+ TCP header        = Segment   (L4)\n+ IP header         = Packet    (L3)\n+ Ethernet header   = Frame     (L2)\n-> electric/light   = Bits      (L1)"
+    },
+    {
+      "icon": "🧠",
+      "title": "TCP/IP — The Real-World Version",
+      "body": "Real networks do not use all 7 OSI layers; they use the simpler TCP/IP model. Same ideas, fewer boxes. For the exam you must map them:",
+      "table": {
+        "head": [
+          "TCP/IP Layer",
+          "Covers OSI"
+        ],
+        "rows": [
+          [
+            "Application",
+            "Layers 7 + 6 + 5"
+          ],
+          [
+            "Transport",
+            "Layer 4"
+          ],
+          [
+            "Internet",
+            "Layer 3"
+          ],
+          [
+            "Network Access",
+            "Layers 2 + 1"
+          ]
+        ]
+      }
+    },
+    {
+      "icon": "✅",
+      "title": "Memory Tricks",
+      "points": [
+        "Top-down: \"All People Seem To Need Data Processing\" (Application -> Physical).",
+        "Bottom-up: \"Please Do Not Throw Sausage Pizza Away\".",
+        "Devices: Switch = 2 letters = L2. Router = R looks like 3 = L3."
+      ],
+      "tip": "💡 Exam tip: memorize \"data → segment → packet → frame → bits\". Questions love asking the PDU name at each layer."
+    }
+  ],
+  "tags": [],
+  "related": [],
+  "resources": []
+}

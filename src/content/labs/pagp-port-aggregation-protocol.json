@@ -1,0 +1,116 @@
+{
+  "title": "PAgP (Port Aggregation Protocol)",
+  "description": "Configure Cisco-proprietary PAgP negotiation with desirable and auto modes.",
+  "scenario": "Configure Cisco-proprietary PAgP negotiation with desirable and auto modes.",
+  "duration": "8 min",
+  "stage": 6,
+  "stageName": "Link Aggregation",
+  "category": "Link Aggregation",
+  "difficulty": "intermediate",
+  "status": "published",
+  "icon": "🧪",
+  "order": 76,
+  "allowedCommands": [
+    "enable",
+    "configure terminal",
+    "interface range",
+    "channel-group 1 mode desirable",
+    "channel-group 1 mode auto",
+    "show etherchannel summary",
+    "show pagp neighbor",
+    "exit",
+    "end",
+    "help",
+    "?"
+  ],
+  "objectives": [
+    {
+      "text": "Set PAgP desirable",
+      "cmd": "channel-group 1 mode desirable"
+    },
+    {
+      "text": "Set PAgP auto",
+      "cmd": "channel-group 1 mode auto"
+    },
+    {
+      "text": "Verify the channel",
+      "cmd": "show etherchannel summary"
+    }
+  ],
+  "concepts": [
+    {
+      "title": "What is PAgP?",
+      "body": "PAgP (Port Aggregation Protocol) is Cisco-proprietary. It negotiates an EtherChannel between two Cisco switches automatically.",
+      "code": "SW1(config)# interface range FastEthernet0/1-2\nSW1(config-if-range)# channel-group 1 mode desirable"
+    },
+    {
+      "title": "PAgP Modes",
+      "body": "desirable actively asks to form a channel. auto passively waits for the other side to ask. on is static with no negotiation at all.",
+      "code": "desirable: initiates negotiation\nauto:      responds only\non:        static, no PAgP"
+    },
+    {
+      "title": "Mode Combinations",
+      "body": "desirable + desirable = channel forms. desirable + auto = channel forms. auto + auto = NEVER forms (nobody asks).",
+      "code": "desirable + desirable → channel\nauto + auto           → no channel!"
+    },
+    {
+      "title": "Verifying PAgP",
+      "body": "\"show etherchannel summary\" shows the channel protocol as PAgP. \"show pagp neighbor\" lists the PAgP partner.",
+      "code": "SW1# show etherchannel summary\nGroup  Port-channel  Protocol  Ports\n1      Po1(SU)      PAgP      Fa0/1(P) Fa0/2(P)"
+    }
+  ],
+  "topology": {
+    "devices": [
+      {
+        "id": "pc-a",
+        "label": "PC-A",
+        "type": "pc",
+        "x": 60,
+        "y": 75
+      },
+      {
+        "id": "sw1",
+        "label": "SW1",
+        "type": "switch",
+        "x": 210,
+        "y": 75
+      },
+      {
+        "id": "pc-b",
+        "label": "PC-B",
+        "type": "pc",
+        "x": 360,
+        "y": 75
+      }
+    ],
+    "links": [
+      {
+        "from": "pc-a",
+        "to": "sw1",
+        "label": "Fa0/1"
+      },
+      {
+        "from": "pc-b",
+        "to": "sw1",
+        "label": "Fa0/2"
+      }
+    ],
+    "table": [
+      {
+        "port": "Fa0/1",
+        "mode": "access",
+        "vlan": "1",
+        "peer": "PC-A"
+      },
+      {
+        "port": "Fa0/2",
+        "mode": "access",
+        "vlan": "1",
+        "peer": "PC-B"
+      }
+    ]
+  },
+  "tags": [],
+  "related": [],
+  "resources": []
+}

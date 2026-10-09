@@ -1,0 +1,70 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import CollectionBrowser from '../../components/CollectionBrowser.astro';
+import Button from '../../components/Button.astro';
+import Icon from '../../components/Icon.astro';
+import { getCollection } from 'astro:content';
+import { published, uniqueValues } from '../../lib/content.js';
+
+const tools = published(await getCollection('tools'));
+const categories = uniqueValues(tools, 'category');
+
+const ICONS = { subnet: 'calculator', mask: 'swap', none: 'sliders' };
+
+const items = tools.map((tool) => ({
+  href: `/tools/${tool.id}/`,
+  title: tool.data.title,
+  kicker: tool.data.category,
+  description: tool.data.description,
+  icon: ICONS[tool.data.toolType] || 'sliders',
+  difficulty: tool.data.difficulty,
+  category: tool.data.category,
+  level: tool.data.difficulty,
+  searchText: [tool.data.title, tool.data.description, ...(tool.data.tags || [])]
+    .filter(Boolean)
+    .join(' '),
+}));
+
+const breadcrumbs = [
+  { href: '/', label: 'Home' },
+  { label: 'Tools' },
+];
+---
+
+<BaseLayout
+  title="Networking Tools & Calculators"
+  description="Free interactive networking tools: subnet calculator, subnet-mask to CIDR converter and more, built for CCNA study and everyday troubleshooting."
+  path="/tools/"
+  breadcrumbs={breadcrumbs}
+>
+  <div class="container container--wide">
+    <PageHeader
+      kicker={`${tools.length} tools`}
+      icon="sliders"
+      title="Network tools"
+      lead="Calculators that run entirely in your browser — no sign-up, no upload, no waiting. Useful when you are studying and when you are on shift."
+    >
+      <div slot="actions" class="cluster">
+        <Button href="/tools/subnet-calculator/" variant="primary">
+          <Icon name="calculator" size={16} />
+          <span>Subnet calculator</span>
+        </Button>
+        <Button href="/lessons/subnetting/">
+          <Icon name="book" size={16} />
+          <span>How subnetting works</span>
+        </Button>
+      </div>
+    </PageHeader>
+
+    <CollectionBrowser
+      items={items}
+      noun="tools"
+      label="Search tools"
+      placeholder="Search tools — try “subnet”, “CIDR” or “mask”…"
+      emptyTitle="No tools match"
+      emptyText="Nothing matched that search. Try “subnet” or “mask”."
+      filters={[{ key: 'category', label: 'Category', options: categories }]}
+    />
+  </div>
+</BaseLayout>

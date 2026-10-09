@@ -1,0 +1,124 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Card from '../components/Card.astro';
+import SearchBox from '../components/SearchBox.astro';
+import EmptyState from '../components/EmptyState.astro';
+import Button from '../components/Button.astro';
+import Icon from '../components/Icon.astro';
+import { getCollection } from 'astro:content';
+import { buildSearchIndex, uniqueValues } from '../lib/content.js';
+
+const [labs, lessons, quizzes, tools, interview, incidents, glossary, articles] =
+  await Promise.all([
+    getCollection('labs'),
+    getCollection('lessons'),
+    getCollection('quizzes'),
+    getCollection('tools'),
+    getCollection('interview'),
+    getCollection('incidents'),
+    getCollection('glossary'),
+    getCollection('articles'),
+  ]);
+
+const index = buildSearchIndex({
+  labs,
+  lessons,
+  quizzes,
+  tools,
+  interview,
+  incidents,
+  glossary,
+  articles,
+});
+
+const categories = uniqueValues(index.map((i) => ({ data: i })), 'category').filter(Boolean);
+
+/** Popular starting points, shown before the reader types anything. */
+const suggestions = ['VLAN', 'subnet', 'OSI', 'TCP', 'STP', 'trunk', 'ARP'];
+---
+
+<BaseLayout
+  title="Search"
+  description="Search every lab, lesson, quiz, tool, interview question, incident scenario and glossary entry on CCNA Path."
+  path="/search/"
+>
+  <div class="container container--wide">
+    <PageHeader
+      kicker={`${index.length} resources`}
+      icon="search"
+      title="Search everything"
+      lead="One box across every section — lessons, labs, quizzes, tools, interview questions, incidents and the glossary."
+    />
+
+    <div class="search-page u-mt-5">
+      <div class="search-page__panel">
+        <SearchBox
+          placeholder="Search anything — try “VLAN”, “subnet mask” or “ARP”…"
+          label="Search all content"
+          filters={[{ key: 'category', label: 'Category', options: categories }]}
+        />
+
+        <p class="search-page__suggestions u-mt-4">
+          <span>Popular:</span>
+          {suggestions.map((term) => (
+            <a class="chip" href={`/search/?q=${encodeURIComponent(term)}`}>{term}</a>
+          ))}
+        </p>
+        <p class="search-page__suggestions u-dim">
+          <Icon name="code" size={13} />
+          <span>
+            Tip: press <kbd>Ctrl</kbd> + <kbd>K</kbd> anywhere to jump straight to global search.
+          </span>
+        </p>
+      </div>
+
+      <div data-search-root>
+        <div class="grid grid--3">
+          {index.map((item) => (
+            <Card
+              title={item.label}
+              href={item.url}
+              kicker={item.type}
+              description={item.description}
+              icon={item.icon}
+              difficulty={item.difficulty || undefined}
+              attrs={{
+                'data-search-item': true,
+                'data-category': item.category,
+                'data-difficulty': item.difficulty,
+                'data-search-text': item.text,
+              }}
+            />
+          ))}
+        </div>
+
+        <EmptyState
+          icon="search"
+          title="No matches"
+          text="Nothing matched that search. Try a shorter term, or clear the category filter."
+          hidden
+          data-search-empty
+        >
+          <Fragment slot="actions">
+            <Button size="sm" data-search-clear-all>Clear search</Button>
+            <Button href="/" size="sm" variant="ghost">Back to home</Button>
+          </Fragment>
+        </EmptyState>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  import '../scripts/search.js';
+
+  // Deep links like /search/?q=vlan should pre-fill the box.
+  const params = new URLSearchParams(window.location.search);
+  const initial = params.get('q');
+  const input = document.querySelector('[data-search-input]');
+  if (initial && input) {
+    input.value = initial;
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+  }
+</script>

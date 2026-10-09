@@ -1,0 +1,113 @@
+---
+/**
+ * CollectionBrowser.astro — the shared index page.
+ *
+ * All eight collection index pages (labs, lessons, quizzes, tools,
+ * interview, incidents, glossary, articles) render through this one
+ * component, so search behaviour, result counts, filtering, empty states
+ * and card layout can never drift between them.
+ *
+ * Items are still rendered as static HTML, so every card remains
+ * crawlable; search.js filters them in place.
+ *
+ * Props:
+ *   items        {Array}   card descriptors (see the type below)
+ *   placeholder  {string}
+ *   label        {string}  accessible name for the search field
+ *   filters      {Array}   [{ key, label, options: string[] }]
+ *   grid         {string}  grid modifier, default 'grid--3'
+ *   emptyTitle   {string}
+ *   emptyText    {string}
+ *   noun         {string}  used in the result summary, e.g. "labs"
+ *
+ * Item shape:
+ *   { href, title, kicker, description, icon, difficulty, meta,
+ *     category, level, searchText }
+ */
+import Card from './Card.astro';
+import SearchBox from './SearchBox.astro';
+import EmptyState from './EmptyState.astro';
+import Icon from './Icon.astro';
+
+const {
+  items = [],
+  placeholder = 'Search…',
+  label = 'Search',
+  filters = [],
+  grid = 'grid--3',
+  emptyTitle = 'No matches',
+  emptyText = 'Try a different search term, or clear the filters to see everything.',
+  noun = 'items',
+} = Astro.props;
+---
+
+<div class="collection" data-search-root>
+  <div class="collection__toolbar">
+    <SearchBox placeholder={placeholder} label={label} filters={filters} />
+  </div>
+
+  {items.length > 0 && (
+    <div class={['grid', grid]}>
+      {items.map((item) => (
+        <Card
+          title={item.title}
+          href={item.href}
+          kicker={item.kicker}
+          description={item.description}
+          icon={item.icon}
+          difficulty={item.difficulty}
+          meta={item.meta}
+          attrs={{
+            'data-search-item': true,
+            'data-category': item.category ?? '',
+            'data-difficulty': item.level ?? item.difficulty ?? '',
+            'data-search-text': item.searchText ?? `${item.title} ${item.description ?? ''}`,
+          }}
+        />
+      ))}
+    </div>
+  )}
+
+  <EmptyState
+    icon="search"
+    title={emptyTitle}
+    text={emptyText}
+    hidden
+    data-search-empty
+  >
+    <Fragment slot="actions">
+      <button type="button" class="btn btn--sm" data-search-clear-all>
+        <Icon name="x" size={14} />
+        <span>Clear filters</span>
+      </button>
+    </Fragment>
+  </EmptyState>
+</div>
+
+<script>
+  import '../scripts/search.js';
+</script>
+
+<style>
+  .collection {
+    display: grid;
+    gap: var(--sp-5);
+  }
+  .collection__toolbar {
+    padding: var(--sp-4);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--bg-panel);
+    position: sticky;
+    top: calc(var(--header-h) + var(--sp-3));
+    z-index: var(--z-sticky);
+  }
+  .collection__toolbar .search__status {
+    min-width: 6ch;
+  }
+  @media (max-width: 760px) {
+    .collection__toolbar {
+      position: static;
+    }
+  }
+</style>

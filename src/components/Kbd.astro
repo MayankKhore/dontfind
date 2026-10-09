@@ -1,0 +1,18 @@
+---
+/**
+ * Kbd.astro — a keyboard key, optionally multiple in a combination.
+ * Props: keys {string[]|string}, join {string} (default '+')
+ * Example: <Kbd keys={['Ctrl','K']} /> → Ctrl + K
+ */
+const { keys = [], join = '+' } = Astro.props;
+const list = Array.isArray(keys) ? keys : String(keys).split(join);
+---
+
+<span class="kbd-combo">
+  {list.map((key, i) => (
+    <>
+      {i > 0 && <span class="kbd-combo__join" aria-hidden="true">{join}</span>}
+      <kbd>{key}</kbd>
+    </>
+  ))}
+</span>

@@ -1,0 +1,105 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import Badge from '../../components/Badge.astro';
+import Button from '../../components/Button.astro';
+import Icon from '../../components/Icon.astro';
+import RelatedResources from '../../components/RelatedResources.astro';
+import CTABand from '../../components/CTABand.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+import { getCollection } from 'astro:content';
+import { published } from '../../lib/content.js';
+import { definedTermSchema } from '../../lib/seo.js';
+
+export async function getStaticPaths() {
+  const terms = published(await getCollection('glossary'));
+  return terms.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const term = entry.data;
+const path = `/glossary/${entry.id}/`;
+
+const breadcrumbs = [
+  { href: '/', label: 'Home' },
+  { href: '/glossary/', label: 'Glossary' },
+  { label: term.term },
+];
+
+/**
+ * A worked example per term where we can confidently show one.
+ * Keyed by the filename slug so adding a term degrades gracefully.
+ */
+const EXAMPLES = {
+  subnet: {
+    caption: 'A /24 network, laid out',
+    code: 'Network    192.168.10.0\nBroadcast  192.168.10.255\nFirst host 192.168.10.1\nLast host  192.168.10.254\nUsable     254 hosts',
+  },
+  vlan: {
+    caption: 'Two VLANs, two broadcast domains',
+    code: 'vlan 10\n name SALES\nvlan 20\n name ENGINEERING\n!\ninterface fa0/1\n switchport access vlan 10',
+  },
+};
+
+const example = EXAMPLES[entry.id];
+---
+
+<BaseLayout
+  title={`${term.term} — Networking Glossary`}
+  description={term.definition}
+  path={path}
+  breadcrumbs={breadcrumbs}
+  pageType="glossary"
+  collection="glossary"
+  schema={definedTermSchema({
+    term: term.term,
+    definition: term.definition,
+    path,
+    acronymFor: term.acronymFor,
+  })}
+>
+  <div class="container container--narrow">
+    <PageHeader
+      kicker={term.category}
+      icon="book-open"
+      title={term.term}
+      lead={term.acronymFor ? `Short for ${term.acronymFor}` : undefined}
+    >
+      <div slot="meta" class="page-header__meta">
+        {term.category && <Badge variant="stage" label={term.category} />}
+        {term.acronymFor && <Badge label={term.acronymFor} />}
+      </div>
+    </PageHeader>
+
+    <article class="prose">
+      <p>{term.definition}</p>
+
+      {example && (
+        <div class="u-mt-5">
+          <CodeBlock title={example.caption} lang="example" code={example.code} />
+        </div>
+      )}
+
+      {term.tags.length > 0 && (
+        <ul class="chips" style="margin-top:var(--sp-6)">
+          {term.tags.map((tag) => <li class="chip">#{tag}</li>)}
+        </ul>
+      )}
+    </article>
+
+    <RelatedResources related={term.related} resources={term.resources} />
+
+    <CTABand
+      title="Definitions stick faster when you use them"
+      text="Each term has somewhere it is used for real — a lab that needs it, or a lesson that explains it."
+    >
+      <Fragment slot="actions">
+        <Button href="/glossary/" variant="primary">
+          <Icon name="book-open" size={16} />
+          <span>Browse all terms</span>
+        </Button>
+        <Button href="/search/">Search everything</Button>
+      </Fragment>
+    </CTABand>
+  </div>
+</BaseLayout>

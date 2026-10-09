@@ -1,0 +1,111 @@
+{
+  "title": "LLDP Configuration",
+  "description": "Configure the open-standard LLDP and verify neighbor information.",
+  "scenario": "Configure the open-standard LLDP and verify neighbor information.",
+  "duration": "6 min",
+  "stage": 4,
+  "stageName": "Spanning Tree",
+  "category": "Spanning Tree",
+  "difficulty": "beginner",
+  "status": "published",
+  "icon": "🧪",
+  "order": 67,
+  "allowedCommands": [
+    "enable",
+    "configure terminal",
+    "lldp run",
+    "show lldp neighbors",
+    "show lldp status",
+    "lldp timer",
+    "lldp holdtime",
+    "exit",
+    "end",
+    "help",
+    "?"
+  ],
+  "objectives": [
+    {
+      "text": "Enable LLDP",
+      "cmd": "lldp run"
+    },
+    {
+      "text": "View LLDP neighbors",
+      "cmd": "show lldp neighbors"
+    },
+    {
+      "text": "Verify LLDP",
+      "cmd": "show lldp status"
+    }
+  ],
+  "concepts": [
+    {
+      "title": "What is LLDP?",
+      "body": "LLDP (802.1AB) is the open-standard discovery protocol, like CDP but vendor-neutral.",
+      "code": "SW1(config)# lldp run\nSW1# show lldp neighbors"
+    },
+    {
+      "title": "Configuring LLDP",
+      "body": "Enable globally with \"lldp run\". Change \"lldp timer\" and \"lldp holdtime\" values as needed.",
+      "code": "SW1(config)# lldp run\nSW1(config)# lldp timer 30\nSW1(config)# lldp holdtime 120"
+    },
+    {
+      "title": "Verifying LLDP",
+      "body": "\"show lldp status\" lists LLDP state; \"show lldp neighbors detail\" gives MAC, platform, and port info.",
+      "code": "SW1# show lldp status\nLLDP state: enabled\n"
+    }
+  ],
+  "topology": {
+    "devices": [
+      {
+        "id": "pc-a",
+        "label": "PC-A",
+        "type": "pc",
+        "x": 60,
+        "y": 75
+      },
+      {
+        "id": "sw1",
+        "label": "SW1",
+        "type": "switch",
+        "x": 210,
+        "y": 75
+      },
+      {
+        "id": "pc-b",
+        "label": "PC-B",
+        "type": "pc",
+        "x": 360,
+        "y": 75
+      }
+    ],
+    "links": [
+      {
+        "from": "pc-a",
+        "to": "sw1",
+        "label": "Fa0/1"
+      },
+      {
+        "from": "pc-b",
+        "to": "sw1",
+        "label": "Fa0/2"
+      }
+    ],
+    "table": [
+      {
+        "port": "Fa0/1",
+        "mode": "access",
+        "vlan": "1",
+        "peer": "PC-A"
+      },
+      {
+        "port": "Fa0/2",
+        "mode": "access",
+        "vlan": "1",
+        "peer": "PC-B"
+      }
+    ]
+  },
+  "tags": [],
+  "related": [],
+  "resources": []
+}

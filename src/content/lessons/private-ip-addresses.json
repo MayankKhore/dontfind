@@ -1,0 +1,63 @@
+{
+  "title": "Private IP Addresses",
+  "description": "Free addresses that never touch the Internet directly",
+  "tagline": "Free addresses that never touch the Internet directly",
+  "duration": "8 min",
+  "stage": 6,
+  "stageName": "Subnetting",
+  "category": "Subnetting",
+  "difficulty": "intermediate",
+  "status": "published",
+  "icon": "🔒",
+  "order": 121,
+  "sections": [
+    {
+      "icon": "🔒",
+      "title": "What \"Private\" Means",
+      "body": "Three ranges were reserved for anyone to use inside their own networks — free of charge, no permission needed. They are NOT routable on the Internet; routers on the Internet simply drop them."
+    },
+    {
+      "icon": "📋",
+      "title": "The Three Ranges",
+      "table": {
+        "head": [
+          "Class feel",
+          "Range",
+          "Typical use"
+        ],
+        "rows": [
+          [
+            "10.x.x.x",
+            "10.0.0.0 – 10.255.255.255 (/8)",
+            "Big companies"
+          ],
+          [
+            "172.16–31.x.x",
+            "172.16.0.0 – 172.31.255.255 (/12)",
+            "Medium networks"
+          ],
+          [
+            "192.168.x.x",
+            "192.168.0.0 – 192.168.255.255 (/16)",
+            "Homes, small office"
+          ]
+        ]
+      }
+    },
+    {
+      "icon": "🔁",
+      "title": "How Private IPs Reach the Internet: NAT",
+      "body": "Your router keeps a private IP inside and swaps it for its PUBLIC IP when traffic leaves (NAT — Network Address Translation). Replies come back to the public IP, and the router sends them to the right private device.",
+      "code": "PC 192.168.1.50 -> Router NAT -> 203.0.113.5 (public) -> Internet"
+    },
+    {
+      "icon": "🎁",
+      "title": "Why This Saved the Internet",
+      "body": "Billions of devices share millions of public IPs thanks to private + NAT. Every home Wi-Fi reuses 192.168.1.x — that is fine because those packets never appear on the Internet with those addresses.",
+      "tip": "💡 Exam tip: memorize the three ranges exactly. 172 range starts at 172.16 — not 172.0!"
+    }
+  ],
+  "tags": [],
+  "related": [],
+  "resources": []
+}

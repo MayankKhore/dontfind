@@ -1,0 +1,45 @@
+---
+/**
+ * Accordion.astro — disclosure list built on native <details>.
+ *
+ * No JavaScript required: native details/summary is keyboard accessible
+ * and announced correctly by screen readers, which beats a JS accordion.
+ *
+ * Props:
+ *   items {Array<{ title, icon?, text?, html? }>}
+ *   open  {number[]}  indexes that start expanded
+ *   label {string}    accessible group name
+ *
+ * Content comes from `text` (escaped) or `html` (rendered verbatim, so
+ * only pass markup you generated yourself). Astro does not allow dynamic
+ * slot names, which is why items carry their own body rather than being
+ * slotted per index.
+ */
+import Icon from './Icon.astro';
+
+const { items = [], open = [], label = 'Disclosures', class: className = '' } = Astro.props;
+
+const escape = (value) =>
+  String(value ?? '').replace(
+    /[&<>"']/g,
+    (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c],
+  );
+---
+
+<div class={['accordion', className].filter(Boolean).join(' ')} data-accordion aria-label={label}>
+  {items.map((item, i) => (
+    <details class="accordion__item" open={open.includes(i)}>
+      <summary class="accordion__summary">
+        {item.icon && <Icon name={item.icon} size={16} />}
+        <span>{item.title}</span>
+      </summary>
+      <div class="accordion__panel">
+        {item.html ? (
+          <Fragment set:html={item.html} />
+        ) : (
+          <p>{escape(item.text ?? '')}</p>
+        )}
+      </div>
+    </details>
+  ))}
+</div>

@@ -1,0 +1,147 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import Badge from '../../components/Badge.astro';
+import Button from '../../components/Button.astro';
+import Icon from '../../components/Icon.astro';
+import Alert from '../../components/Alert.astro';
+import RelatedResources from '../../components/RelatedResources.astro';
+import CTABand from '../../components/CTABand.astro';
+import { getCollection } from 'astro:content';
+import { published } from '../../lib/content.js';
+import { quizSchema } from '../../lib/seo.js';
+
+export async function getStaticPaths() {
+  const quizzes = published(await getCollection('quizzes'));
+  return quizzes.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const quiz = entry.data;
+const path = `/quizzes/${entry.id}/`;
+
+const breadcrumbs = [
+  { href: '/', label: 'Home' },
+  { href: '/quizzes/', label: 'Quizzes' },
+  { label: quiz.title },
+];
+
+const LETTERS = ['a', 'b', 'c', 'd', 'e', 'f'];
+---
+
+<BaseLayout
+  title={quiz.title}
+  description={quiz.description || `${quiz.title} — an interactive CCNA quiz.`}
+  path={path}
+  breadcrumbs={breadcrumbs}
+  pageType="quiz"
+  collection="quizzes"
+  schema={quizSchema({
+    title: quiz.title,
+    description: quiz.description,
+    path,
+    difficulty: quiz.difficulty,
+    questionCount: quiz.questions.length,
+    keywords: quiz.tags,
+  })}
+>
+  <div class="container">
+    <PageHeader
+      kicker={quiz.category}
+      icon="help-circle"
+      title={quiz.title}
+      lead={quiz.description}
+    >
+      <div slot="meta" class="page-header__meta">
+        <Badge variant={quiz.difficulty} label={quiz.difficulty} />
+        <span class="badge badge--count">{quiz.questions.length} questions</span>
+        <span class="badge badge--count">No time limit</span>
+      </div>
+    </PageHeader>
+
+    <Alert variant="info" title="How this works" class="u-mt-4">
+      Answer every question. Each one is marked as soon as you choose, with an
+      explanation either way — so a wrong answer still teaches you something.
+    </Alert>
+
+    <!-- Markup contract for quiz.js — do not rename these hooks. -->
+    <div class="quiz u-mt-5" data-quiz data-quiz-id={`quiz:${entry.id}`}>
+      <div class="quiz__status">
+        <p class="quiz__status-row">
+          <span class="quiz__status-text" data-quiz-progress-text>
+            0 / {quiz.questions.length} answered
+          </span>
+          <span class="quiz__score">
+            <Icon name="target" size={14} />
+            <span data-quiz-score>0 correct</span>
+          </span>
+        </p>
+        <div
+          class="progress"
+          role="progressbar"
+          aria-label="Quiz progress"
+          aria-valuemin="0"
+          aria-valuemax={quiz.questions.length}
+          aria-valuenow="0"
+        >
+          <span class="progress__fill" data-quiz-progress-fill style="width:0%"></span>
+        </div>
+      </div>
+
+      {quiz.questions.map((q, i) => (
+        <fieldset class="question" data-question data-answer={q.answer} data-answered="false">
+          <legend class="question__prompt">
+            <span class="question__num" aria-hidden="true">{i + 1}</span>
+            <span>{q.prompt}</span>
+          </legend>
+
+          <ul class="options">
+            {q.options.map((o, oi) => (
+              <li>
+                <label class="option">
+                  <input type="radio" name={`q-${entry.id}-${i}`} value={o.value} />
+                  <span class="option__mark" aria-hidden="true">{LETTERS[oi] ?? oi + 1}</span>
+                  <span>{o.text}</span>
+                </label>
+              </li>
+            ))}
+          </ul>
+
+          {q.explanation && <div class="quiz-explanation" hidden>{q.explanation}</div>}
+        </fieldset>
+      ))}
+
+      <div class="quiz-result" data-quiz-result hidden aria-live="polite"></div>
+
+      <div class="cluster cluster--between">
+        <Button variant="ghost" data-quiz-restart>
+          <Icon name="refresh" size={15} />
+          <span>Restart quiz</span>
+        </Button>
+        <a class="btn btn--ghost" href="/quizzes/">
+          <Icon name="list" size={15} />
+          <span>All quizzes</span>
+        </a>
+      </div>
+    </div>
+
+    <RelatedResources related={quiz.related} resources={quiz.resources} />
+
+    <CTABand
+      title="One quiz down — lock it in."
+      text="Your score is saved to this browser. Keep going with the next topic, or revisit the lessons behind the questions you missed."
+    >
+      <Fragment slot="actions">
+        <Button href="/quizzes/" variant="primary">
+          <span>Next quiz</span>
+          <Icon name="arrow-right" size={16} />
+        </Button>
+        <Button href="/lessons/">Revise a lesson</Button>
+      </Fragment>
+    </CTABand>
+  </div>
+</BaseLayout>
+
+<script>
+  import '../../scripts/quiz.js';
+</script>

@@ -1,0 +1,70 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import CollectionBrowser from '../../components/CollectionBrowser.astro';
+import Button from '../../components/Button.astro';
+import Icon from '../../components/Icon.astro';
+import { getCollection } from 'astro:content';
+import { published, uniqueValues } from '../../lib/content.js';
+
+const quizzes = published(await getCollection('quizzes'));
+const categories = uniqueValues(quizzes, 'category');
+
+const items = quizzes.map((quiz) => ({
+  href: `/quizzes/${quiz.id}/`,
+  title: quiz.data.title,
+  kicker: quiz.data.category,
+  description: quiz.data.description,
+  icon: 'help-circle',
+  difficulty: quiz.data.difficulty,
+  meta: [`${quiz.data.questions.length} questions`],
+  category: quiz.data.category,
+  level: quiz.data.difficulty,
+  searchText: [quiz.data.title, quiz.data.description].filter(Boolean).join(' '),
+}));
+
+const breadcrumbs = [
+  { href: '/', label: 'Home' },
+  { label: 'Quizzes' },
+];
+---
+
+<BaseLayout
+  title="CCNA Quizzes & MCQs"
+  description="Test your networking knowledge with multiple-choice quizzes covering addressing, switching, routing and security — every answer marked and explained."
+  path="/quizzes/"
+  breadcrumbs={breadcrumbs}
+>
+  <div class="container container--wide">
+    <PageHeader
+      kicker={`${quizzes.length} quizzes`}
+      icon="help-circle"
+      title="Quizzes &amp; MCQs"
+      lead="Answer under exam conditions, then read why the right answer is right. Every option is marked and every result is explained — a wrong answer is the useful one."
+    >
+      <div slot="actions" class="cluster">
+        <Button href="/lessons/" variant="primary">
+          <Icon name="book" size={16} />
+          <span>Revise a topic first</span>
+        </Button>
+        <Button href="/dashboard/">
+          <Icon name="gauge" size={16} />
+          <span>Track your score</span>
+        </Button>
+      </div>
+    </PageHeader>
+
+    <CollectionBrowser
+      items={items}
+      noun="quizzes"
+      label="Search quizzes"
+      placeholder="Search quizzes — try “VLAN”, “TCP” or “subnet mask”…"
+      emptyTitle="No quizzes match"
+      emptyText="Nothing matched that search. Try a topic you have studied."
+      filters={[
+        { key: 'difficulty', label: 'Difficulty', options: ['beginner', 'intermediate', 'advanced'] },
+        { key: 'category', label: 'Category', options: categories },
+      ]}
+    />
+  </div>
+</BaseLayout>

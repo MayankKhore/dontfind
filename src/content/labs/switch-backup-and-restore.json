@@ -1,0 +1,110 @@
+{
+  "title": "Switch Backup & Restore",
+  "description": "Back up the running configuration and restore it when needed.",
+  "scenario": "Back up the running configuration and restore it when needed.",
+  "duration": "6 min",
+  "stage": 9,
+  "stageName": "Monitoring & Operations",
+  "category": "Monitoring & Operations",
+  "difficulty": "advanced",
+  "status": "published",
+  "icon": "🧪",
+  "order": 37,
+  "allowedCommands": [
+    "enable",
+    "copy running-config startup-config",
+    "copy startup-config running-config",
+    "write memory",
+    "show running-config",
+    "show startup-config",
+    "exit",
+    "end",
+    "help",
+    "?"
+  ],
+  "objectives": [
+    {
+      "text": "Save config to NVRAM",
+      "cmd": "write memory"
+    },
+    {
+      "text": "Backup to startup-config",
+      "cmd": "copy running-config startup-config"
+    },
+    {
+      "text": "Restore from startup-config",
+      "cmd": "copy startup-config running-config"
+    }
+  ],
+  "concepts": [
+    {
+      "title": "Backup Locations",
+      "body": "NVRAM (startup-config), TFTP server, or USB. Always keep an off-device backup.",
+      "code": "copy running-config startup-config\ncopy running-config tftp:\ncopy running-config flash:"
+    },
+    {
+      "title": "Restoring",
+      "body": "Copy from backup back into running-config. Merge or replace depending on the source.",
+      "code": "copy startup-config running-config\ncopy tftp: running-config"
+    },
+    {
+      "title": "Best Practice",
+      "body": "Save after every change with \"write memory\". Keep a TFTP backup for disaster recovery.",
+      "code": "SW1# write memory\nBuilding configuration...\n[OK]"
+    }
+  ],
+  "topology": {
+    "devices": [
+      {
+        "id": "pc-a",
+        "label": "PC-A",
+        "type": "pc",
+        "x": 60,
+        "y": 75
+      },
+      {
+        "id": "sw1",
+        "label": "SW1",
+        "type": "switch",
+        "x": 210,
+        "y": 75
+      },
+      {
+        "id": "pc-b",
+        "label": "PC-B",
+        "type": "pc",
+        "x": 360,
+        "y": 75
+      }
+    ],
+    "links": [
+      {
+        "from": "pc-a",
+        "to": "sw1",
+        "label": "Fa0/1"
+      },
+      {
+        "from": "pc-b",
+        "to": "sw1",
+        "label": "Fa0/2"
+      }
+    ],
+    "table": [
+      {
+        "port": "Fa0/1",
+        "mode": "access",
+        "vlan": "1",
+        "peer": "PC-A"
+      },
+      {
+        "port": "Fa0/2",
+        "mode": "access",
+        "vlan": "1",
+        "peer": "PC-B"
+      }
+    ]
+  },
+  "tags": [],
+  "related": [],
+  "resources": []
+}

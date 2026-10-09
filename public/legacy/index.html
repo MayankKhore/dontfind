@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CCNA Path - Learn Networking in Your Browser</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- ==================== NAVBAR ==================== -->
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <span class="navbar-icon">🌐</span>
+            <a href="#" class="navbar-title" data-view="dashboard">CCNA Path</a>
+        </div>
+        <ul class="navbar-nav">
+            <li><a href="#" class="nav-link active" data-view="dashboard">Home</a></li>
+            <li><a href="#" class="nav-link" data-view="lab">📚 Lab</a></li>
+            <li><a href="#" class="nav-link" data-view="labs">💻 CLI</a></li>
+        </ul>
+        <div class="navbar-actions">
+            <span class="stage-pill" id="stage-pill">Stage 1 · 0/3</span>
+            <button class="profile-btn" id="profile-btn" title="Profile">👤</button>
+        </div>
+    </nav>
+
+    <!-- ==================== DASHBOARD ==================== -->
+    <section id="view-dashboard" class="view active">
+        <div class="dash-layout">
+
+            <!-- LEFT SIDEBAR -->
+            <aside class="dash-sidebar">
+                <div class="sidebar-brand">
+                    <span class="sidebar-logo">🌐</span>
+                    <span class="sidebar-name">CCNA Path</span>
+                </div>
+                <nav class="sidebar-nav">
+                    <a href="#" class="side-link active" data-side="dashboard">
+                        <span class="side-ico">🏠</span><span>Dashboard</span>
+                    </a>
+                    <a href="#" class="side-link" data-side="lab">
+                        <span class="side-ico">📚</span><span>Lab</span>
+                    </a>
+                    <a href="#" class="side-link" data-side="cli">
+                        <span class="side-ico">💻</span><span>CLI</span>
+                    </a>
+                    <a href="#" class="side-link" data-side="ccna">
+                        <span class="side-ico">📘</span><span>CCNA</span>
+                    </a>
+                    <a href="#" class="side-link" data-side="settings">
+                        <span class="side-ico">⚙️</span><span>Settings</span>
+                    </a>
+                    <a href="#" class="side-link" data-side="support">
+                        <span class="side-ico">💬</span><span>Support</span>
+                    </a>
+                </nav>
+                <div class="premium-card">
+                    <div class="premium-icon">⚡</div>
+                    <h4>Get Premium</h4>
+                    <p>Unlock every lab, PDF notes & the full learning path.</p>
+                    <button class="btn-premium" id="btn-premium">Upgrade Now</button>
+                </div>
+            </aside>
+
+            <!-- CENTER: HERO + STAGE CARDS (preserved) -->
+            <main class="dash-main">
+                <div class="dashboard-hero">
+                    <div class="hero-badge">CCNA Learning Path</div>
+                    <h1>Build the hands-on skills<br><span class="grad">behind the CCNA.</span></h1>
+                    <p>Follow one clear study path. Configure real networks in your browser. No downloads, no hardware.</p>
+                </div>
+
+                <div class="stage-cards">
+                    <div class="stage-card" data-stage="1">
+                        <div class="stage-card-head">
+                            <span class="stage-badge s1">Stage 1</span>
+                            <span class="stage-count" id="stage1-count">0/1</span>
+                        </div>
+                        <h3>Meet the CLI</h3>
+                        <p>Get fast at prompts, help, mode changes, and saving so the terminal stops costing you mental energy.</p>
+                        <div class="stage-bar"><div class="stage-fill" id="stage1-fill" style="width:0%"></div></div>
+                        <div class="stage-lessons">
+                            <a href="#" class="stage-lesson" data-lesson="1">
+                                <span class="sl-check" id="sl-check-1">○</span>
+                                <span class="sl-title">Your First Switch Config</span>
+                                <span class="sl-time">8 min</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="stage-card" data-stage="2">
+                        <div class="stage-card-head">
+                            <span class="stage-badge s2">Stage 2</span>
+                            <span class="stage-count" id="stage2-count">0/1</span>
+                        </div>
+                        <h3>Learn Foundation</h3>
+                        <p>Build the mental model for frames, packets, addressing, and broadcast behavior before configuration.</p>
+                        <div class="stage-bar"><div class="stage-fill" id="stage2-fill" style="width:0%"></div></div>
+                        <div class="stage-lessons">
+                            <a href="#" class="stage-lesson" data-lesson="2">
+                                <span class="sl-check" id="sl-check-2">○</span>
+                                <span class="sl-title">Network Foundations</span>
+                                <span class="sl-time">10 min</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="stage-card" data-stage="3">
+                        <div class="stage-card-head">
+                            <span class="stage-badge s3">Stage 3</span>
+                            <span class="stage-count" id="stage3-count">0/1</span>
+                        </div>
+                        <h3>Learn Switching</h3>
+                        <p>Read interface state, status tables, and link evidence until you can explain what the switch sees.</p>
+                        <div class="stage-bar"><div class="stage-fill" id="stage3-fill" style="width:0%"></div></div>
+                        <div class="stage-lessons">
+                            <a href="#" class="stage-lesson" data-lesson="3">
+                                <span class="sl-check" id="sl-check-3">○</span>
+                                <span class="sl-title">Configure Access VLANs</span>
+                                <span class="sl-time">12 min</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <!-- RIGHT: PROFILE / STREAK / ACTIVITY -->
+            <aside class="dash-right">
+                <div class="profile-card">
+                    <div class="profile-avatar">👤</div>
+                    <div class="profile-info">
+                        <h4>Shubham</h4>
+                        <p>CCNA Learner</p>
+                    </div>
+                    <span class="profile-level" id="profile-level">Level 1</span>
+                </div>
+
+                <div class="streak-card">
+                    <div class="streak-head">
+                        <span class="streak-flame">🔥</span>
+                        <div class="streak-head-text">
+                            <h3 id="streak-days" class="streak-days">0 Days Streak!</h3>
+                            <p>Keep learning every day</p>
+                        </div>
+                    </div>
+                    <div class="streak-week" id="streak-week"></div>
+                </div>
+
+                <div class="activity-card">
+                    <div class="panel-head">
+                        <h3>Activity</h3>
+                    </div>
+                    <div class="activity-list" id="activity-list"></div>
+                </div>
+            </aside>
+
+        </div>
+    </section>
+
+    <!-- ==================== LAB VIEW (CURRICULUM) ==================== -->
+    <section id="view-lab" class="view">
+        <div class="page-layout">
+
+            <!-- LEFT: CCNA PATH SIDEBAR -->
+            <aside class="dash-sidebar">
+                <div class="sidebar-brand">
+                    <span class="sidebar-logo">🌐</span>
+                    <span class="sidebar-name">CCNA Path</span>
+                </div>
+                <nav class="sidebar-nav">
+                    <a href="#" class="side-link" data-side="dashboard">
+                        <span class="side-ico">🏠</span><span>Dashboard</span>
+                    </a>
+                    <a href="#" class="side-link active" data-side="lab">
+                        <span class="side-ico">📚</span><span>Lab</span>
+                    </a>
+                    <a href="#" class="side-link" data-side="cli">
+                        <span class="side-ico">💻</span><span>CLI</span>
+                    </a>
+                    <a href="#" class="side-link" data-side="ccna">
+                        <span class="side-ico">📘</span><span>CCNA</span>
+                    </a>
+                    <a href="#" class="side-link" data-side="settings">
+                        <span class="side-ico">⚙️</span><span>Settings</span>
+                    </a>
+                    <a href="#" class="side-link" data-side="support">
+                        <span class="side-ico">💬</span><span>Support</span>
+                    </a>
+                </nav>
+                <div class="premium-card">
+                    <div class="premium-icon">⚡</div>
+                    <h4>Get Premium</h4>
+                    <p>Unlock every lab, PDF notes & the full learning path.</p>
+                    <button class="btn-premium">Upgrade Now</button>
+                </div>
+            </aside>
+
+            <!-- CENTER: HERO + CURRICULUM (preserved) -->
+            <main class="page-main">
+                <div class="lab-hero">
+                    <div class="hero-badge">📚 CCNA Lab Path</div>
+                    <h1>Hands-on <span class="grad">Labs</span></h1>
+                    <p>Follow the stages in order. Complete each lab to unlock the next.</p>
+                </div>
+
+                <div class="lab-toolbar">
+                        <span class="lab-toolbar-title">📋 Lessons</span>
+                    </div>
+
+                <div class="lab-curriculum" id="lab-curriculum">
+                    <!-- Stages & lessons rendered dynamically from LESSONS data -->
+                </div>
+            </main>
+
+            <!-- RIGHT: PROFILE / STREAK / ACTIVITY -->
+            <aside class="page-right">
+                <div class="profile-card">
+                    <div class="profile-avatar">👤</div>
+                    <div class="profile-info">
+                        <h4>Shubham</h4>
+                        <p>CCNA Learner</p>
+                    </div>
+                    <span class="profile-level">Level 1</span>
+                </div>
+
+                <div class="streak-card">
+                    <div class="streak-head">
+                        <span class="streak-flame">🔥</span>
+                        <div class="streak-head-text">
+                            <h3 class="streak-days">0 Days Streak!</h3>
+                            <p>Keep learning every day</p>
+                        </div>
+                    </div>
+                    <div class="streak-week"></div>
+                </div>
+
+                <div class="activity-card">
+                    <div class="panel-head">
+                        <h3>Activity</h3>
+                    </div>
+                    <div class="activity-list"></div>
+                </div>
+            </aside>
+
+        </div>
+    </section>
+
+    <!-- ==================== CCNA VIEW (theory material) ==================== -->
+    <section id="view-ccna" class="view">
+        <div class="page-layout">
+
+            <!-- LEFT: CCNA PATH SIDEBAR -->
+            <aside class="dash-sidebar">
+                <div class="sidebar-brand">
+                    <span class="sidebar-logo">🌐</span>
+                    <span class="sidebar-name">CCNA Path</span>
+                </div>
+                <nav class="sidebar-nav">
+                    <a href="#" class="side-link" data-side="dashboard">
+                        <span class="side-ico">🏠</span><span>Dashboard</span>
+                    </a>
+                    <a href="#" class="side-link" data-side="lab">
+                        <span class="side-ico">📚</span><span>Lab</span>
+                    </a>
+                    <a href="#" class="side-link" data-side="cli">
+                        <span class="side-ico">💻</span><span>CLI</span>
+                    </a>
+                    <a href="#" class="side-link active" data-side="ccna">
+                        <span class="side-ico">📘</span><span>CCNA</span>
+                    </a>
+                    <a href="#" class="side-link" data-side="settings">
+                        <span class="side-ico">⚙️</span><span>Settings</span>
+                    </a>
+                    <a href="#" class="side-link" data-side="support">
+                        <span class="side-ico">💬</span><span>Support</span>
+                    </a>
+                </nav>
+                <div class="premium-card">
+                    <div class="premium-icon">⚡</div>
+                    <h4>Get Premium</h4>
+                    <p>Unlock every lab, PDF notes & the full learning path.</p>
+                    <button class="btn-premium">Upgrade Now</button>
+                </div>
+            </aside>
+
+            <!-- CENTER: HERO + CCNA CURRICULUM -->
+            <main class="page-main">
+                <div class="ccna-hero">
+                    <div class="hero-badge">📘 CCNA Guide</div>
+                    <h1>What is <span class="grad">CCNA?</span></h1>
+                    <p>Cisco Certified Network Associate covers the fundamentals of networking — how devices communicate, addressing, routing, switching, security, and the technologies that run modern networks. Work through the stages in order to build a complete mental model before jumping into hands-on labs.</p>
+                </div>
+
+                <div class="lab-toolbar">
+                    <span class="lab-toolbar-title">📖 CCNA Stages</span>
+                </div>
+
+                <div class="lab-curriculum" id="ccna-curriculum">
+                    <!-- Stages rendered dynamically from MATERIAL data (reuses the lab renderer) -->
+                </div>
+            </main>
+
+            <!-- RIGHT: PROFILE / STREAK / ACTIVITY -->
+            <aside class="page-right">
+                <div class="profile-card">
+                    <div class="profile-avatar">👤</div>
+                    <div class="profile-info">
+                        <h4>Shubham</h4>
+                        <p>CCNA Learner</p>
+                    </div>
+                    <span class="profile-level">Level 1</span>
+                </div>
+
+                <div class="streak-card">
+                    <div class="streak-head">
+                        <span class="streak-flame">🔥</span>
+                        <div class="streak-head-text">
+                            <h3 class="streak-days">0 Days Streak!</h3>
+                            <p>Keep learning every day</p>
+                        </div>
+                    </div>
+                    <div class="streak-week"></div>
+                </div>
+
+                <div class="activity-card">
+                    <div class="panel-head">
+                        <h3>Activity</h3>
+                    </div>
+                    <div class="activity-list"></div>
+                </div>
+            </aside>
+
+        </div>
+    </section>
+
+    <!-- ==================== CCNA TOPIC PAGE (full view) ==================== -->
+    <section id="view-topic" class="view">
+        <div class="page-layout">
+
+            <!-- LEFT: SIDEBAR -->
+            <aside class="dash-sidebar">
+                <div class="sidebar-brand">
+                    <span class="sidebar-logo">🌐</span>
+                    <span class="sidebar-name">CCNA Path</span>
+                </div>
+                <nav class="sidebar-nav">
+                    <a href="#" class="side-link" data-side="dashboard">
+                        <span class="side-ico">🏠</span><span>Dashboard</span>
+                    </a>
+                    <a href="#" class="side-link" data-side="lab">
+                        <span class="side-ico">📚</span><span>Lab</span>
+                    </a>
+                    <a href="#" class="side-link" data-side="cli">
+                        <span class="side-ico">💻</span><span>CLI</span>
+                    </a>
+                    <a href="#" class="side-link active" data-side="ccna">
+                        <span class="side-ico">📘</span><span>CCNA</span>
+                    </a>
+                    <a href="#" class="side-link" data-side="settings">
+                        <span class="side-ico">⚙️</span><span>Settings</span>
+                    </a>
+                    <a href="#" class="side-link" data-side="support">
+                        <span class="side-ico">💬</span><span>Support</span>
+                    </a>
+                </nav>
+                <div class="premium-card">
+                    <div class="premium-icon">⚡</div>
+                    <h4>Get Premium</h4>
+                    <p>Unlock every lab, PDF notes & the full learning path.</p>
+                    <button class="btn-premium">Upgrade Now</button>
+                </div>
+            </aside>
+
+            <!-- CENTER: TOPIC CONTENT -->
+            <main class="page-main topic-main">
+                <div class="topic-toolbar">
+                    <button class="topic-back-btn" id="topic-back-btn">← Back to Stages</button>
+                    <button class="topic-done-btn" id="btn-mark-read">✅ Mark as Read</button>
+                </div>
+
+                <article class="topic-article">
+                    <header class="reader-head">
+                        <span class="stage-badge s1" id="reader-stage-badge">Stage 1</span>
+                        <h2 id="reader-title">Topic</h2>
+                        <div class="reader-meta">
+                            <span class="reader-tagline" id="reader-tagline"></span>
+                            <span class="curriculum-lesson-duration" id="reader-duration"></span>
+                        </div>
+                    </header>
+                    <div class="reader-body" id="reader-body"></div>
+                </article>
+            </main>
+
+            <!-- RIGHT: PROFILE / STREAK / ACTIVITY -->
+            <aside class="page-right">
+                <div class="profile-card">
+                    <div class="profile-avatar">👤</div>
+                    <div class="profile-info">
+                        <h4>Shubham</h4>
+                        <p>CCNA Learner</p>
+                    </div>
+                    <span class="profile-level">Level 1</span>
+                </div>
+
+                <div class="streak-card">
+                    <div class="streak-head">
+                        <span class="streak-flame">🔥</span>
+                        <div class="streak-head-text">
+                            <h3 class="streak-days">0 Days Streak!</h3>
+                            <p>Keep learning every day</p>
+                        </div>
+                    </div>
+                    <div class="streak-week"></div>
+                </div>
+
+                <div class="activity-card">
+                    <div class="panel-head">
+                        <h3>Activity</h3>
+                    </div>
+                    <div class="activity-list"></div>
+                </div>
+            </aside>
+
+        </div>
+    </section>
+
+    <!-- ==================== LABS VIEW ==================== -->
+    <section id="view-labs" class="view">
+        <div class="page-layout">
+
+            <!-- LEFT: CCNA PATH SIDEBAR -->
+            <aside class="dash-sidebar">
+                <div class="sidebar-brand">
+                    <span class="sidebar-logo">🌐</span>
+                    <span class="sidebar-name">CCNA Path</span>
+                </div>
+                <nav class="sidebar-nav">
+                    <a href="#" class="side-link" data-side="dashboard">
+                        <span class="side-ico">🏠</span><span>Dashboard</span>
+                    </a>
+                    <a href="#" class="side-link" data-side="lab">
+                        <span class="side-ico">📚</span><span>Lab</span>
+                    </a>
+                    <a href="#" class="side-link" data-side="cli">
+                        <span class="side-ico">💻</span><span>CLI</span>
+                    </a>
+                    <a href="#" class="side-link" data-side="ccna">
+                        <span class="side-ico">📘</span><span>CCNA</span>
+                    </a>
+                    <a href="#" class="side-link" data-side="settings">
+                        <span class="side-ico">⚙️</span><span>Settings</span>
+                    </a>
+                    <a href="#" class="side-link" data-side="support">
+                        <span class="side-ico">💬</span><span>Support</span>
+                    </a>
+                </nav>
+                <div class="premium-card">
+                    <div class="premium-icon">⚡</div>
+                    <h4>Get Premium</h4>
+                    <p>Unlock every lab, PDF notes & the full learning path.</p>
+                    <button class="btn-premium">Upgrade Now</button>
+                </div>
+            </aside>
+
+            <!-- CENTER: HERO + SANDBOX TERMINAL (preserved) -->
+            <main class="page-main">
+                <div class="labs-hero">
+                    <div class="hero-badge">🧪 CLI Sandbox</div>
+                    <h1>Free-form <span class="grad">Network Lab</span></h1>
+                    <p>Explore the simulated Cisco IOS environment freely. No objectives, no grading — just experiment.</p>
+                </div>
+
+                <div class="labs-terminal-wrap">
+                    <div class="device-tabs" id="labs-device-tabs">
+                        <button class="dev-tab active" data-device="cli">CLI</button>
+                        <button class="dev-tab" data-device="pc-a">PC-A</button>
+                        <button class="dev-tab" data-device="pc-b">PC-B</button>
+                        <button class="dev-tab" data-device="sw1">SW1</button>
+                        <button class="dev-tab" data-device="sw2">SW2</button>
+                    </div>
+                    <div class="term-body" id="labs-term-body">
+                        <div class="term-output" id="labs-term-output"></div>
+                        <div class="term-input-line">
+                            <span class="term-prompt" id="labs-term-prompt">Switch></span>
+                            <input type="text" id="labs-term-input" class="term-input" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Type a command and press Enter...">
+                        </div>
+                    </div>
+                    <div class="term-footer">
+                        <span>Tab: Complete</span>
+                        <span>↑↓: History</span>
+                        <span>? : Help</span>
+                        <span>Ctrl+L: Clear</span>
+                    </div>
+                </div>
+            </main>
+
+            <!-- RIGHT: PROFILE / STREAK / ACTIVITY -->
+            <aside class="page-right">
+                <div class="profile-card">
+                    <div class="profile-avatar">👤</div>
+                    <div class="profile-info">
+                        <h4>Shubham</h4>
+                        <p>CCNA Learner</p>
+                    </div>
+                    <span class="profile-level">Level 1</span>
+                </div>
+
+                <div class="streak-card">
+                    <div class="streak-head">
+                        <span class="streak-flame">🔥</span>
+                        <div class="streak-head-text">
+                            <h3 class="streak-days">0 Days Streak!</h3>
+                            <p>Keep learning every day</p>
+                        </div>
+                    </div>
+                    <div class="streak-week"></div>
+                </div>
+
+                <div class="activity-card">
+                    <div class="panel-head">
+                        <h3>Activity</h3>
+                    </div>
+                    <div class="activity-list"></div>
+                </div>
+            </aside>
+
+        </div>
+    </section>
+
+    <!-- ==================== LESSON VIEW ==================== -->
+    <section id="view-lesson" class="view">
+        <div class="lesson-topbar">
+            <button class="btn btn-back" id="btn-back">← Lab</button>
+            <div class="lesson-topbar-info">
+                <span class="lesson-stage-badge" id="lesson-stage-badge">Stage 1</span>
+                <span class="lesson-title-text" id="lesson-title-text">Your First Switch Config</span>
+            </div>
+            <span class="lesson-progress" id="lesson-progress">0/3 objectives</span>
+            <button class="btn-next-lesson" id="btn-next-lesson" title="Go to the next lesson">
+                Next <span class="btn-next-icon">→</span>
+            </button>
+            <button class="btn-reset-lesson" id="btn-reset-lesson" title="Reset this lesson back to its starting state">
+                <span class="btn-reset-icon">↺</span> Reset Lesson
+            </button>
+        </div>
+
+        <div class="lesson-layout">
+            <!-- LEFT: Objectives -->
+            <aside class="obj-panel">
+                <div class="panel-head">
+                    <h3>Scenario</h3>
+                    <p id="lesson-scenario">Configure the switch hostname.</p>
+                </div>
+                <div class="panel-head">
+                    <h3>Objectives</h3>
+                    <span class="obj-count" id="obj-count">0/3</span>
+                </div>
+                <div class="obj-list" id="obj-list"></div>
+                <div class="panel-head">
+                    <h3>Concepts</h3>
+                </div>
+                <div class="concept-list" id="concept-list"></div>
+            </aside>
+
+            <!-- CENTER: Terminal -->
+            <section class="term-panel">
+                <div class="device-tabs" id="device-tabs">
+                    <button class="dev-tab active" data-device="sw1"> sw1</button>
+                    <button class="dev-tab" data-device="sw2">sw2</button>
+                    <button class="dev-tab" data-device="pc-a">pc1</button>
+                    <button class="dev-tab" data-device="pc-b">pc2</button>
+                </div>
+                <div class="term-body" id="term-body">
+                    <div class="term-output" id="term-output"></div>
+                    <div class="term-input-line">
+                        <span class="term-prompt" id="term-prompt">Switch></span>
+                        <input type="text" id="term-input" class="term-input" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Type a command and press Enter...">
+                    </div>
+                </div>
+                <div class="term-footer">
+                    <span>Tab: Complete</span>
+                    <span>↑↓: History</span>
+                    <span>? : Help</span>
+                    <span>Ctrl+L: Clear</span>
+                </div>
+            </section>
+
+            <!-- RIGHT: Topology -->
+            <aside class="topo-panel">
+                <div class="panel-head">
+                    <h3>Topology</h3>
+                    <span class="topo-count" id="topo-count">3 devices</span>
+                </div>
+                <div class="topo-svg" id="topo-svg"></div>
+                <div class="topo-table" id="topo-table"></div>
+            </aside>
+        </div>
+    </section>
+
+    <!-- ==================== PROFILE MODAL ==================== -->
+    <div id="profile-modal" class="modal-overlay">
+        <div class="modal profile-modal">
+            <button class="modal-close" id="profile-modal-close">✕</button>
+
+            <!-- LOGIN SCREEN (shown when not logged in) -->
+            <div id="login-screen" class="profile-screen">
+                <div class="login-brand">
+                    <span class="login-logo">🌐</span>
+                    <h2>Welcome to CCNA Path</h2>
+                    <p>Sign in to track your progress, save your labs, and unlock your full learning path.</p>
+                </div>
+                <div class="login-options">
+                    <button class="login-btn google-btn" id="btn-google-login">
+                        <span class="login-btn-icon">G</span>
+                        <span>Continue with Google (Demo)</span>
+                    </button>
+                    <div class="login-divider"><span>or</span></div>
+                    <button class="login-btn guest-btn" id="btn-guest-login">
+                        <span class="login-btn-icon">👤</span>
+                        <span>Continue as Guest</span>
+                    </button>
+                </div>
+                <p class="login-note">Demo mode — no real account required. Your progress is saved locally in your browser.</p>
+            </div>
+
+            <!-- PROFILE SCREEN (shown when logged in) -->
+            <div id="profile-screen" class="profile-screen" style="display:none">
+                <div class="profile-header">
+                    <div class="profile-dp" id="profile-dp">👤</div>
+                    <div class="profile-header-info">
+                        <h2 id="profile-name">Guest User</h2>
+                        <span class="profile-badge" id="profile-badge">Guest</span>
+                    </div>
+                </div>
+
+                <div class="profile-stats">
+                    <div class="profile-stat">
+                        <span class="stat-value" id="stat-lessons">0</span>
+                        <span class="stat-label">Labs Done</span>
+                    </div>
+                    <div class="profile-stat">
+                        <span class="stat-value" id="stat-level">1</span>
+                        <span class="stat-label">Level</span>
+                    </div>
+                    <div class="profile-stat">
+                        <span class="stat-value" id="stat-streak">0</span>
+                        <span class="stat-label">Day Streak</span>
+                    </div>
+                </div>
+
+                <div class="profile-details">
+                    <div class="profile-detail-row">
+                        <span class="detail-label">📧 Email</span>
+                        <span class="detail-value" id="profile-email">guest@ccnapath.local</span>
+                    </div>
+                    <div class="profile-detail-row">
+                        <span class="detail-label">🎂 Date of Birth</span>
+                        <span class="detail-value" id="profile-dob">—</span>
+                    </div>
+                    <div class="profile-detail-row">
+                        <span class="detail-label">📅 Joined</span>
+                        <span class="detail-value" id="profile-joined">—</span>
+                    </div>
+                    <div class="profile-detail-row">
+                        <span class="detail-label">💳 Subscription</span>
+                        <span class="detail-value" id="profile-subscription">Free</span>
+                    </div>
+                </div>
+
+                <div class="profile-actions">
+                    <button class="profile-action-btn" id="btn-upgrade">⚡ Upgrade to Premium</button>
+                    <button class="profile-action-btn danger" id="btn-logout">🚪 Logout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+    <div id="toast" class="toast"></div>
+
+    <script src="js/data.js"></script>
+    <script src="js/devices.js"></script>
+    <script src="js/cli.js"></script>
+    <script src="js/lab-cli.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

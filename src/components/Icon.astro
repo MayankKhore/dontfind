@@ -1,0 +1,126 @@
+---
+/**
+ * Icon.astro — the platform's inline SVG icon set.
+ *
+ * Why a component instead of emoji: emoji render differently on every
+ * OS, cannot inherit colour, and read poorly at small sizes. A single
+ * stroke-based set (24×24 grid, currentColor, 1.75 stroke) keeps the
+ * thousands of generated pages visually identical everywhere.
+ *
+ * Props:
+ *   name   {string}  icon key (see ICONS below)
+ *   size   {number}  px size, default 18
+ *   stroke {number}  stroke width, default 1.75
+ *   label  {string}  set when the icon is the only label of a control
+ *   class  {string}
+ */
+const { name, size = 18, stroke = 1.75, label, class: className = '', ...rest } = Astro.props;
+
+/** Path data for every icon, drawn on a 24×24 grid. */
+const ICONS = {
+  home: '<path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9.6V20a1 1 0 0 0 1 1H10v-6h4v6h3.5a1 1 0 0 0 1-1V9.6"/>',
+  route:
+    '<circle cx="6" cy="18" r="2.2"/><circle cx="18" cy="6" r="2.2"/><path d="M6 15.8V9.4A3.4 3.4 0 0 1 9.4 6H14"/>',
+  book: '<path d="M4 4.5h6.5a3 3 0 0 1 3 3V20a2.5 2.5 0 0 0-2.5-2.5H4Z"/><path d="M20 4.5h-6.5a3 3 0 0 1-3 3"/>',
+  'book-open':
+    '<path d="M12 6.6C10.4 5.2 8.4 4.5 6 4.5H3v13h3c2.4 0 4.4.7 6 2.1"/><path d="M12 6.6c1.6-1.3 3.6-2 6-2h3v13h-3c-2.4 0-4.4.7-6 2.1"/><path d="M12 6.6v13"/>',
+  flask:
+    '<path d="M9.5 3h5"/><path d="M10.5 3v5.4L5.3 18a2 2 0 0 0 1.8 3h9.8a2 2 0 0 0 1.8-3L13.5 8.4V3"/><path d="M7.6 14.5h8.8"/>',
+  'help-circle':
+    '<circle cx="12" cy="12" r="9"/><path d="M9.3 9.2a2.9 2.9 0 1 1 4.1 2.6c-.9.5-1.4 1.1-1.4 2.1"/><path d="M12 17.4h.01"/>',
+  sliders:
+    '<path d="M4 6.5h8M17.5 6.5H20M4 12h4.5M14 12h6M4 17.5h8M17.5 17.5H20"/><circle cx="14.5" cy="6.5" r="2.3"/><circle cx="11" cy="12" r="2.3"/><circle cx="14.5" cy="17.5" r="2.3"/>',
+  mic: '<rect x="9" y="2.5" width="6" height="11" rx="3"/><path d="M5.6 11a6.4 6.4 0 0 0 12.8 0"/><path d="M12 17.4V21M8.6 21h6.8"/>',
+  'alert-triangle':
+    '<path d="M10.3 4.4 2.7 17.5A2 2 0 0 0 4.4 20.5h15.2a2 2 0 0 0 1.7-3L13.7 4.4a2 2 0 0 0-3.4 0Z"/><path d="M12 9.6v4"/><path d="M12 17h.01"/>',
+  'file-text':
+    '<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8Z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/>',
+  terminal:
+    '<rect x="2.5" y="4" width="19" height="16" rx="2.5"/><path d="m7 9.5 2.6 2.5L7 14.5"/><path d="M12.6 15h4.4"/>',
+  search: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/>',
+  sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6"/>',
+  moon: '<path d="M20.5 14.6A8.6 8.6 0 0 1 9.4 3.5a8.6 8.6 0 1 0 11.1 11.1Z"/>',
+  menu: '<path d="M3.5 6.5h17M3.5 12h17M3.5 17.5h17"/>',
+  x: '<path d="m6 6 12 12M18 6 6 18"/>',
+  plus: '<path d="M12 5v14M5 12h14"/>',
+  minus: '<path d="M5 12h14"/>',
+  'chevron-down': '<path d="m6 9.5 6 6 6-6"/>',
+  'chevron-right': '<path d="m9.5 6 6 6-6 6"/>',
+  'chevron-left': '<path d="m14.5 6-6 6 6 6"/>',
+  'chevron-up': '<path d="m6 14.5 6-6 6 6"/>',
+  'arrow-right': '<path d="M4 12h15"/><path d="m13 6 6 6-6 6"/>',
+  'arrow-left': '<path d="M20 12H5"/><path d="m11 6-6 6 6 6"/>',
+  'arrow-up-right': '<path d="M7 17 17 7"/><path d="M8 7h9v9"/>',
+  external:
+    '<path d="M14 4h6v6"/><path d="M20 4 11.5 12.5"/><path d="M18 14.5V18a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h3.5"/>',
+  check: '<path d="m4.5 12.5 5 5 10-11"/>',
+  'check-circle': '<circle cx="12" cy="12" r="9"/><path d="m8 12.4 2.8 2.8L16.2 9.6"/>',
+  info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v5.2"/><path d="M12 7.7h.01"/>',
+  'alert-circle': '<circle cx="12" cy="12" r="9"/><path d="M12 7.6v5.2"/><path d="M12 16.3h.01"/>',
+  sparkles:
+    '<path d="M11.5 3l1.7 4.6 4.6 1.7-4.6 1.7-1.7 4.6-1.7-4.6L5.2 9.3l4.6-1.7L11.5 3Z"/><path d="M18.2 15.4l.8 2.1 2.1.8-2.1.8-.8 2.1-.8-2.1-2.1-.8 2.1-.8.8-2.1Z"/>',
+  trophy:
+    '<path d="M8 3.5h8V9a4 4 0 0 1-8 0V3.5Z"/><path d="M8 5H5.6A2.6 2.6 0 0 0 8 10"/><path d="M16 5h2.4A2.6 2.6 0 0 1 16 10"/><path d="M12 13v3.5"/><path d="M9 20.5h6"/><path d="M10.3 16.5h3.4l.6 4H9.7l.6-4Z"/>',
+  user: '<circle cx="12" cy="8" r="3.6"/><path d="M4.8 20.2a7.2 7.2 0 0 1 14.4 0"/>',
+  gauge: '<path d="M3.6 18.4a9.2 9.2 0 1 1 16.8 0"/><path d="m12 14.2 3.6-3.6"/><circle cx="12" cy="14.2" r="1.7"/>',
+  clock: '<circle cx="12" cy="12" r="9"/><path d="M12 6.8V12.4l3.6 2.1"/>',
+  layers:
+    '<path d="m12 3 8.6 4.5L12 12 3.4 7.5 12 3Z"/><path d="m4.4 12 7.6 4 7.6-4"/><path d="m4.4 16.5 7.6 4 7.6-4"/>',
+  target:
+    '<circle cx="12" cy="12" r="8.6"/><circle cx="12" cy="12" r="4.6"/><circle cx="12" cy="12" r="1.1"/>',
+  flame:
+    '<path d="M12 3c2.9 3.3 5 6 5 9a5 5 0 0 1-10 0c0-1.3.4-2.5 1.1-3.5"/><path d="M12 21a6.2 6.2 0 0 0 6.2-6.2c0-2.6-1.6-4.9-4.2-7.6"/>',
+  award: '<circle cx="12" cy="8.8" r="5.6"/><path d="m8.4 13.3-1 7.4L12 18.3l4.6 2.4-1-7.4"/>',
+  'trending-up': '<path d="m3.6 16.6 5.6-5.6 4 4 7.2-7.2"/><path d="M14.6 7.8h5.8v5.8"/>',
+  copy: '<rect x="9" y="9" width="11.5" height="11.5" rx="2.2"/><path d="M15.2 5.6A2.6 2.6 0 0 0 12.6 3H6.1A2.6 2.6 0 0 0 3.5 5.6V12a2.6 2.6 0 0 0 2.6 2.6"/>',
+  play: '<path d="M8 5.4v13.2L18.4 12 8 5.4Z"/>',
+  filter: '<path d="M3.6 5.5h16.8l-6.6 8.1v5.2l-3.6 1.8v-7L3.6 5.5Z"/>',
+  grid: '<rect x="3.5" y="3.5" width="7" height="7" rx="1.6"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.6"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.6"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.6"/>',
+  list: '<path d="M8.5 6.5h11.5M8.5 12h11.5M8.5 17.5h11.5"/><path d="M4.2 6.5h.01M4.2 12h.01M4.2 17.5h.01"/>',
+  network:
+    '<rect x="9" y="2.5" width="6" height="6" rx="1.6"/><rect x="2.5" y="15.5" width="6" height="6" rx="1.6"/><rect x="15.5" y="15.5" width="6" height="6" rx="1.6"/><path d="M12 8.6v3.4M5.5 15.5V12h13v3.5"/>',
+  shield: '<path d="M12 3.2 19.5 6v6c0 4-3 7.3-7.5 9-4.5-1.7-7.5-5-7.5-9V6L12 3.2Z"/>',
+  zap: '<path d="M13.2 2.6 4.6 13.4H11l-.2 8 8.6-10.8H13l.2-8Z"/>',
+  calendar:
+    '<rect x="3.5" y="5" width="17" height="15.5" rx="2.2"/><path d="M3.5 10h17"/><path d="M8 2.8v4.2M16 2.8v4.2"/>',
+  bookmark: '<path d="M6.5 3.5h11a1 1 0 0 1 1 1V21L12 16.9 5.5 21V4.5a1 1 0 0 1 1-1Z"/>',
+  lightbulb:
+    '<path d="M9.2 18h5.6"/><path d="M10.2 21h3.6"/><path d="M12 3a6 6 0 0 0-3.6 10.8c.5.3.8.8.8 1.3V18h5.6v-2.9c0-.5.3-1 .8-1.3A6 6 0 0 0 12 3Z"/>',
+  cpu: '<rect x="6.5" y="6.5" width="11" height="11" rx="2.2"/><path d="M10 3v3.5M14 3v3.5M10 17.5V21M14 17.5V21M3 10h3.5M3 14h3.5M17.5 10H21M17.5 14H21"/>',
+  'bar-chart':
+    '<path d="M3.5 20.5h17"/><path d="M7.2 20.5V13"/><path d="M12 20.5V5.6"/><path d="M16.8 20.5v-5.4"/>',
+  refresh:
+    '<path d="M20 11.2A8 8 0 0 0 6.4 6.3L4 8.6"/><path d="M4 4.6v4h4"/><path d="M4 12.8a8 8 0 0 0 13.6 4.9L20 15.4"/><path d="M20 19.4v-4h-4"/>',
+  lock: '<rect x="4.5" y="10.4" width="15" height="10.6" rx="2.2"/><path d="M8 10.4V7.6a4 4 0 0 1 8 0v2.8"/>',
+  swap: '<path d="M7.5 4 4 7.5 7.5 11"/><path d="M4 7.5h12"/><path d="m16.5 20 3.5-3.5L16.5 13"/><path d="M20 16.5H8"/>',
+  calculator:
+    '<rect x="4.5" y="2.5" width="15" height="19" rx="2.2"/><path d="M8.2 7.2h7.6"/><path d="M8.6 12h.01M12 12h.01M15.4 12h.01M8.6 16h.01M12 16h.01M15.4 16h.01"/>',
+  star: '<path d="m12 3.4 2.7 5.6 6.1.9-4.4 4.3 1 6.2-5.4-2.9-5.4 2.9 1-6.2-4.4-4.3 6.1-.9L12 3.4Z"/>',
+  mail: '<rect x="3" y="5.5" width="18" height="13" rx="2.2"/><path d="m3.6 7 8.4 5.9L20.4 7"/>',
+  bell: '<path d="M6.2 9.4a5.8 5.8 0 0 1 11.6 0c0 4.8 2 5.9 2 5.9H4.2s2-1.1 2-5.9Z"/><path d="M10 19.2a2.1 2.1 0 0 0 4 0"/>',
+  code: '<path d="m8.2 6.5-5.4 5.5 5.4 5.5"/><path d="m15.8 6.5 5.4 5.5-5.4 5.5"/>',
+  users:
+    '<circle cx="9.2" cy="8.2" r="3.4"/><path d="M2.8 20a6.4 6.4 0 0 1 12.8 0"/><path d="M16 5.2a3.4 3.4 0 0 1 0 6.6"/><path d="M17.6 14.3A6.4 6.4 0 0 1 21.2 20"/>',
+  circle: '<circle cx="12" cy="12" r="9"/>',
+};
+
+const inner = ICONS[name] || ICONS.circle;
+---
+
+<svg
+  class={['icon', className].filter(Boolean).join(' ')}
+  width={size}
+  height={size}
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width={stroke}
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  role={label ? 'img' : undefined}
+  aria-label={label}
+  aria-hidden={label ? undefined : 'true'}
+  focusable="false"
+  set:html={inner}
+  {...rest}
+/>

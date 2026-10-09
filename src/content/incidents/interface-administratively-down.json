@@ -1,0 +1,24 @@
+{
+  "title": "Interface is administratively down",
+  "description": "A switchport shows 'administratively down' and no traffic passes.",
+  "symptom": "A connected host has no network connectivity. The switch port status is 'administratively down' even though a cable is plugged in.",
+  "diagnosis": [
+    "Run 'show interfaces status' to find the port and confirm the state.",
+    "Run 'show interfaces fa0/5' to see the exact line and protocol status.",
+    "Check the running configuration for a 'shutdown' command on the interface.",
+    "Verify the correct VLAN is assigned and that the cable is good."
+  ],
+  "resolution": "The interface was manually shut down. Enter interface configuration mode and apply 'no shutdown'. Confirm the status changes to 'connected' / 'up'.",
+  "commands": [
+    "show interfaces status",
+    "show interfaces fa0/5",
+    "show running-config interface fa0/5",
+    "configure terminal",
+    "interface fa0/5",
+    "no shutdown"
+  ],
+  "category": "Interface Configuration",
+  "difficulty": "beginner",
+  "status": "published",
+  "tags": ["interface", "shutdown", "troubleshooting"]
+}

@@ -1,0 +1,106 @@
+{
+  "title": "Types of Ethernet Cabling",
+  "description": "Which wire connects what, and how",
+  "tagline": "Which wire connects what, and how",
+  "duration": "10 min",
+  "stage": 8,
+  "stageName": "Physical Layer",
+  "category": "Physical Layer",
+  "difficulty": "advanced",
+  "status": "published",
+  "icon": "🔌",
+  "order": 124,
+  "sections": [
+    {
+      "icon": "🔌",
+      "title": "The Cable Families",
+      "table": {
+        "head": [
+          "Cable",
+          "Medium",
+          "Typical job"
+        ],
+        "rows": [
+          [
+            "UTP (Cat5e/6/6a)",
+            "Copper pairs, RJ-45",
+            "PCs to switches, up to 100 m"
+          ],
+          [
+            "Fiber optic",
+            "Light through glass",
+            "Buildings, backbones, long runs"
+          ],
+          [
+            "Console (rollover)",
+            "Copper, RJ-45/USB",
+            "Direct device management"
+          ],
+          [
+            "Coaxial",
+            "Single copper core",
+            "Old LANs, ISP/cable TV"
+          ]
+        ]
+      }
+    },
+    {
+      "icon": "🔀",
+      "title": "Straight-Through vs Crossover",
+      "table": {
+        "head": [
+          "You connect...",
+          "Use"
+        ],
+        "rows": [
+          [
+            "Different types (PC→switch, switch→router)",
+            "Straight-through"
+          ],
+          [
+            "Same type (switch→switch, PC→PC, router→router)",
+            "Crossover"
+          ]
+        ]
+      },
+      "code": "Straight : T568B | T568B\nCrossover: T568A | T568B"
+    },
+    {
+      "icon": "✨",
+      "title": "UTP Categories Recap",
+      "table": {
+        "head": [
+          "Cat",
+          "Speed",
+          "Note"
+        ],
+        "rows": [
+          [
+            "Cat5e",
+            "1 Gbps",
+            "Cheapest gigabit option"
+          ],
+          [
+            "Cat6",
+            "10 Gbps up to ~55 m",
+            "Most common new install"
+          ],
+          [
+            "Cat6a",
+            "10 Gbps at 100 m",
+            "Future-proof offices"
+          ]
+        ]
+      }
+    },
+    {
+      "icon": "💡",
+      "title": "Modern Reality",
+      "body": "Auto-MDIX lets modern ports detect the cable type and fix wiring internally — crossover cables are nearly extinct. But CCNA still tests the classic rule!",
+      "tip": "💡 Exam tip: fiber for EMI-heavy areas or distances beyond 100 m; UTP otherwise."
+    }
+  ],
+  "tags": [],
+  "related": [],
+  "resources": []
+}

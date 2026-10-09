@@ -1,0 +1,107 @@
+{
+  "title": "Types of IP Address",
+  "description": "Public vs private, static vs dynamic, special ones",
+  "tagline": "Public vs private, static vs dynamic, special ones",
+  "duration": "9 min",
+  "stage": 4,
+  "stageName": "Network Layer",
+  "category": "Network Layer",
+  "difficulty": "beginner",
+  "status": "published",
+  "icon": "🗂️",
+  "order": 114,
+  "sections": [
+    {
+      "icon": "🌍",
+      "title": "Public vs Private",
+      "table": {
+        "head": [
+          "",
+          "Private 🔒",
+          "Public 🌍"
+        ],
+        "rows": [
+          [
+            "Where used",
+            "Inside home/office LANs",
+            "On the Internet"
+          ],
+          [
+            "Unique?",
+            "Only inside your LAN",
+            "Worldwide unique"
+          ],
+          [
+            "Routed online?",
+            "No — routers drop it",
+            "Yes"
+          ],
+          [
+            "Who gives it",
+            "Your own router (DHCP)",
+            "Your ISP"
+          ],
+          [
+            "Cost",
+            "Free",
+            "Usually paid"
+          ]
+        ]
+      }
+    },
+    {
+      "icon": "⚙️",
+      "title": "Static vs Dynamic",
+      "points": [
+        "Static — typed in by hand, never changes. Best for servers, printers, routers.",
+        "Dynamic — handed out automatically by DHCP. Best for laptops and phones."
+      ]
+    },
+    {
+      "icon": "🚫",
+      "title": "Special Addresses You Must Know",
+      "table": {
+        "head": [
+          "Address",
+          "Meaning"
+        ],
+        "rows": [
+          [
+            "127.0.0.1",
+            "Loopback — test your OWN PC (\"localhost\")"
+          ],
+          [
+            "169.254.x.x",
+            "APIPA — DHCP failed, PC picked its own IP"
+          ],
+          [
+            "x.x.x.0",
+            "Network address — names the whole subnet"
+          ],
+          [
+            "x.x.x.255",
+            "Broadcast address of that subnet"
+          ],
+          [
+            "255.255.255.255",
+            "Broadcast to everyone here and now"
+          ]
+        ]
+      }
+    },
+    {
+      "icon": "🏠",
+      "title": "The 3 Private Ranges (Memorize!)",
+      "code": "A: 10.0.0.0    - 10.255.255.255\nB: 172.16.0.0  - 172.31.255.255\nC: 192.168.0.0 - 192.168.255.255"
+    },
+    {
+      "icon": "🔍",
+      "title": "Quick Self-Check",
+      "body": "See 192.168.1.50? Private + probably DHCP. See 8.8.8.8? Public (Google DNS). See 169.254.x.x on a PC? Its DHCP request failed — classic troubleshooting answer!",
+      "tip": "💡 Exam tip: APIPA (169.254.x.x) in a scenario almost always means \"DHCP server unreachable\"."
+    }
+  ],
+  "tags": [],
+  "related": [],
+  "resources": []
+}

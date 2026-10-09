@@ -1,0 +1,104 @@
+{
+  "title": "Inter-VLAN Routing (Router on a Stick)",
+  "description": "Understand how subinterfaces route between VLANs.",
+  "scenario": "Understand how subinterfaces route between VLANs.",
+  "duration": "9 min",
+  "stage": 8,
+  "stageName": "Layer 3 Switching",
+  "category": "Layer 3 Switching",
+  "difficulty": "advanced",
+  "status": "published",
+  "icon": "🧪",
+  "order": 26,
+  "allowedCommands": [
+    "enable",
+    "show vlan brief",
+    "show interfaces trunk",
+    "show ip interface brief",
+    "exit",
+    "end",
+    "help",
+    "?"
+  ],
+  "objectives": [
+    {
+      "text": "View VLANs",
+      "cmd": "show vlan brief"
+    },
+    {
+      "text": "View trunk status",
+      "cmd": "show interfaces trunk"
+    }
+  ],
+  "concepts": [
+    {
+      "title": "Inter-VLAN Routing",
+      "body": "Devices in different VLANs cannot communicate without a Layer 3 device. A router with subinterfaces can route between them.",
+      "code": "VLAN 10 → 192.168.10.0/24\nVLAN 20 → 192.168.20.0/24\nRouter routes between them"
+    },
+    {
+      "title": "Router on a Stick",
+      "body": "One physical router link carries multiple VLANs using subinterfaces with 802.1Q encapsulation.",
+      "code": "Gi0/0.10 → VLAN 10\nGi0/0.20 → VLAN 20\nencapsulation dot1Q 10"
+    },
+    {
+      "title": "Layer 3 Switch Alternative",
+      "body": "Layer 3 switches use SVIs (interface vlan) for routing — faster than router-on-a-stick.",
+      "code": "SW1(config)# interface vlan 10\nSW1(config-if)# ip address 192.168.10.1 255.255.255.0"
+    }
+  ],
+  "topology": {
+    "devices": [
+      {
+        "id": "pc-a",
+        "label": "PC-A",
+        "type": "pc",
+        "x": 60,
+        "y": 75
+      },
+      {
+        "id": "sw1",
+        "label": "SW1",
+        "type": "switch",
+        "x": 210,
+        "y": 75
+      },
+      {
+        "id": "pc-b",
+        "label": "PC-B",
+        "type": "pc",
+        "x": 360,
+        "y": 75
+      }
+    ],
+    "links": [
+      {
+        "from": "pc-a",
+        "to": "sw1",
+        "label": "Fa0/1"
+      },
+      {
+        "from": "pc-b",
+        "to": "sw1",
+        "label": "Fa0/2"
+      }
+    ],
+    "table": [
+      {
+        "port": "Fa0/1",
+        "mode": "access",
+        "vlan": "1",
+        "peer": "PC-A"
+      },
+      {
+        "port": "Fa0/2",
+        "mode": "access",
+        "vlan": "1",
+        "peer": "PC-B"
+      }
+    ]
+  },
+  "tags": [],
+  "related": [],
+  "resources": []
+}

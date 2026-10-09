@@ -1,0 +1,104 @@
+{
+  "title": "Subnet Mask",
+  "description": "Understand subnet masks, CIDR notation, and how they define network boundaries.",
+  "scenario": "Understand subnet masks, CIDR notation, and how they define network boundaries.",
+  "duration": "7 min",
+  "stage": 2,
+  "stageName": "Learn Foundation",
+  "category": "Learn Foundation",
+  "difficulty": "beginner",
+  "status": "published",
+  "icon": "🧪",
+  "order": 52,
+  "allowedCommands": [
+    "enable",
+    "show ip interface",
+    "show ip interface brief",
+    "show running-config",
+    "exit",
+    "end",
+    "help",
+    "?"
+  ],
+  "objectives": [
+    {
+      "text": "View IP interface",
+      "cmd": "show ip interface"
+    },
+    {
+      "text": "View interface brief",
+      "cmd": "show ip interface brief"
+    }
+  ],
+  "concepts": [
+    {
+      "title": "Subnet Mask",
+      "body": "A subnet mask determines which part of an IP is the network and which is the host. 255.255.255.0 = /24.",
+      "code": "IP: 192.168.1.10\nMask: 255.255.255.0 (/24)\nNetwork: 192.168.1.0\nHost: 192.168.1.10"
+    },
+    {
+      "title": "CIDR Notation",
+      "body": "CIDR (Classless Inter-Domain Routing) uses /N to indicate the number of network bits. /24 = 255.255.255.0.",
+      "code": "/8  = 255.0.0.0\n/16 = 255.255.0.0\n/24 = 255.255.255.0\n/30 = 255.255.255.252"
+    },
+    {
+      "title": "Subnetting",
+      "body": "Subnetting divides a large network into smaller subnets. Each subnet has a network address, hosts, and a broadcast address.",
+      "code": "192.168.1.0/24 → 256 addresses (254 hosts)\n192.168.1.0/25 → 128 addresses (126 hosts)"
+    }
+  ],
+  "topology": {
+    "devices": [
+      {
+        "id": "pc-a",
+        "label": "PC-A",
+        "type": "pc",
+        "x": 60,
+        "y": 75
+      },
+      {
+        "id": "sw1",
+        "label": "SW1",
+        "type": "switch",
+        "x": 210,
+        "y": 75
+      },
+      {
+        "id": "pc-b",
+        "label": "PC-B",
+        "type": "pc",
+        "x": 360,
+        "y": 75
+      }
+    ],
+    "links": [
+      {
+        "from": "pc-a",
+        "to": "sw1",
+        "label": "Fa0/1"
+      },
+      {
+        "from": "pc-b",
+        "to": "sw1",
+        "label": "Fa0/2"
+      }
+    ],
+    "table": [
+      {
+        "port": "Fa0/1",
+        "mode": "access",
+        "vlan": "1",
+        "peer": "PC-A"
+      },
+      {
+        "port": "Fa0/2",
+        "mode": "access",
+        "vlan": "1",
+        "peer": "PC-B"
+      }
+    ]
+  },
+  "tags": [],
+  "related": [],
+  "resources": []
+}

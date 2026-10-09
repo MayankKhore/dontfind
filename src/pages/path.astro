@@ -1,0 +1,143 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Icon from '../components/Icon.astro';
+import Badge from '../components/Badge.astro';
+import Button from '../components/Button.astro';
+import Stat from '../components/Stat.astro';
+import { buildCurriculum, curriculumIsland } from '../lib/curriculum.js';
+
+const curriculum = await buildCurriculum();
+const { stages, totals } = curriculum;
+
+const breadcrumbs = [
+  { href: '/', label: 'Home' },
+  { label: 'Learning path' },
+];
+
+const TYPE_ICON = { lab: 'terminal', lesson: 'book', quiz: 'help-circle' };
+const TYPE_LABEL = { lab: 'Lab', lesson: 'Lesson', quiz: 'Quiz' };
+
+/** Icon shown per stage, derived from the stage name. */
+function stageIcon(name) {
+  const n = name.toLowerCase();
+  if (n.includes('found') || n.includes('basic') || n.includes('network')) return 'network';
+  if (n.includes('vlan') || n.includes('switch')) return 'layers';
+  if (n.includes('subnet') || n.includes('address')) return 'calculator';
+  if (n.includes('secur')) return 'shield';
+  if (n.includes('wireless')) return 'zap';
+  if (n.includes('practice') || n.includes('test')) return 'target';
+  return 'route';
+}
+
+// This page already renders every unit, so the island only needs the
+// per-stage ids for the progress bars — no duplicated unit objects.
+const island = curriculumIsland(curriculum, { includeUnits: false });
+---
+
+<BaseLayout
+  title="CCNA Learning Path"
+  description="A staged route through CCNA Path: which lessons to read, which labs to practise and which quizzes to pass, in the order that actually builds understanding."
+  path="/path/"
+  breadcrumbs={breadcrumbs}
+  pageType="page"
+>
+  <div class="container container--wide" data-dashboard>
+    <script type="application/json" data-curriculum set:html={island} is:inline />
+
+    <PageHeader
+      kicker={`${stages.length} stages · ${totals.all} items`}
+      icon="route"
+      title="The CCNA learning path"
+      lead="Work top to bottom. Each stage assumes the one before it, and mixing them up is the most common reason people plateau."
+    >
+      <div slot="actions" class="cluster">
+        <Button href="/dashboard/" variant="primary">
+          <Icon name="gauge" size={16} />
+          <span>See my progress</span>
+        </Button>
+        <Button href="/lessons/">
+          <Icon name="book" size={16} />
+          <span>Browse all lessons</span>
+        </Button>
+      </div>
+    </PageHeader>
+
+    <section class="grid grid--stats u-mt-5" aria-label="Path summary">
+      <Stat label="Stages" value={String(stages.length)} icon="layers" />
+      <Stat label="Lessons" value={String(totals.lesson)} icon="book" />
+      <Stat label="Labs" value={String(totals.lab)} icon="flask" />
+      <Stat label="Quizzes" value={String(totals.quiz)} icon="help-circle" />
+      <Stat label="Estimated time" value="~40 h" icon="clock" hint="across all stages" />
+    </section>
+
+    <div class="path u-mt-6">
+      {stages.map((stage) => (
+        <section class="stage" data-stage-row={stage.number} data-complete="false" aria-labelledby={`stage-${stage.number}`}>
+          <div class="stage__head">
+            <p class="stage__num">
+              <Icon name={stageIcon(stage.name)} size={13} />
+              <span>Stage {stage.number}</span>
+            </p>
+            <h2 class="stage__title" id={`stage-${stage.number}`}>{stage.name}</h2>
+            <p class="stage__count">
+              <span data-stage-count>0 / {stage.total}</span> complete
+            </p>
+            <div class="progress progress--sm" style="margin-top:var(--sp-3)">
+              <span class="progress__fill" data-stage-fill style="width:0%"></span>
+            </div>
+          </div>
+
+          <ol class="stage__items">
+            {stage.units.map((unit) => (
+              <li>
+                <a class="card card--row card--link" href={unit.href}>
+                  <span class="card__icon" aria-hidden="true">
+                    <Icon name={TYPE_ICON[unit.type] || 'file-text'} size={17} />
+                  </span>
+                  <span style="min-width:0">
+                    <span class="card__title" style="display:block">{unit.title}</span>
+                    <span class="u-dim" style="font-size:var(--fs-xs)">
+                      {TYPE_LABEL[unit.type] || unit.type}
+                      {unit.duration ? ` · ${unit.duration}` : ''}
+                      {unit.category ? ` · ${unit.category}` : ''}
+                    </span>
+                  </span>
+                  <span class="cluster" style="margin-left:auto;flex:none">
+                    <Badge variant={unit.difficulty} label={unit.difficulty} />
+                    <Icon name="arrow-right" size={15} />
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ol>
+        </section>
+      ))}
+    </div>
+
+    <aside class="cta">
+      <div class="cta__inner">
+        <div class="cta__copy">
+          <h2 class="cta__title">
+            <Icon name="target" size={20} />
+            <span>Not sure where to begin?</span>
+          </h2>
+          <p class="cta__text">
+            If you are starting from zero, begin with Stage 1 and do not skip ahead — the
+            later labs assume the earlier vocabulary.
+          </p>
+        </div>
+        <div class="cta__actions">
+          <Button href="/lessons/osi-model-and-tcp-ip-suite/" variant="primary" size="lg">
+            <span>Start stage one</span>
+            <Icon name="arrow-right" size={17} />
+          </Button>
+        </div>
+      </div>
+    </aside>
+  </div>
+</BaseLayout>
+
+<script>
+  import '../scripts/dashboard.js';
+</script>

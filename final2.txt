@@ -1,0 +1,6 @@
+﻿lab has data-lab-complete: False
+lab has data-lab-id: True
+lab has btn--block: False
+lesson has data-lesson-read: False
+lesson btn--block: False
+lesson sidebar count: 4

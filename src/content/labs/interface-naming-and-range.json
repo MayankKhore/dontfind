@@ -1,0 +1,110 @@
+{
+  "title": "Interface Naming & Range",
+  "description": "Learn how Cisco names interfaces and how to configure multiple ports at once with interface range.",
+  "scenario": "Learn how Cisco names interfaces and how to configure multiple ports at once with interface range.",
+  "duration": "7 min",
+  "stage": 1,
+  "stageName": "Meet the CLI",
+  "category": "Meet the CLI",
+  "difficulty": "beginner",
+  "status": "published",
+  "icon": "🧪",
+  "order": 41,
+  "allowedCommands": [
+    "enable",
+    "configure terminal",
+    "interface",
+    "interface range",
+    "show interfaces status",
+    "show interfaces",
+    "exit",
+    "end",
+    "help",
+    "?"
+  ],
+  "objectives": [
+    {
+      "text": "Enter interface config",
+      "cmd": "interface FastEthernet0/1"
+    },
+    {
+      "text": "Configure interface range",
+      "cmd": "interface range FastEthernet0/1 - 4"
+    },
+    {
+      "text": "Verify interfaces",
+      "cmd": "show interfaces status"
+    }
+  ],
+  "concepts": [
+    {
+      "title": "Interface Naming",
+      "body": "Cisco interfaces are named by type, module, and port. Examples: FastEthernet0/1, GigabitEthernet0/1, VLAN1.",
+      "code": "FastEthernet0/1 → Fa0/1\nGigabitEthernet0/1 → Gi0/1\nVLAN 1 → Vlan1"
+    },
+    {
+      "title": "Interface Range",
+      "body": "Use \"interface range\" to configure multiple ports at once. Saves time on access ports or shutdown commands.",
+      "code": "SW1(config)# interface range FastEthernet0/1 - 4\nSW1(config-if-range)# switchport mode access"
+    },
+    {
+      "title": "Verifying Interfaces",
+      "body": "\"show interfaces status\" gives a quick overview. \"show interfaces\" gives detailed info per port.",
+      "code": "SW1# show interfaces status\nPort   Status   Vlan   Duplex  Speed\nFa0/1  connected 1     a-full  a-100"
+    }
+  ],
+  "topology": {
+    "devices": [
+      {
+        "id": "pc-a",
+        "label": "PC-A",
+        "type": "pc",
+        "x": 60,
+        "y": 75
+      },
+      {
+        "id": "sw1",
+        "label": "SW1",
+        "type": "switch",
+        "x": 210,
+        "y": 75
+      },
+      {
+        "id": "pc-b",
+        "label": "PC-B",
+        "type": "pc",
+        "x": 360,
+        "y": 75
+      }
+    ],
+    "links": [
+      {
+        "from": "pc-a",
+        "to": "sw1",
+        "label": "Fa0/1"
+      },
+      {
+        "from": "pc-b",
+        "to": "sw1",
+        "label": "Fa0/2"
+      }
+    ],
+    "table": [
+      {
+        "port": "Fa0/1",
+        "mode": "access",
+        "vlan": "1",
+        "peer": "PC-A"
+      },
+      {
+        "port": "Fa0/2",
+        "mode": "access",
+        "vlan": "1",
+        "peer": "PC-B"
+      }
+    ]
+  },
+  "tags": [],
+  "related": [],
+  "resources": []
+}

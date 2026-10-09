@@ -1,0 +1,85 @@
+{
+  "title": "LAN — Local Area Network",
+  "description": "Your local, fast, private network",
+  "tagline": "Your local, fast, private network",
+  "duration": "7 min",
+  "stage": 1,
+  "stageName": "Network Intro",
+  "category": "Network Intro",
+  "difficulty": "beginner",
+  "status": "published",
+  "icon": "🏠",
+  "order": 102,
+  "sections": [
+    {
+      "icon": "🏠",
+      "title": "LAN in One Line",
+      "body": "A LAN is a network that lives inside ONE small place — your home, one office floor, or a school building. It is private (you own it), very fast, and everything is close together."
+    },
+    {
+      "icon": "🗺️",
+      "title": "What It Looks Like",
+      "body": "The switch connects your devices. The router is the exit door to the outside world:",
+      "code": "[PC] [PC] [Printer]\n   \\   |   /\n   [ Switch ]   <-- this whole thing = LAN\n        |\n    [ Router ] ---> outside world (WAN / Internet)"
+    },
+    {
+      "icon": "⚔️",
+      "title": "LAN vs WAN",
+      "body": "LAN = inside your walls. WAN = the long-distance link between LANs (usually rented from an internet provider).",
+      "table": {
+        "head": [
+          "Feature",
+          "LAN",
+          "WAN"
+        ],
+        "rows": [
+          [
+            "Area",
+            "One building / home",
+            "Cities, countries"
+          ],
+          [
+            "Speed",
+            "Very fast (1–10 Gbps)",
+            "Slower"
+          ],
+          [
+            "Who owns it",
+            "You do",
+            "Service provider"
+          ],
+          [
+            "Cost",
+            "Cheap",
+            "Expensive"
+          ],
+          [
+            "Example",
+            "Office network",
+            "The Internet"
+          ]
+        ]
+      }
+    },
+    {
+      "icon": "🔌",
+      "title": "What Lives Inside a LAN",
+      "points": [
+        "End devices — PCs, laptops, printers, IP phones, cameras.",
+        "Switch — plugs them all together.",
+        "Router — the way out to other networks.",
+        "Wi-Fi access point — same LAN, just without wires.",
+        "Optional firewall — a security guard at the door."
+      ]
+    },
+    {
+      "icon": "📦",
+      "title": "When One LAN Is Not Enough",
+      "body": "If 500 devices share one flat LAN, everyone hears every broadcast shout — it gets noisy and slow. Big companies cut the LAN into smaller virtual pieces called VLANs (you will meet them later in this course).",
+      "tip": "💡 Exam tip: LAN = small area + high speed + privately owned. If a question says \"campus network owned by the company\", it is a LAN."
+    }
+  ],
+  "tags": [],
+  "related": [],
+  "resources": []
+}

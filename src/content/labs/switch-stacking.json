@@ -1,0 +1,103 @@
+{
+  "title": "Switch Stacking",
+  "description": "Understand how switch stacking creates a single logical switch.",
+  "scenario": "Understand how switch stacking creates a single logical switch.",
+  "duration": "5 min",
+  "stage": 9,
+  "stageName": "Monitoring & Operations",
+  "category": "Monitoring & Operations",
+  "difficulty": "advanced",
+  "status": "published",
+  "icon": "🧪",
+  "order": 32,
+  "allowedCommands": [
+    "enable",
+    "show switch",
+    "show version",
+    "exit",
+    "end",
+    "help",
+    "?"
+  ],
+  "objectives": [
+    {
+      "text": "View stack members",
+      "cmd": "show switch"
+    },
+    {
+      "text": "View stack version",
+      "cmd": "show version"
+    }
+  ],
+  "concepts": [
+    {
+      "title": "Switch Stacking",
+      "body": "Stacking connects multiple switches with stack cables to act as one logical switch with a single management IP.",
+      "code": "SW1 + SW2 + SW3 → one logical switch"
+    },
+    {
+      "title": "Stack Members",
+      "body": "Each switch has a member number (1-9). The master manages the stack. Members are numbered by priority.",
+      "code": "SW1# show switch\nSwitch/Port  Role     Mac Address\n1           Master   00:1B:2F:3C:4D:5E\n2           Member   00:1B:2F:3C:4D:5F"
+    },
+    {
+      "title": "Benefits",
+      "body": "Single management point, shared config, high availability, and more ports.",
+      "code": "One IP to manage all\nShared configuration\nRedundant master"
+    }
+  ],
+  "topology": {
+    "devices": [
+      {
+        "id": "pc-a",
+        "label": "PC-A",
+        "type": "pc",
+        "x": 60,
+        "y": 75
+      },
+      {
+        "id": "sw1",
+        "label": "SW1",
+        "type": "switch",
+        "x": 210,
+        "y": 75
+      },
+      {
+        "id": "pc-b",
+        "label": "PC-B",
+        "type": "pc",
+        "x": 360,
+        "y": 75
+      }
+    ],
+    "links": [
+      {
+        "from": "pc-a",
+        "to": "sw1",
+        "label": "Fa0/1"
+      },
+      {
+        "from": "pc-b",
+        "to": "sw1",
+        "label": "Fa0/2"
+      }
+    ],
+    "table": [
+      {
+        "port": "Fa0/1",
+        "mode": "access",
+        "vlan": "1",
+        "peer": "PC-A"
+      },
+      {
+        "port": "Fa0/2",
+        "mode": "access",
+        "vlan": "1",
+        "peer": "PC-B"
+      }
+    ]
+  },
+  "tags": [],
+  "related": [],
+  "resources": []
+}

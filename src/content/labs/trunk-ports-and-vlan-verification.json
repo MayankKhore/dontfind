@@ -1,0 +1,111 @@
+{
+  "title": "Trunk Ports & VLAN Verification",
+  "description": "Configure a trunk port between switches and verify VLANs are carried correctly.",
+  "scenario": "Configure a trunk port between switches and verify VLANs are carried correctly.",
+  "duration": "10 min",
+  "stage": 3,
+  "stageName": "VLAN & Trunking",
+  "category": "VLAN & Trunking",
+  "difficulty": "beginner",
+  "status": "published",
+  "icon": "🧪",
+  "order": 10,
+  "allowedCommands": [
+    "enable",
+    "configure terminal",
+    "interface",
+    "switchport mode trunk",
+    "show interfaces trunk",
+    "show vlan brief",
+    "show interfaces status",
+    "exit",
+    "end",
+    "help",
+    "?"
+  ],
+  "objectives": [
+    {
+      "text": "Enter GigabitEthernet0/1 config",
+      "cmd": "interface GigabitEthernet0/1"
+    },
+    {
+      "text": "Set the port to trunk mode",
+      "cmd": "switchport mode trunk"
+    },
+    {
+      "text": "Verify the trunk",
+      "cmd": "show interfaces trunk"
+    }
+  ],
+  "concepts": [
+    {
+      "title": "Trunk Ports",
+      "body": "A trunk carries multiple VLANs between switches. It uses 802.1Q tagging so each frame knows its VLAN.",
+      "code": "SW1(config)# interface GigabitEthernet0/1\nSW1(config-if)# switchport mode trunk"
+    },
+    {
+      "title": "Access vs Trunk",
+      "body": "Access ports carry one VLAN (untagged). Trunk ports carry many VLANs (tagged with 802.1Q).",
+      "code": "Access: Fa0/1 → VLAN 20\nTrunk:  Gi0/1 → VLANs 1-4094"
+    },
+    {
+      "title": "Verifying Trunks",
+      "body": "\"show interfaces trunk\" shows trunk status, encapsulation, and which VLANs are allowed.",
+      "code": "SW1# show interfaces trunk\nPort   Mode  Encapsulation  Status\nGi0/1  on    802.1q         trunking"
+    }
+  ],
+  "topology": {
+    "devices": [
+      {
+        "id": "pc-a",
+        "label": "PC-A",
+        "type": "pc",
+        "x": 60,
+        "y": 75
+      },
+      {
+        "id": "sw1",
+        "label": "SW1",
+        "type": "switch",
+        "x": 210,
+        "y": 75
+      },
+      {
+        "id": "pc-b",
+        "label": "PC-B",
+        "type": "pc",
+        "x": 360,
+        "y": 75
+      }
+    ],
+    "links": [
+      {
+        "from": "pc-a",
+        "to": "sw1",
+        "label": "Fa0/1"
+      },
+      {
+        "from": "pc-b",
+        "to": "sw1",
+        "label": "Fa0/2"
+      }
+    ],
+    "table": [
+      {
+        "port": "Fa0/1",
+        "mode": "access",
+        "vlan": "1",
+        "peer": "PC-A"
+      },
+      {
+        "port": "Fa0/2",
+        "mode": "access",
+        "vlan": "1",
+        "peer": "PC-B"
+      }
+    ]
+  },
+  "tags": [],
+  "related": [],
+  "resources": []
+}

@@ -1,0 +1,35 @@
+---
+/**
+ * Alert.astro — inline callout for tips, warnings and errors.
+ *
+ * Props:
+ *   variant ('info'|'success'|'warning'|'danger'), title,
+ *   icon (Icon name or literal glyph), class, style
+ *
+ * All remaining props are spread onto the root, which is how the
+ * calculators reuse this component as a live error region
+ * (`data-subnet-error`) without needing a second implementation.
+ */
+import Icon from './Icon.astro';
+
+const DEFAULT_ICONS = {
+  info: 'info',
+  success: 'check-circle',
+  warning: 'alert-triangle',
+  danger: 'alert-circle',
+};
+
+const { variant = 'info', title, icon, class: className = '', style, ...rest } = Astro.props;
+
+const cls = ['alert', `alert--${variant}`, className].filter(Boolean).join(' ');
+const glyph = icon || DEFAULT_ICONS[variant] || 'info';
+---
+<div class={cls} style={style} role={variant === 'danger' ? 'alert' : 'note'} {...rest}>
+  <span class="alert__icon" aria-hidden="true">
+    <Icon name={glyph} size={17} />
+  </span>
+  <div>
+    {title && <strong>{title}</strong>}
+    <slot />
+  </div>
+</div>

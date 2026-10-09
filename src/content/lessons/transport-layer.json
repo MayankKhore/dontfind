@@ -1,0 +1,73 @@
+{
+  "title": "Transport Layer",
+  "description": "Delivery service between two apps",
+  "tagline": "Delivery service between two apps",
+  "duration": "9 min",
+  "stage": 3,
+  "stageName": "Transport Layer",
+  "category": "Transport Layer",
+  "difficulty": "beginner",
+  "status": "published",
+  "icon": "🚚",
+  "order": 108,
+  "sections": [
+    {
+      "icon": "🚚",
+      "title": "What It Does",
+      "body": "IP gets data to the right COMPUTER. The transport layer (Layer 4) gets it to the right PROGRAM on that computer — Chrome, a game, WhatsApp. It is like a courier who not only finds your building but also your exact flat number.",
+      "code": "Layer 3: PC -> PC   (IP address)\nLayer 4: App -> App (Port number)"
+    },
+    {
+      "icon": "🛠️",
+      "title": "Its Main Jobs",
+      "points": [
+        "Tracking conversations — each app chat gets its own session.",
+        "Segmentation — cuts big data into small pieces (segments) and numbers them so they can be rebuilt in order.",
+        "Port numbers — a label saying WHICH application the data belongs to.",
+        "Reliability (optional) — TCP can resend anything that got lost."
+      ]
+    },
+    {
+      "icon": "⚖️",
+      "title": "Two Protocols to Choose From",
+      "body": "Layer 4 gives you a choice: TCP = reliable but slower (like registered post with signature), UDP = fast but no guarantees (like throwing letters over the wall). Next lessons cover both."
+    },
+    {
+      "icon": "⭐",
+      "title": "Quick Facts",
+      "table": {
+        "head": [
+          "Feature",
+          "TCP",
+          "UDP"
+        ],
+        "rows": [
+          [
+            "Connection",
+            "Connection-oriented",
+            "Connectionless"
+          ],
+          [
+            "Reliability",
+            "Resends lost data ✔",
+            "No resending"
+          ],
+          [
+            "Speed",
+            "Slower",
+            "Faster"
+          ],
+          [
+            "Best for",
+            "Web, email, files",
+            "Voice, video, games"
+          ]
+        ]
+      },
+      "tip": "💡 Exam tip: segments are built at Layer 4. Port numbers also live at Layer 4."
+    }
+  ],
+  "tags": [],
+  "related": [],
+  "resources": []
+}

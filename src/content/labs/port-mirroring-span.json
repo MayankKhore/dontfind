@@ -1,0 +1,108 @@
+{
+  "title": "Port Mirroring (SPAN)",
+  "description": "Configure SPAN to copy traffic from one port to a monitoring port.",
+  "scenario": "Configure SPAN to copy traffic from one port to a monitoring port.",
+  "duration": "7 min",
+  "stage": 9,
+  "stageName": "Monitoring & Operations",
+  "category": "Monitoring & Operations",
+  "difficulty": "advanced",
+  "status": "published",
+  "icon": "🧪",
+  "order": 30,
+  "allowedCommands": [
+    "enable",
+    "configure terminal",
+    "monitor session",
+    "show monitor",
+    "exit",
+    "end",
+    "help",
+    "?"
+  ],
+  "objectives": [
+    {
+      "text": "Create SPAN session",
+      "cmd": "monitor session 1 source interface FastEthernet0/1"
+    },
+    {
+      "text": "Set destination port",
+      "cmd": "monitor session 1 destination interface FastEthernet0/24"
+    },
+    {
+      "text": "Verify SPAN",
+      "cmd": "show monitor session 1"
+    }
+  ],
+  "concepts": [
+    {
+      "title": "SPAN",
+      "body": "SPAN (Switched Port Analyzer) copies traffic from source ports to a destination port for monitoring.",
+      "code": "SW1(config)# monitor session 1 source interface FastEthernet0/1\nSW1(config)# monitor session 1 destination interface FastEthernet0/24"
+    },
+    {
+      "title": "Use Cases",
+      "body": "Traffic analysis, intrusion detection, packet capture with Wireshark, and troubleshooting.",
+      "code": "Monitor port → Wireshark / IDS / IPS"
+    },
+    {
+      "title": "Verifying SPAN",
+      "body": "\"show monitor session 1\" shows source and destination ports.",
+      "code": "SW1# show monitor session 1\nSession 1\nSource Ports: Fa0/1\nDestination Ports: Fa0/24"
+    }
+  ],
+  "topology": {
+    "devices": [
+      {
+        "id": "pc-a",
+        "label": "PC-A",
+        "type": "pc",
+        "x": 60,
+        "y": 75
+      },
+      {
+        "id": "sw1",
+        "label": "SW1",
+        "type": "switch",
+        "x": 210,
+        "y": 75
+      },
+      {
+        "id": "pc-b",
+        "label": "PC-B",
+        "type": "pc",
+        "x": 360,
+        "y": 75
+      }
+    ],
+    "links": [
+      {
+        "from": "pc-a",
+        "to": "sw1",
+        "label": "Fa0/1"
+      },
+      {
+        "from": "pc-b",
+        "to": "sw1",
+        "label": "Fa0/2"
+      }
+    ],
+    "table": [
+      {
+        "port": "Fa0/1",
+        "mode": "access",
+        "vlan": "1",
+        "peer": "PC-A"
+      },
+      {
+        "port": "Fa0/2",
+        "mode": "access",
+        "vlan": "1",
+        "peer": "PC-B"
+      }
+    ]
+  },
+  "tags": [],
+  "related": [],
+  "resources": []
+}

@@ -1,0 +1,65 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/Button.astro';
+import Icon from '../components/Icon.astro';
+import { SITE, SECTIONS } from '../lib/site.js';
+
+/** Highest-value destinations, so a lost reader is never stuck. */
+const escapes = [
+  { href: '/path/', label: 'Learning path', icon: 'route' },
+  { href: '/labs/', label: 'Guided labs', icon: 'flask' },
+  { href: '/lessons/', label: 'Lessons', icon: 'book' },
+  { href: '/tools/subnet-calculator/', label: 'Subnet calculator', icon: 'calculator' },
+  { href: '/dashboard/', label: 'Your dashboard', icon: 'gauge' },
+  { href: '/search/', label: 'Search everything', icon: 'search' },
+];
+---
+
+<BaseLayout
+  title="Page not found"
+  description="The page you are looking for could not be found on CCNA Path."
+  noindex
+>
+  <div class="container container--narrow">
+    <section class="home-section u-center">
+      <p class="page-hero__badge" style="margin-inline:auto">Error 404</p>
+      <h1 class="page-header__title" style="margin-inline:auto">
+        That page is not here
+      </h1>
+      <p class="page-header__lead" style="margin-inline:auto">
+        The link may be out of date, or the page may have moved. Nothing is broken on your
+        side — try one of these instead.
+      </p>
+
+      <div class="cluster u-mt-6" style="justify-content:center">
+        <Button href="/" variant="primary" size="lg">
+          <Icon name="home" size={17} />
+          <span>Back to home</span>
+        </Button>
+        <Button href="/search/" size="lg">
+          <Icon name="search" size={17} />
+          <span>Search everything</span>
+        </Button>
+      </div>
+
+      <nav class="u-mt-6" aria-label="Popular pages">
+        <p class="eyebrow">Popular destinations</p>
+        <ul class="chips" style="justify-content:center">
+          {escapes.map((item) => (
+            <li>
+              <a class="chip" href={item.href}>
+                <Icon name={item.icon} size={13} />
+                {item.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      <p class="u-dim u-mt-6" style="font-size:var(--fs-sm)">
+        Looking for the classic single-page app? It is preserved at
+        <a href="/legacy/">/legacy/</a>.
+      </p>
+    </section>
+  </div>
+</BaseLayout>

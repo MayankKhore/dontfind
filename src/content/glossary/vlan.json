@@ -1,0 +1,10 @@
+{
+  "title": "VLAN (Virtual LAN)",
+  "term": "VLAN",
+  "acronymFor": "Virtual Local Area Network",
+  "definition": "A VLAN logically segments a physical switch into multiple isolated broadcast domains. Devices in one VLAN communicate as if on their own separate switch, improving security and reducing broadcast traffic. Frames are tagged between switches using 802.1Q.",
+  "category": "Switching",
+  "difficulty": "beginner",
+  "status": "published",
+  "tags": ["vlan", "switching", "802.1q"]
+}

@@ -1,0 +1,73 @@
+{
+  "title": "VLSM",
+  "description": "Different subnet sizes in one network",
+  "tagline": "Different subnet sizes in one network",
+  "duration": "11 min",
+  "stage": 6,
+  "stageName": "Subnetting",
+  "category": "Subnetting",
+  "difficulty": "intermediate",
+  "status": "published",
+  "icon": "📐",
+  "order": 120,
+  "sections": [
+    {
+      "icon": "📐",
+      "title": "The Problem VLSM Solves",
+      "body": "Plain subnetting gives every piece the SAME size. A LAN needs 100 hosts, but a router-to-router link only needs 2 — giving it /26 wastes 60 addresses. VLSM (Variable Length Subnet Mask) lets each piece get its own right-sized mask."
+    },
+    {
+      "icon": "📏",
+      "title": "The Golden Rule: Biggest First",
+      "points": [
+        "Sort requirements from LARGEST to smallest.",
+        "Give the biggest network the first block.",
+        "Next subnet starts where the previous one ended.",
+        "Use /30 for every point-to-point router link."
+      ]
+    },
+    {
+      "icon": "🧩",
+      "title": "Worked Example",
+      "body": "From 192.168.1.0/24 give: Sales 100 hosts, HR 50 hosts, IT 20 hosts, one WAN link:",
+      "code": "/25 = 126 hosts -> Sales : .0   - .127\n/26 = 62  hosts -> HR    : .128 - .191\n/27 = 30  hosts -> IT    : .192 - .223\n/30 = 2   hosts -> WAN   : .224 - .227\n(wasted space? almost none!)"
+    },
+    {
+      "icon": "⚔️",
+      "title": "Subnetting vs VLSM",
+      "table": {
+        "head": [
+          "",
+          "Normal",
+          "VLSM"
+        ],
+        "rows": [
+          [
+            "Mask per subnet",
+            "Same everywhere",
+            "Each its own"
+          ],
+          [
+            "Address waste",
+            "High",
+            "Minimal"
+          ],
+          [
+            "Complexity",
+            "Easy",
+            "Needs planning"
+          ],
+          [
+            "Also called",
+            "FLSM",
+            "Classless subnetting"
+          ]
+        ]
+      },
+      "tip": "💡 Exam tip: always start from the largest requirement or you will create overlapping subnets."
+    }
+  ],
+  "tags": [],
+  "related": [],
+  "resources": []
+}

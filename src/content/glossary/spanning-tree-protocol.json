@@ -1,0 +1,10 @@
+{
+  "title": "Spanning Tree Protocol (STP)",
+  "term": "Spanning Tree Protocol",
+  "acronymFor": "STP",
+  "definition": "STP (IEEE 802.1D) builds a loop-free logical topology on a switched network by electing a root bridge and blocking redundant paths. Without STP, a Layer 2 loop would cause broadcast storms and MAC table instability. Modern variants include RSTP (802.1w) and MSTP (802.1s).",
+  "category": "Switching",
+  "difficulty": "intermediate",
+  "status": "published",
+  "tags": ["stp", "switching", "loops"]
+}

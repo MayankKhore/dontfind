@@ -1,0 +1,69 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import CollectionBrowser from '../../components/CollectionBrowser.astro';
+import Button from '../../components/Button.astro';
+import Icon from '../../components/Icon.astro';
+import { getCollection } from 'astro:content';
+import { published, uniqueValues } from '../../lib/content.js';
+
+const incidents = published(await getCollection('incidents'));
+const categories = uniqueValues(incidents, 'category');
+
+const items = incidents.map((incident) => ({
+  href: `/incidents/${incident.id}/`,
+  title: incident.data.title,
+  kicker: incident.data.category,
+  description: incident.data.symptom,
+  icon: 'alert-triangle',
+  difficulty: incident.data.difficulty,
+  meta: [`${incident.data.diagnosis.length} diagnosis steps`],
+  category: incident.data.category,
+  level: incident.data.difficulty,
+  searchText: [incident.data.title, incident.data.symptom, incident.data.resolution]
+    .filter(Boolean)
+    .join(' '),
+}));
+
+const breadcrumbs = [
+  { href: '/', label: 'Home' },
+  { label: 'Incident Scenarios' },
+];
+---
+
+<BaseLayout
+  title="Network Incident Scenarios"
+  description="Realistic troubleshooting scenarios: read the symptom, form a diagnosis, prove it with the CLI and resolve the fault for good."
+  path="/incidents/"
+  breadcrumbs={breadcrumbs}
+>
+  <div class="container container--wide">
+    <PageHeader
+      kicker={`${incidents.length} scenarios`}
+      icon="alert-triangle"
+      title="Incident scenarios"
+      lead="A broken network and a short symptom report. Work the diagnosis yourself, then check your method against the reference steps — and practise the fix in the sandbox."
+    >
+      <div slot="actions" class="cluster">
+        <Button href="/labs/vlan-troubleshooting/" variant="primary">
+          <Icon name="terminal" size={16} />
+          <span>Open a troubleshooting lab</span>
+        </Button>
+        <Button href="/interview-questions/">
+          <Icon name="mic" size={16} />
+          <span>Interview scenarios</span>
+        </Button>
+      </div>
+    </PageHeader>
+
+    <CollectionBrowser
+      items={items}
+      noun="scenarios"
+      label="Search incident scenarios"
+      placeholder="Search scenarios — try “VLAN”, “duplex” or “trunk”…"
+      emptyTitle="No scenarios match"
+      emptyText="Nothing matched that search. Try a protocol or a symptom keyword."
+      filters={[{ key: 'category', label: 'Category', options: categories }]}
+    />
+  </div>
+</BaseLayout>
