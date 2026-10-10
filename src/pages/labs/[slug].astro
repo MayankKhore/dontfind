@@ -119,24 +119,50 @@ const tabs = [
           <div class="lab-stack">
             {guided && <GuidedLesson steps={guided} lessonId={lessonId} />}
 
-            {guided && (
-              /* The control that completes `action` steps. The scripted
-                 commands live in the content JSON, so the learner just
-                 clicks — they can never type a command that breaks the
-                 simulated device. Disabled until its step is current. */
-              <div class="lab-stack__block guide-action">
-                <Button
-                  variant="outline"
-                  data-guide-action={guided.find((s) => s.type === 'action')?.action}
-                  disabled
-                >
-                  <Icon name="plus" size={15} />
-                  <span>{guided.find((s) => s.type === 'action')?.buttonLabel ?? 'Apply change'}</span>
-                </Button>
-                <p class="guide-action__hint" data-guide-action-hint>
-                  Locked — finish the current step first.
+            {guided && guided.some((s) => s.type === 'action') && (
+               /* Quick Actions: one button per `action` step. The scripted
+                  commands live in the content JSON, so the learner just
+                  clicks through the lesson — they can never type a command
+                  that breaks the simulated device. Only the current step's
+                  button is enabled; earlier ones show "Applied ✓". */
+              <section class="lab-stack__block guide-actions" aria-label="Quick actions">
+                <p class="guide-actions__title">
+                  <Icon name="play" size={14} />
+                  <span>Quick actions</span>
                 </p>
-              </div>
+                <p class="guide-actions__lead">
+                  Select a command — it runs in the terminal for you, one step after another.
+                </p>
+                <ul class="guide-actions__list">
+                  {guided.map((step, i) =>
+                    step.type === 'action' ? (
+                      <li class="guide-actions__item">
+                        <Button
+                          variant="outline"
+                          data-guide-action={step.action}
+                          data-guide-action-step={i}
+                          disabled
+                        >
+                          <Icon
+                            name={
+                              step.action === 'save'
+                                ? 'check-circle'
+                                : step.action === 'inspect'
+                                  ? 'search'
+                                  : 'plus'
+                            }
+                            size={15}
+                          />
+                          <span>{step.buttonLabel}</span>
+                        </Button>
+                        <p class="guide-actions__hint" data-guide-action-hint>
+                          Locked — finish the current step first.
+                        </p>
+                      </li>
+                    ) : null,
+                  )}
+                </ul>
+              </section>
             )}
 
             {labUi.renderTerminal && (
@@ -150,14 +176,23 @@ const tabs = [
                   focus
                   initialMode={labUi.initialMode}
                   setup={labUi.setup}
+                  hideInput={labUi.hideInput}
+                  switchPorts={labUi.switchPorts}
                   title={`${lab.title} — ${deviceLabel(labUi.terminalDevices[0])}`}
                 />
 
                 <div class="u-mt-4">
-                  <Alert variant="info" title="This is a simulated IOS">
-                    Nothing you type can reach a real network. Press <code>Tab</code> to complete a
-                    command, <code>?</code> for help, and <code>Ctrl+L</code> to clear the screen.
-                  </Alert>
+                  {labUi.hideInput ? (
+                    <Alert variant="info" title="This is a simulated IOS">
+                      Nothing here reaches a real network. Use the Quick Actions buttons above —
+                      each one runs its commands in the terminal for you.
+                    </Alert>
+                  ) : (
+                    <Alert variant="info" title="This is a simulated IOS">
+                      Nothing you type can reach a real network. Press <code>Tab</code> to complete a
+                      command, <code>?</code> for help, and <code>Ctrl+L</code> to clear the screen.
+                    </Alert>
+                  )}
                 </div>
               </section>
             )}
@@ -204,6 +239,8 @@ const tabs = [
                   tabs={labUi.terminalDevices}
                   initialMode={labUi.initialMode}
                   setup={labUi.setup}
+                  hideInput={labUi.hideInput}
+                  switchPorts={labUi.switchPorts}
                   title={`${lab.title} — SW1`}
                 />
 

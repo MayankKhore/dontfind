@@ -6,12 +6,14 @@
  * config in their content JSON (see content.config.ts). The companion
  * script guided-lesson.js drives it:
  *
+ *   - `action` steps advance through page controls (the Quick Actions
+ *     buttons rendered by labs/[slug].astro); each button scripts its
+ *     commands into the terminal;
  *   - `command` steps advance when the learner runs the expected command
  *     (any other command is vetoed in the terminal with the step hint);
- *   - `action` steps advance through a page control (the topology Add
- *     button rendered by labs/[slug].astro);
- *   - a live running-config vs startup-config status strip shows exactly
- *     which lines exist only in RAM until `write memory` saves them.
+ *   - a live Compare Configurations panel shows the running-config (RAM,
+ *     green) and startup-config (NVRAM, amber) side by side, with every
+ *     line that exists in only one of the two copies highlighted.
  *
  * Markup contract (read by guided-lesson.js):
  *   [data-guide]                root; carries lesson id + steps JSON
@@ -22,7 +24,8 @@
  *   [data-guide-fill]           progress fill width updated live
  *   [data-guide-run-state]      running-config badge text + data-state
  *   [data-guide-start-state]    startup-config badge text + data-state
- *   [data-guide-diff]/[data-guide-diff-list]   unsaved-lines panel
+ *   [data-guide-run-body]       running-config excerpt <pre>
+ *   [data-guide-start-body]     startup-config excerpt <pre>
  *   [data-guide-done]           completion banner (hidden until done)
  *   [data-guide-reset]          "Start over" button (reloads the page)
  */
@@ -79,20 +82,26 @@ const total = steps.length || 1;
     ))}
   </ol>
 
-  <div class="guide__status">
-    <div class="guide__cfg">
-      <p class="guide__cfg-name">running-config <span>RAM</span></p>
-      <p class="guide__cfg-state" data-guide-run-state data-state="sync">In sync</p>
+  <!-- Live side-by-side comparison: RAM (green) vs NVRAM (amber). -->
+  <div class="guide__compare">
+    <p class="guide__compare-title">
+      <Icon name="layers" size={14} />
+      <span>Compare configurations</span>
+    </p>
+    <div class="guide__cfg guide__cfg--run">
+      <p class="guide__cfg-head">
+        <span class="guide__cfg-name">running-config <span>RAM</span></span>
+        <span class="guide__cfg-badge" data-guide-run-state data-state="sync">In sync</span>
+      </p>
+      <pre class="guide__cfg-body" data-guide-run-body aria-label="Running config excerpt"></pre>
     </div>
-    <div class="guide__cfg">
-      <p class="guide__cfg-name">startup-config <span>NVRAM</span></p>
-      <p class="guide__cfg-state" data-guide-start-state data-state="sync">In sync</p>
+    <div class="guide__cfg guide__cfg--start">
+      <p class="guide__cfg-head">
+        <span class="guide__cfg-name">startup-config <span>NVRAM</span></span>
+        <span class="guide__cfg-badge" data-guide-start-state data-state="sync">In sync</span>
+      </p>
+      <pre class="guide__cfg-body" data-guide-start-body aria-label="Startup config excerpt"></pre>
     </div>
-  </div>
-
-  <div class="guide__diff" data-guide-diff hidden>
-    <p class="guide__diff-title">Not saved yet — only in running-config:</p>
-    <ul class="guide__diff-list" data-guide-diff-list></ul>
   </div>
 
   <div class="guide__done" data-guide-done hidden>

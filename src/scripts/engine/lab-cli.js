@@ -70,6 +70,13 @@ class LabCLI extends CLI {
             }
         });
 
+        // The allow-list only knows command words — it can never complete a
+        // real device token like an interface name. When it has nothing to
+        // offer, fall back to the base engine, which returns real tokens
+        // with canonical casing (`fastethernet0/1` + Tab → `FastEthernet0/1`).
+        if (suggestions.size === 0) {
+            return super.getCompletions(input);
+        }
         return [...suggestions];
     }
 }

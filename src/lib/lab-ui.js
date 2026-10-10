@@ -52,6 +52,11 @@ export function resolveLabUi(lab = {}) {
     : [];
   const initialMode = TERMINAL_MODES.includes(ui.initialMode) ? ui.initialMode : 'user';
   const setup = normalizeSetup(ui.setup);
+  const hideInput = ui.hideInput === true;
+  const switchPorts =
+    Number.isInteger(ui.switchPorts) && ui.switchPorts >= 1 && ui.switchPorts <= 48
+      ? ui.switchPorts
+      : null;
 
   // A panel only renders when it is enabled in config AND has content.
   const renderTerminal = showTerminal && lab?.objectives?.length > 0;
@@ -79,6 +84,8 @@ export function resolveLabUi(lab = {}) {
     requiredDevices,
     initialMode,
     setup,
+    hideInput,
+    switchPorts,
     renderTerminal,
     renderTopology,
     renderPortMap,
