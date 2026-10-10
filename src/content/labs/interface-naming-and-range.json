@@ -1,7 +1,7 @@
 {
   "title": "Interface Naming & Range",
   "description": "Learn how Cisco names interfaces and how to configure multiple ports at once with interface range.",
-  "scenario": "Learn how Cisco names interfaces and how to configure multiple ports at once with interface range.",
+  "scenario": "Check how the switch names its ports with show interfaces status, open FastEthernet0/1 in interface configuration mode, then select ports 1 to 4 together with interface range.",
   "duration": "7 min",
   "stage": 1,
   "stageName": "Meet the CLI",
@@ -22,29 +22,53 @@
     "help",
     "?"
   ],
+  "ui": {
+    "showTopology": false,
+    "showPortMap": false,
+    "showTerminal": true,
+    "requiredDevices": ["sw1"],
+    "focus": true,
+    "initialMode": "user"
+  },
   "objectives": [
     {
-      "text": "Enter interface config",
+      "text": "Enter privileged EXEC mode",
+      "cmd": "enable"
+    },
+    {
+      "text": "See how the switch names its ports (Fa0/1 = FastEthernet0/1)",
+      "cmd": "show interfaces status"
+    },
+    {
+      "text": "Enter global configuration mode",
+      "cmd": "configure terminal"
+    },
+    {
+      "text": "Open interface FastEthernet0/1",
       "cmd": "interface FastEthernet0/1"
     },
     {
-      "text": "Configure interface range",
+      "text": "Exit back to global configuration mode",
+      "cmd": "exit"
+    },
+    {
+      "text": "Select ports 1 to 4 together with interface range",
       "cmd": "interface range FastEthernet0/1 - 4"
     },
     {
-      "text": "Verify interfaces",
-      "cmd": "show interfaces status"
+      "text": "Return to privileged EXEC mode",
+      "cmd": "end"
     }
   ],
   "concepts": [
     {
       "title": "Interface Naming",
-      "body": "Cisco interfaces are named by type, module, and port. Examples: FastEthernet0/1, GigabitEthernet0/1, VLAN1.",
-      "code": "FastEthernet0/1 → Fa0/1\nGigabitEthernet0/1 → Gi0/1\nVLAN 1 → Vlan1"
+      "body": "Cisco interfaces are named by type, module, and port. Examples: FastEthernet0/1, GigabitEthernet0/1, VLAN1. You can type the short form (Fa0/1) too.",
+      "code": "FastEthernet0/1 \u2192 Fa0/1\nGigabitEthernet0/1 \u2192 Gi0/1\nVLAN 1 \u2192 Vlan1"
     },
     {
       "title": "Interface Range",
-      "body": "Use \"interface range\" to configure multiple ports at once. Saves time on access ports or shutdown commands.",
+      "body": "Use \"interface range\" to configure multiple ports at once. Saves time on access ports or shutdown commands. The prompt becomes (config-if-range)#.",
       "code": "SW1(config)# interface range FastEthernet0/1 - 4\nSW1(config-if-range)# switchport mode access"
     },
     {
@@ -53,57 +77,6 @@
       "code": "SW1# show interfaces status\nPort   Status   Vlan   Duplex  Speed\nFa0/1  connected 1     a-full  a-100"
     }
   ],
-  "topology": {
-    "devices": [
-      {
-        "id": "pc-a",
-        "label": "PC-A",
-        "type": "pc",
-        "x": 60,
-        "y": 75
-      },
-      {
-        "id": "sw1",
-        "label": "SW1",
-        "type": "switch",
-        "x": 210,
-        "y": 75
-      },
-      {
-        "id": "pc-b",
-        "label": "PC-B",
-        "type": "pc",
-        "x": 360,
-        "y": 75
-      }
-    ],
-    "links": [
-      {
-        "from": "pc-a",
-        "to": "sw1",
-        "label": "Fa0/1"
-      },
-      {
-        "from": "pc-b",
-        "to": "sw1",
-        "label": "Fa0/2"
-      }
-    ],
-    "table": [
-      {
-        "port": "Fa0/1",
-        "mode": "access",
-        "vlan": "1",
-        "peer": "PC-A"
-      },
-      {
-        "port": "Fa0/2",
-        "mode": "access",
-        "vlan": "1",
-        "peer": "PC-B"
-      }
-    ]
-  },
   "tags": [],
   "related": [],
   "resources": []

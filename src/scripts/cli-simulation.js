@@ -35,9 +35,16 @@ class Terminal {
     this.lessonId = root.getAttribute('data-cli-lesson') || '';
     this.initialMode = root.getAttribute('data-cli-initial-mode') || 'user';
     this.setup = parseJSON(root.getAttribute('data-cli-setup'), []);
+    // Optional per-lesson FastEthernet port count (default 24). Keeps
+    // `show running-config` short in button-driven lessons.
+    const switchPortsRaw = parseInt(root.getAttribute('data-cli-switch-ports') || '', 10);
+    const switchPorts =
+      Number.isInteger(switchPortsRaw) && switchPortsRaw >= 1 && switchPortsRaw <= 48
+        ? switchPortsRaw
+        : 24;
     this.devices = {
-      sw1: new Switch('SW1'),
-      sw2: new Switch('SW2'),
+      sw1: new Switch('SW1', { ports: switchPorts }),
+      sw2: new Switch('SW2', { ports: switchPorts }),
       'pc-a': new PC('PC-A'),
       'pc-b': new PC('PC-B'),
     };
@@ -258,6 +265,28 @@ class Terminal {
       parts[parts.length - 1] = completions[0];
       this.input.value = parts.join(' ') + ' ';
     } else if (completions.length > 1) {
+      // IOS behaviour: complete up to the longest common prefix
+      // (case-insensitive, but typed with the canonical casing from the
+      // first match — so `fastethernet0/1` grows into `FastEthernet0/1`).
+      // Only when the prefix adds nothing new do we list the options.
+      const parts = value.split(/\s+/);
+      const typed = parts[parts.length - 1];
+      let common = completions[0];
+      for (const c of completions) {
+        let i = 0;
+        while (i < common.length && i < c.length && common[i].toLowerCase() === c[i].toLowerCase()) i++;
+        common = common.slice(0, i);
+      }
+      // Extend when the common prefix goes further than the typed token,
+      // or when it only differs by casing (`fastethernet0/1` → canonical
+      // `FastEthernet0/1`). Otherwise list the options like IOS `?`.
+      const extendsTyped =
+        common.toLowerCase().startsWith(typed.toLowerCase()) && common !== typed;
+      if (extendsTyped) {
+        parts[parts.length - 1] = common;
+        this.input.value = parts.join(' ');
+        return;
+      }
       this.line(completions.join('  '), 'muted');
       this.scroll();
     }

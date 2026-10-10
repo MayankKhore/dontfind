@@ -24,10 +24,17 @@
  *   initialMode      CLI mode the terminal boots into ('user' default).
  *   setup            silent, ungraded seed commands applied per device
  *                    before the session starts (pre-filled config).
+ *   hideInput {boolean}  button-driven lesson: no command line and no
+ *                    keyboard footer — guided step buttons script every
+ *                    command into the transcript instead.
+ *   switchPorts {number}  FastEthernet port count for simulated switches
+ *                    (default 24). Smaller counts keep `show
+ *                    running-config` readable in short lessons.
  *
  * Markup contract additions:
  *   [data-cli-initial-mode]  boot mode for the session
  *   [data-cli-setup]         JSON seed steps [{ device?, commands[] }]
+ *   [data-cli-switch-ports]  FastEthernet port count for switches
  *
  * Accessibility: a proper tablist for devices, a log role for output that
  * announces new lines, and a real <label> for the input.
@@ -45,6 +52,8 @@ const {
   focus = false,
   initialMode = 'user',
   setup = [],
+  hideInput = false,
+  switchPorts = null,
 } = Astro.props;
 
 const KNOWN_LABELS = { sw1: 'SW1', sw2: 'SW2', 'pc-a': 'PC-A', 'pc-b': 'PC-B' };
@@ -57,15 +66,21 @@ const showDeviceTabs = tabs.length > 1;
 ---
 
 <section
-  class:list={['terminal', focus && 'terminal--focus']}
+  class:list={[
+    'terminal',
+    focus && 'terminal--focus',
+    objectiveItems.length > 0 && 'terminal--rail',
+  ]}
   data-cli-sim
   data-cli-lesson={lessonId}
   data-cli-allowed={allowed ? JSON.stringify(allowed) : undefined}
   data-cli-objectives={JSON.stringify(objectives)}
   data-cli-initial-mode={initialMode}
   data-cli-setup={setup?.length ? JSON.stringify(setup) : undefined}
+  data-cli-switch-ports={switchPorts ?? undefined}
   aria-label={title}
 >
+  <div class="terminal__main">
   <div class="terminal__chrome">
     <span class="code-block__dots" aria-hidden="true">
       <i></i><i></i><i></i>
@@ -103,28 +118,42 @@ const showDeviceTabs = tabs.length > 1;
     tabindex="0"
   ></div>
 
-  <div class="terminal__input-line">
-    <label class="sr-only" for={inputId}>Command input</label>
-    <span class="terminal__prompt" data-cli-prompt aria-hidden="true">Switch&gt;</span>
-    <input
-      id={inputId}
-      class="terminal__input"
-      data-cli-input
-      type="text"
-      autocomplete="off"
-      autocapitalize="off"
-      spellcheck="false"
-      placeholder="Type a command and press Enter…"
-    />
-  </div>
+  {!hideInput && (
+    <div class="terminal__input-line">
+      <label class="sr-only" for={inputId}>Command input</label>
+      <span class="terminal__prompt" data-cli-prompt aria-hidden="true">Switch&gt;</span>
+      <input
+        id={inputId}
+        class="terminal__input"
+        data-cli-input
+        type="text"
+        autocomplete="off"
+        autocapitalize="off"
+        spellcheck="false"
+        placeholder="Type a command and press Enter…"
+      />
+    </div>
+  )}
 
+  {!hideInput && (
+    <div class="terminal__footer">
+      <span>Tab: complete</span>
+      <span>↑↓: history</span>
+      <span>? : help</span>
+      <span>Ctrl+L: clear</span>
+    </div>
+  )}
+  </div>
   <!--
     The objective checklist MUST live inside [data-cli-sim]: the grading
     code looks it up with root.querySelector('[data-objective="i"]'), so
     rendering it in a sibling aside silently disables grading.
+
+    Rendered as an attached left-side rail (desktop) of the terminal
+    card; on narrow screens it falls back to the bottom strip.
   -->
   {objectiveItems.length > 0 && (
-    <div class="terminal__objectives">
+    <aside class="terminal__objectives">
       <p class="terminal__objectives-title">
         Objectives · <span data-cli-progress>0 / {objectiveItems.length}</span>
       </p>
@@ -138,15 +167,8 @@ const showDeviceTabs = tabs.length > 1;
           </li>
         ))}
       </ul>
-    </div>
+    </aside>
   )}
-
-  <div class="terminal__footer">
-    <span>Tab: complete</span>
-    <span>↑↓: history</span>
-    <span>? : help</span>
-    <span>Ctrl+L: clear</span>
-  </div>
 </section>
 
 <script>

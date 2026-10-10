@@ -101,6 +101,19 @@ const labs = defineCollection({
             }),
           )
           .default([]),
+        /**
+         * Button-driven lessons hide the free-typing input: the learner
+         * only clicks the guided step buttons, which script commands into
+         * the terminal. No command line, no keyboard footer.
+         */
+        hideInput: z.boolean().default(false),
+        /**
+         * How many FastEthernet ports the simulated switch exposes
+         * (default 24, the WS-C2960-24TT). Lessons that do not need the
+         * full panel can shrink it (e.g. 8) so `show running-config`
+         * stays readable.
+         */
+        switchPorts: z.number().int().min(1).max(48).optional(),
       })
       .optional(),
     /**
@@ -133,6 +146,8 @@ const labs = defineCollection({
               instruction: z.string(),
               /** Message shown when a non-matching command is vetoed. */
               hint: z.string().optional(),
+              /** Success line printed after an action step's commands run. */
+              outcome: z.string().optional(),
             }),
           )
           .min(2),

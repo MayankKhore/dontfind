@@ -31,7 +31,9 @@
     "setup": [
       { "device": "sw1", "commands": ["enable", "write memory"] }
     ],
-    "focus": true
+    "focus": true,
+    "hideInput": true,
+    "switchPorts": 8
   },
   "objectives": [
     {
@@ -50,25 +52,22 @@
   "guided": {
     "steps": [
       {
-        "type": "command",
-        "cmd": "show running-config",
-        "accepts": ["sh run", "show run"],
-        "title": "Look at the live config",
-        "instruction": "The switch boots from what is saved in NVRAM, so right now RAM and NVRAM hold exactly the same thing. Prove it — read the active config.",
-        "hint": "Step 1 wants: show running-config"
-      },
-      {
-        "type": "command",
-        "cmd": "show startup-config",
-        "accepts": ["sh start", "show start"],
-        "title": "Read the saved copy",
-        "instruction": "Same file, different home. This is the startup-config from NVRAM — identical to the running-config, because you have not changed anything yet.",
-        "hint": "Step 2 wants: show startup-config"
+        "type": "action",
+        "action": "inspect",
+        "buttonLabel": "Show running-config & startup-config",
+        "commands": [
+          "show running-config",
+          "show startup-config"
+        ],
+        "title": "Inspect the switch",
+        "instruction": "The switch boots from what is saved in NVRAM, so right now RAM and NVRAM hold exactly the same thing. Run both show commands and watch the terminal.",
+        "hint": "Step 1 wants: the Inspect button",
+        "outcome": "✓ Both copies inspected — they are identical."
       },
       {
         "type": "action",
-        "action": "topology-add",
-        "buttonLabel": "Add a VLAN on the switch",
+        "action": "add-vlan",
+        "buttonLabel": "Add VLAN 20 to Fa0/3",
         "commands": [
           "configure terminal",
           "vlan 20",
@@ -78,41 +77,22 @@
           "switchport access vlan 20",
           "end"
         ],
-        "title": "Make a change in the topology editor",
-        "instruction": "Now add a configuration: VLAN 20 on FastEthernet0/3. Click the button and watch it type itself into the terminal.",
-        "hint": "Step 3 wants: the Add a VLAN on the switch button"
+        "title": "Make a change",
+        "instruction": "Add VLAN 20 on FastEthernet0/3. Changes hit the running-config (RAM) immediately — compare the green and amber cards below to see the startup-config stay behind.",
+        "hint": "Step 2 wants: the Add VLAN button",
+        "outcome": "✓ Configuration changed successfully. running-config updated — startup-config unchanged."
       },
       {
-        "type": "command",
-        "cmd": "show running-config",
-        "accepts": ["sh run", "show run"],
-        "title": "The running-config changed",
-        "instruction": "There it is — vlan 20 and the Fa0/3 line. This is the whole point of RAM: changes work immediately, with no reboot.",
-        "hint": "Step 4 wants: show running-config"
-      },
-      {
-        "type": "command",
-        "cmd": "show startup-config",
-        "accepts": ["sh start", "show start"],
-        "title": "…but the saved copy did not",
-        "instruction": "Still the old config. NVRAM knows nothing about VLAN 20 — pull the power and that change is gone forever.",
-        "hint": "Step 5 wants: show startup-config"
-      },
-      {
-        "type": "command",
-        "cmd": "write memory",
-        "accepts": ["copy running-config startup-config", "copy run start", "wr"],
-        "title": "Save it to NVRAM",
-        "instruction": "Push RAM into NVRAM. This is the command people forget — and the one that costs them a weekend.",
-        "hint": "Step 6 wants: write memory"
-      },
-      {
-        "type": "command",
-        "cmd": "show startup-config",
-        "accepts": ["sh start", "show start"],
-        "title": "Now both copies match",
-        "instruction": "VLAN 20 is in the saved copy too, so it survives a reboot. running-config = RAM, startup-config = NVRAM, write memory = the bridge between them.",
-        "hint": "Step 7 wants: show startup-config"
+        "type": "action",
+        "action": "save",
+        "buttonLabel": "Save to NVRAM",
+        "commands": [
+          "write memory"
+        ],
+        "title": "Compare and save",
+        "instruction": "The green card (RAM) has VLAN 20, the amber card (NVRAM) does not. Save with write memory so the change survives a reboot — then both copies match again.",
+        "hint": "Step 3 wants: the Save button",
+        "outcome": "✓ Saved to NVRAM — both copies match, your change survives a reboot."
       }
     ]
   },

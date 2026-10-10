@@ -34,6 +34,8 @@ class CLI {
                 return this.executeConfig(cmd, args);
             case 'config-interface':
                 return this.executeInterface(cmd, args);
+            case 'config-if-range':
+                return this.executeInterfaceRange(cmd, args);
             case 'config-vlan':
                 return this.executeVlan(cmd, args);
             default:
@@ -155,6 +157,20 @@ class CLI {
         }
         if (cmd === 'interface' || cmd === 'int') {
             if (!args[0]) return { type: 'error', message: '% Incomplete command.' };
+            // `interface range Fa0/1 - 4` (or `Fa0/1-4`): select several
+            // ports at once. Both the spaced CLI form and the compact form
+            // are accepted — the spec is just the tokens after `range`.
+            if (args[0].toLowerCase() === 'range') {
+                const spec = args.slice(1).join('');
+                if (!spec) return { type: 'error', message: '% Incomplete command.' };
+                const ifaces = d.findInterfaceRange(spec);
+                if (!ifaces.length) return { type: 'error', message: '% Invalid range specified.' };
+                d.currentInterfaces = ifaces;
+                d.currentInterface = null;
+                d.modeStack.push(d.mode);
+                d.mode = 'config-if-range';
+                return { type: 'config-output', message: `${d.hostname}(config-if-range)#` };
+            }
             const iface = d.findInterface(args[0]);
             if (!iface) return { type: 'error', message: '% Invalid interface type and number' };
             d.currentInterface = iface;
@@ -277,6 +293,43 @@ class CLI {
         }
         if (cmd === 'help' || cmd === '?') return this.showHelp('config-interface');
         return { type: 'error', message: `% Invalid input detected at '^' marker.` };
+    }
+
+    // ============================================================
+    // INTERFACE RANGE CONFIG MODE (config-if-range)#
+    // ============================================================
+    // Commands apply to EVERY interface in the selected range. Navigation
+    // (exit/end/help) is handled here; everything else is replayed through
+    // the single-interface handler so both modes stay in sync.
+    executeInterfaceRange(cmd, args) {
+        const d = this.device;
+        if (cmd === 'exit') {
+            const prev = d.modeStack.pop() || 'config';
+            d.mode = prev;
+            d.currentInterfaces = null;
+            return { type: 'config-output', message: `${d.getPrompt()}` };
+        }
+        if (cmd === 'end') {
+            d.mode = 'privileged';
+            d.modeStack = [];
+            d.currentInterface = null;
+            d.currentInterfaces = null;
+            d.currentVlan = null;
+            return { type: 'config-output', message: `${d.getPrompt()}` };
+        }
+        if (cmd === 'help' || cmd === '?') return this.showHelp('config-interface');
+
+        const ifaces = d.currentInterfaces || [];
+        if (!ifaces.length) return { type: 'error', message: '% No interface range selected.' };
+        const logs = [];
+        for (const iface of ifaces) {
+            d.currentInterface = iface;
+            const r = this.executeInterface(cmd, args);
+            d.currentInterface = null;
+            if (r.type === 'error') return r;
+            if (r.message) logs.push(r.message);
+        }
+        return { type: 'success', message: logs.join('\n') };
     }
 
     // ============================================================

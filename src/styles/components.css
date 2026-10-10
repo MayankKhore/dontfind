@@ -1364,6 +1364,47 @@ a.chip:hover {
   box-shadow: var(--shadow);
 }
 
+/* The lesson column (chrome + transcript + input + footer) always stacks;
+   when objectives exist they become an attached rail beside it. */
+.terminal__main {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+/* Objectives rail: the checklist sits attached to the LEFT side of the
+   terminal card (same attached feel as the old bottom strip), instead of
+   below the transcript. */
+.terminal--rail {
+  flex-direction: row;
+}
+.terminal--rail .terminal__objectives {
+  order: -1;
+  width: clamp(200px, 26%, 270px);
+  flex: 0 0 auto;
+  border-top: none;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  align-content: start;
+  overflow-y: auto;
+  scrollbar-color: rgba(255, 255, 255, 0.16) transparent;
+}
+
+/* Narrow screens: the rail can't share the card, so the checklist drops
+   back to the attached bottom strip it used to be. */
+@media (max-width: 860px) {
+  .terminal--rail {
+    flex-direction: column;
+  }
+  .terminal--rail .terminal__objectives {
+    order: 1;
+    width: auto;
+    border-right: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    overflow-y: visible;
+  }
+}
+
 .terminal__chrome {
   display: flex;
   align-items: center;

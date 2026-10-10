@@ -9,12 +9,14 @@
  *    expected command (and the always-safe `?` / `help`) is vetoed via the
  *    cancelable `cli:before` event, so learners cannot skip steps, wander
  *    into other CLI modes, or break the simulated device;
+ *  - `action` steps complete through Quick Actions buttons (rendered by
+ *    labs/[slug].astro), which script the change into the device's
+ *    running-config and echo every line into the transcript;
  *  - `command` steps advance on `cli:executed` when the expected command
  *    succeeded;
- *  - `action` steps complete through a page control (the topology Add
- *    button), which scripts the change into the device's running-config;
- *  - a live status strip diffs running-config against startup-config so the
- *    RAM-vs-NVRAM gap (and its repair via `write memory`) stays visible.
+ *  - a live Compare Configurations panel renders the running-config (RAM,
+ *    green) and startup-config (NVRAM, amber) side by side, highlighting
+ *    every line that exists in only one of the two copies.
  */
 
 import { CLI } from './engine/cli.js';
@@ -72,6 +74,35 @@ function diffLines(running, startup) {
   return { added, removed };
 }
 
+/**
+ * Split a configuration into `!`-separated blocks of lines. The
+ * "Building configuration…" preamble, the byte count and the trailing
+ * `end` are dropped — they never help a learner compare copies.
+ */
+function configBlocks(text) {
+  const blocks = [];
+  let current = [];
+  for (const raw of String(text || '').split('\n')) {
+    const line = raw.replace(/\s+$/, '');
+    const trimmed = line.trim();
+    if (trimmed === '!') {
+      if (current.length) blocks.push(current);
+      current = [];
+    } else if (
+      !trimmed ||
+      trimmed === 'end' ||
+      trimmed.startsWith('Building configuration') ||
+      trimmed.startsWith('Current configuration')
+    ) {
+      continue;
+    } else {
+      current.push(line);
+    }
+  }
+  if (current.length) blocks.push(current);
+  return blocks;
+}
+
 class GuidedLesson {
   constructor(root) {
     this.root = root;
@@ -93,11 +124,10 @@ class GuidedLesson {
     this.stepEls = Array.from(this.root.querySelectorAll('[data-guide-step]'));
     this.runStateEl = this.root.querySelector('[data-guide-run-state]');
     this.startStateEl = this.root.querySelector('[data-guide-start-state]');
-    this.diffEl = this.root.querySelector('[data-guide-diff]');
-    this.diffListEl = this.root.querySelector('[data-guide-diff-list]');
+    this.runBodyEl = this.root.querySelector('[data-guide-run-body]');
+    this.startBodyEl = this.root.querySelector('[data-guide-start-body]');
     this.doneEl = this.root.querySelector('[data-guide-done]');
     this.actionButtons = Array.from(document.querySelectorAll('[data-guide-action]'));
-    this.actionHintIndex = this.steps.findIndex((s) => s.type === 'action');
   }
 
   bind() {
@@ -164,7 +194,8 @@ class GuidedLesson {
     btn.disabled = true;
     // Script the change straight into the shared device state through the
     // unrestricted engine (the lab allow-list never lists config commands),
-    // echoing each line into the transcript like a real session.
+    // echoing each line into the transcript like a real session. Scripted
+    // commands also tick the objectives checklist when they match.
     const device = this.terminal.device();
     const raw = new CLI(device);
     for (const command of step.commands || []) {
@@ -177,11 +208,13 @@ class GuidedLesson {
       }
       this.terminal.cmdLine(prompt, command);
       this.terminal.render(result);
+      this.terminal.checkObjectives?.(command);
     }
     this.terminal.updatePrompt();
     this.terminal.scroll();
     this.terminal.line(
-      `${step.buttonLabel || 'Change'} applied — running-config only. Nothing saved yet.`,
+      step.outcome ||
+        `${step.buttonLabel || 'Change'} applied — running-config only. Nothing saved yet.`,
       'success',
     );
     this.advance();
@@ -258,13 +291,15 @@ class GuidedLesson {
 
     const current = this.finished ? null : this.steps[this.index];
     this.actionButtons.forEach((btn) => {
-      const active = current?.type === 'action' && current.action === btn.dataset.guideAction;
+      const action = btn.dataset.guideAction;
+      const stepIndex = this.steps.findIndex((s) => s.type === 'action' && s.action === action);
+      const active = current?.type === 'action' && current.action === action;
       btn.disabled = !active;
       const hint = btn.parentElement?.querySelector('[data-guide-action-hint]');
       if (!hint) return;
       if (active) {
         hint.textContent = 'Click to apply — it only changes running-config (RAM).';
-      } else if (this.finished || this.index > this.actionHintIndex) {
+      } else if (this.finished || (stepIndex > -1 && stepIndex < this.index)) {
         hint.textContent = 'Applied ✓';
       } else {
         hint.textContent = 'Locked — finish the current step first.';
@@ -289,50 +324,97 @@ class GuidedLesson {
     if (!startup) {
       setState(this.runStateEl, 'dirty', 'No saved copy yet');
       setState(this.startStateEl, 'missing', 'Not present');
-      this.renderDiff(running.split('\n').slice(0, 8), []);
+      this.renderCompare(running, '');
       return;
     }
     if (running === startup) {
       setState(this.runStateEl, 'sync', 'In sync');
       setState(this.startStateEl, 'sync', 'In sync');
-      this.hideDiff();
+      this.renderCompare(running, startup);
       return;
     }
     const { added, removed } = diffLines(running, startup);
     setState(
       this.runStateEl,
       'dirty',
-      `${added.length} unsaved line${added.length === 1 ? '' : 's'}`,
+      `Active · ${added.length} unsaved line${added.length === 1 ? '' : 's'}`,
     );
-    setState(this.startStateEl, 'stale', 'Out of date');
-    this.renderDiff(added, removed);
+    setState(this.startStateEl, 'stale', `Out of date · ${removed.length} behind`);
+    this.renderCompare(running, startup);
   }
 
-  renderDiff(added, removed) {
-    if (!this.diffEl || !this.diffListEl) return;
-    const shown = [
-      ...added.slice(0, 6).map((l) => ({ kind: 'add', text: l })),
-      ...removed.slice(0, 4).map((l) => ({ kind: 'del', text: l })),
-    ];
-    if (shown.length === 0) {
-      this.hideDiff();
+  /**
+   * Fill the two compare cards. When the copies differ, only the differing
+   * `!`-separated blocks are shown (capped) with the unique lines
+   * highlighted; when they match, a small representative excerpt keeps the
+   * cards readable instead of dumping the whole configuration.
+   */
+  renderCompare(running, startup) {
+    const runBlocks = configBlocks(running);
+    const startBlocks = configBlocks(startup);
+
+    if (startup) {
+      const runSet = new Set(runBlocks.map((b) => b.join('\n')));
+      const startSet = new Set(startBlocks.map((b) => b.join('\n')));
+      const runDiff = runBlocks.filter((b) => !startSet.has(b.join('\n')));
+      const startDiff = startBlocks.filter((b) => !runSet.has(b.join('\n')));
+
+      if (runDiff.length || startDiff.length) {
+        this.fillCard(this.runBodyEl, runDiff, startSet, 'Only in RAM — not saved yet');
+        this.fillCard(this.startBodyEl, startDiff, runSet, 'No differences');
+        return;
+      }
+    }
+
+    // In sync (or no saved copy): show a small stable excerpt.
+    const interesting = (blocks) => {
+      const picked = blocks.filter((b) =>
+        b.some((l) => /^(hostname|vlan |interface )/i.test(l.trim())),
+      );
+      return picked.slice(0, 3);
+    };
+    this.fillCard(this.runBodyEl, interesting(runBlocks), null, 'Identical copies');
+    if (startup) {
+      this.fillCard(this.startBodyEl, interesting(startBlocks), null, 'Identical copies');
+    } else {
+      this.fillCard(this.startBodyEl, [], null, 'startup-config is not present');
+    }
+  }
+
+  /**
+   * Render blocks into a card <pre>. `otherSet` (a Set of the other
+   * copy's blocks) marks lines that exist in only this copy as diffs.
+   */
+  fillCard(pre, blocks, otherSet, emptyNote) {
+    if (!pre) return;
+    pre.replaceChildren();
+    const totalLines = blocks.reduce((n, b) => n + b.length, 0);
+    if (totalLines === 0) {
+      const note = document.createElement('span');
+      note.className = 'guide__cfg-line guide__cfg-line--muted';
+      note.textContent = emptyNote;
+      pre.appendChild(note);
       return;
     }
-    this.diffListEl.replaceChildren(
-      ...shown.map(({ kind, text }) => {
-        const li = document.createElement('li');
-        li.className = kind === 'add' ? 'guide__diff-add' : 'guide__diff-del';
-        li.textContent = `${kind === 'add' ? '+ ' : '− '}${text || '(blank line)'}`;
-        return li;
-      }),
-    );
-    this.diffEl.hidden = false;
-  }
-
-  hideDiff() {
-    if (!this.diffEl || !this.diffListEl) return;
-    this.diffListEl.replaceChildren();
-    this.diffEl.hidden = true;
+    const otherLines = new Set();
+    if (otherSet) {
+      for (const block of otherSet) {
+        for (const line of block.split('\n')) otherLines.add(line.trim());
+      }
+    }
+    for (const block of blocks.slice(0, 5)) {
+      for (const line of block) {
+        const span = document.createElement('span');
+        const unique = otherSet !== null && !otherLines.has(line.trim());
+        span.className = 'guide__cfg-line' + (unique ? ' guide__cfg-line--diff' : '');
+        span.textContent = line;
+        pre.appendChild(span);
+      }
+      const gap = document.createElement('span');
+      gap.className = 'guide__cfg-line guide__cfg-line--gap';
+      gap.textContent = '!';
+      pre.appendChild(gap);
+    }
   }
 }
 

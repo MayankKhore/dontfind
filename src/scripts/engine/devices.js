@@ -9,6 +9,8 @@ class NetworkDevice {
         this.mode = 'user';
         this.modeStack = [];
         this.currentInterface = null;
+        /** Interfaces selected by `interface range` (config-if-range mode). */
+        this.currentInterfaces = null;
         this.currentVlan = null;
         this.enableSecret = '';
         this.enablePassword = '';
@@ -25,6 +27,7 @@ class NetworkDevice {
             case 'privileged': return `${this.hostname}#`;
             case 'config': return `${this.hostname}(config)#`;
             case 'config-interface': return `${this.hostname}(config-if)#`;
+            case 'config-if-range': return `${this.hostname}(config-if-range)#`;
             case 'config-vlan': return `${this.hostname}(config-vlan)#`;
             default: return `${this.hostname}>`;
         }
@@ -36,6 +39,7 @@ class NetworkDevice {
             privileged: 'Privileged EXEC',
             config: 'Global Config',
             'config-interface': 'Interface Config',
+            'config-if-range': 'Interface Range Config',
             'config-vlan': 'VLAN Config'
         };
         return names[this.mode] || 'User EXEC';
@@ -96,19 +100,30 @@ class PC extends NetworkDevice {
 }
 
 class Switch extends NetworkDevice {
-    constructor(name) {
+    /**
+     * @param {string} name  device hostname
+     * @param {object} [opts]
+     * @param {number} [opts.ports]  FastEthernet port count (default 24,
+     *   the WS-C2960-24TT). Lessons that do not need the full panel can
+     *   shrink it (e.g. 8) so `show running-config` stays readable.
+     */
+    constructor(name, opts = {}) {
         super(name);
         this.type = 'switch';
         this.model = 'WS-C2960-24TT';
         this.macAddress = NetworkDevice.genMAC();
         this.iosVersion = '12.2(55)SE11';
+        const ports = Number.isInteger(opts.ports) && opts.ports >= 1 && opts.ports <= 48
+            ? opts.ports
+            : 24;
+        this.portCount = ports;
         this.initInterfaces();
         this.initVLANs();
     }
 
     initInterfaces() {
         this.interfaces = [];
-        for (let i = 1; i <= 24; i++) {
+        for (let i = 1; i <= this.portCount; i++) {
             this.interfaces.push({
                 name: `FastEthernet0/${i}`,
                 type: 'fastethernet',
@@ -163,11 +178,32 @@ class Switch extends NetworkDevice {
             if (m) {
                 const alias = aliases[m[1]];
                 const port = m[3] ? parseInt(m[3], 10) : parseInt(m[2], 10);
-                if (alias === 'fastethernet' && port >= 0 && port <= 24 && iface.name === `FastEthernet0/${port}`) return iface;
+                if (alias === 'fastethernet' && port >= 0 && port <= this.portCount && iface.name === `FastEthernet0/${port}`) return iface;
                 if (alias === 'gigabitethernet' && port >= 0 && port <= 2 && iface.name === `GigabitEthernet0/${port}`) return iface;
             }
         }
         return null;
+    }
+
+    /**
+     * Resolve an `interface range` spec (e.g. "FastEthernet0/1-4", or the
+     * spaced CLI form "FastEthernet0/1 - 4" pre-joined) into the list of
+     * matching interfaces. Empty array = invalid range.
+     */
+    findInterfaceRange(spec) {
+        if (!spec) return [];
+        const s = String(spec).toLowerCase().replace(/\s+/g, '');
+        const m = s.match(/^([a-z]+)(\d+)\/(\d+)-(\d+)$/);
+        if (!m) return [];
+        const start = parseInt(m[3], 10);
+        const end = parseInt(m[4], 10);
+        if (end < start || end - start > 40) return [];
+        const found = [];
+        for (let p = start; p <= end; p++) {
+            const iface = this.findInterface(`${m[1]}${m[2]}/${p}`);
+            if (iface && !found.includes(iface)) found.push(iface);
+        }
+        return found;
     }
 
     findVLAN(idOrName) {
