@@ -1,7 +1,7 @@
 {
   "title": "Configuration Modes",
   "description": "Navigate between global config, interface config, and other sub-modes.",
-  "scenario": "Navigate between global config, interface config, and other sub-modes.",
+  "scenario": "Navigate through CLI modes step by step: enable, configure terminal, interface FastEthernet0/1, then end.",
   "duration": "7 min",
   "stage": 1,
   "stageName": "Meet the CLI",
@@ -21,24 +21,41 @@
     "help",
     "?"
   ],
+  "ui": {
+    "showTopology": false,
+    "showPortMap": false,
+    "showTerminal": true,
+    "requiredDevices": ["sw1"],
+    "focus": true,
+    "initialMode": "user"
+  },
   "objectives": [
     {
-      "text": "Enter global config mode",
+      "text": "Enter privileged EXEC mode",
+      "cmd": "enable"
+    },
+    {
+      "text": "Enter global configuration mode",
       "cmd": "configure terminal"
     },
     {
-      "text": "Enter interface config mode",
+      "text": "Enter interface configuration mode for FastEthernet0/1",
       "cmd": "interface FastEthernet0/1"
     },
     {
-      "text": "Return to privileged mode",
+      "text": "Exit to privileged EXEC mode",
       "cmd": "end"
     }
   ],
   "concepts": [
     {
+      "title": "CLI Mode Navigation",
+      "body": "Navigate through CLI modes step by step: User EXEC (>) → Privileged EXEC (#) → Global Config (config)# → Interface Config (config-if)#. Use 'enable' to enter privileged, 'configure terminal' for global config, 'interface' for interface config, 'exit' to go back one level, 'end' to jump to privileged.",
+      "code": "Switch> enable\nSwitch# configure terminal\nSwitch(config)# interface FastEthernet0/1\nSwitch(config-if)# end\nSwitch#"
+    },
+    {
       "title": "Config Sub-modes",
-      "body": "From global config (#), you can enter interface config (config-if)#, line config (config-line)#, VLAN config (config-vlan)#, and more.",
+      "body": "From global config (config)#, you can enter interface config (config-if)#, line config (config-line)#, VLAN config (config-vlan)#, and more.",
       "code": "Switch# configure terminal\nSwitch(config)# interface FastEthernet0/1\nSwitch(config-if)#"
     },
     {
@@ -49,60 +66,9 @@
     {
       "title": "Prompt Indicators",
       "body": "The prompt tells you which mode you are in: (config)#, (config-if)#, (config-line)#, (config-vlan)#.",
-      "code": "(config)#     → global config\n(config-if)#   → interface config\n(config-line)# → VTY/consoles"
+      "code": "(config)#     \u2192 global config\n(config-if)#   \u2192 interface config\n(config-line)# \u2192 VTY/consoles"
     }
   ],
-  "topology": {
-    "devices": [
-      {
-        "id": "pc-a",
-        "label": "PC-A",
-        "type": "pc",
-        "x": 60,
-        "y": 75
-      },
-      {
-        "id": "sw1",
-        "label": "SW1",
-        "type": "switch",
-        "x": 210,
-        "y": 75
-      },
-      {
-        "id": "pc-b",
-        "label": "PC-B",
-        "type": "pc",
-        "x": 360,
-        "y": 75
-      }
-    ],
-    "links": [
-      {
-        "from": "pc-a",
-        "to": "sw1",
-        "label": "Fa0/1"
-      },
-      {
-        "from": "pc-b",
-        "to": "sw1",
-        "label": "Fa0/2"
-      }
-    ],
-    "table": [
-      {
-        "port": "Fa0/1",
-        "mode": "access",
-        "vlan": "1",
-        "peer": "PC-A"
-      },
-      {
-        "port": "Fa0/2",
-        "mode": "access",
-        "vlan": "1",
-        "peer": "PC-B"
-      }
-    ]
-  },
   "tags": [],
   "related": [],
   "resources": []
